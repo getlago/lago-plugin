@@ -32,5 +32,6 @@ Authoritative references: [customers](https://docs.getlago.com/api-reference/cus
 5. Use a tiny example with the user's product language and an independently calculated amount before adding advanced primitives.
 6. Confirm the consequence of a decision, not vocabulary recall. Never quiz the user or require them to translate their needs into Lago terminology.
 7. Keep a visible decision trail: application concept, Lago primitive, evidence, decision, and unresolved owner.
+8. Put the proposed mapping into a one-screen billing blueprint before editing a new integration. Include the smallest flow and one illustrative money calculation so the user can judge the outcome without learning the whole Lago model.
 
 For a greenfield usage flow, the teaching order is usually: billing boundary → customer → billable behavior → event → billable metric → price/charge → plan → subscription → expected invoice. Change the order when repository evidence or a fixed-subscription model makes another sequence clearer.

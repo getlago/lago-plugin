@@ -31,6 +31,8 @@ After confirming an application repository, classify billing separately:
 
 No existing billing code is not a blocker. Do not ask the user to provide an integration that does not exist. Infer safe technical facts from the application, then ask only for the first commercial or lifecycle decision that materially changes the implementation.
 
+For a new integration, the next artifact is a compact billing blueprint, not a Lago configuration questionnaire. Use repository evidence to recommend the billing boundary and smallest billable workflow. Keep unknown prices or contract terms illustrative and out of production configuration.
+
 ## First visible response
 
 Adapt these prepared responses to the evidence. Preserve the first sentence exactly.
@@ -54,6 +56,8 @@ Application without billing:
 > I can design and implement the initial Lago integration without credentials. `<Connected-tool status>` A live seeded demo would use an isolated self-hosted Lago instance; real environment validation requires separate access and approval.
 >
 > I’ll first determine who should be billed and the smallest product action that should affect their bill. I’ll explain how those map to Lago, then ask for the first business decision that cannot be inferred from the code.
+
+Follow this message with the billing blueprint as soon as the repository evidence supports one. If the user asked to implement, treat the blueprint as the preview before code changes. If the user asked to learn or see a demo, show the deterministic offline walkthrough first.
 
 Wrong, content-only, documentation, or empty folder:
 

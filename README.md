@@ -14,6 +14,8 @@ Open the application repository you want to change before invoking the plugin. T
 - Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
 - On first run, expect a short activation message confirming the workspace, detected stack, whether billing already exists, current capabilities, and first next step.
 
+The first useful artifact is a one-screen billing blueprint, not a terminology lesson: who pays, what they buy, what action affects the bill, how the amount is calculated, the smallest code slice to build, and the one decision needed next. The copilot recommends a default from repository evidence instead of presenting a menu of equally weighted options.
+
 ## Install
 
 ### Claude Code
@@ -78,6 +80,10 @@ The plugin silently inspects the workspace before responding. Then follow the pa
 4. **Wrong or empty folder:** it states the inspected path and evidence, then asks you to open the application repository or provide its path. It does not search broadly or clone private code.
 5. **Demo versus real environments:** a live seeded demo uses only an isolated self-hosted Lago instance. Lago Cloud—including staging—is never used for generic demo data. Validation against the user's real environment requires separate access and approval.
 
+If you ask to implement, the copilot shows the billing blueprint as a preview and then builds the smallest coherent slice. If you ask to learn or see a demo, it immediately shows an offline walkthrough and exact money calculation; Docker and a self-hosted Lago instance are offered only for optional live validation.
+
+For longer work it keeps a compact progress block—application mapped, blueprint, implementation, money test, optional live validation—and a decision trail. It always distinguishes an offline example, a repository implementation, live self-hosted validation, and actual production readiness.
+
 Typical successful first response:
 
 > Lago Billing Engineer loaded.
@@ -104,7 +110,7 @@ The copilot translates application concepts into a small core path: who pays bec
 
 ## How it works
 
-The `implementation` skill infers the work required without asking users to choose an internal mode. It confirms activation, discovers the repository first, separates facts from assumptions, keeps provider calls behind a billing adapter, and validates the billed amount with a deterministic money test.
+The `implementation` skill infers the work required without asking users to choose an internal mode. It confirms activation, discovers the repository first, recommends one repository-backed billing blueprint, separates facts from assumptions, keeps provider calls behind a billing adapter, and validates the billed amount with a deterministic money test.
 
 - Lago Cloud: region-aware US/EU integration with no generic demo data. A Cloud account is one environment, not a built-in sandbox.
 - Self-hosted: official, isolated Docker path for live demos and local evaluation; official Helm path for Kubernetes; production adds explicit persistence, backup/restore, health, observability, upgrade, and rollback gates.
@@ -138,7 +144,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 45 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
+The 48 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
 
 ## Updating and uninstalling
 

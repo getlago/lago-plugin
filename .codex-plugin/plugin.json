@@ -16,7 +16,7 @@
     "category": "Developer Tools",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://www.getlago.com",
-    "defaultPrompt": ["Implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions. Assume I am new to Lago and billing; explain each primitive in plain language when it becomes relevant."],
+    "defaultPrompt": ["Implement Lago in the application currently open in this workspace. Confirm the repository, explain what works offline, inspect the architecture, and show one recommended billing blueprint before editing. Assume I am new to Lago and billing; teach through my product and ask only for blocking decisions."],
     "brandColor": "#19212E"
   }
 }

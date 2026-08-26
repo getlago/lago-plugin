@@ -6,7 +6,7 @@ Score each dimension 0 (missing/unsafe), 1 (partial), or 2 (complete and evidenc
 | --- | ---: | --- |
 | Skill routing | | |
 | First-run activation and preflight clarity | | |
-| Beginner guidance and primitive mapping | | |
+| Guided blueprint and primitive mapping | | |
 | Demo environment isolation | | |
 | Repository discovery | | |
 | Technical/source accuracy | | |

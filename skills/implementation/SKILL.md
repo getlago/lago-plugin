@@ -53,6 +53,7 @@ Load only the relevant references:
 - Usage metering: [events](references/events.md).
 - Lago Cloud: [cloud](references/cloud.md). Self-hosting: [self-hosted](references/self-hosted.md).
 - Any example, demo, fake usage, or seeded synthetic data: [demo environment](references/demo.md).
+- Beginner onboarding, billing blueprints, progress updates, and completion language: [guided experience](references/guided-experience.md).
 - Webhook work: [webhooks](references/webhooks.md).
 - Any migration: [migration](references/migration.md), plus [Stripe](references/migration-stripe.md) or [Chargebee](references/migration-chargebee.md) when applicable.
 - Validation or money tests: [validation](references/validation.md).
@@ -64,13 +65,15 @@ Load only the relevant references:
 
 1. Complete the mandatory preflight and inspect before asking. Discover repository instructions, stack, architecture, domain models, existing billing and subscription code, event sources, jobs, persistence, webhooks, payment/tax boundaries, deployment, secrets, tests, CI, logging, and monitoring.
 2. Classify facts as: repository fact, user fact, evidence-backed inference, recommended default, open decision, or blocker. Show conflicting evidence; never silently resolve it.
-3. Before asking for Lago configuration, show a compact `Your application → Lago` map. Begin with who pays, what they buy, and what behavior may affect the bill. Introduce each Lago primitive in one plain sentence tied to repository evidence.
-4. Resolve the intake fields that materially affect the work: deployment model and region, environment, current system, billing model, customer/tenant identity, metrics and aggregation, lifecycle, event sources, payment/tax/invoice ownership, credits/commitments, migration/history, go-live, security/data residency, and owners. Mark unknowns. Ask one blocking question at a time, explain why it matters, and provide a safe recommended default when possible.
-5. Keep Lago calls behind a billing adapter or service. State the authority for customer identity, subscription state, usage, pricing, invoices, payments, and balances.
-6. Use an official Lago SDK when it fits the detected stack; otherwise use the current REST API. Verify version-sensitive fields and deployment settings from current official documentation or mark them for verification.
-7. Implement the smallest coherent slice with typed configuration where supported, environment-based API URL, existing secret management, timeouts, bounded retries, error classification, idempotency, input validation, structured redacted logs, tests, and explicit failure behavior.
-8. Validate behavior, not compilation. Use synthetic data and the smallest representative customer → subscription → usage → aggregation → draft/preview invoice → webhook → reconciliation flow. Calculate the expected amount independently and explain it in the user's product language.
-9. Report changed files, tests and evidence, untested areas, risks, open decisions, and the next safe action. Every blocked or completed response must end with a concrete recovery or continuation path.
+3. Before asking for Lago configuration or editing code, show a one-screen billing blueprint. Start with a compact `Your application → Lago` map: who pays, what they buy, and what behavior may affect the bill. Add the smallest proposed flow, a tiny money example, what will be built now, and the one unresolved decision that matters next. Label safe inferences and give one recommended default rather than a menu of equal choices.
+4. For a new integration, infer the most helpful path from the request. If the user asks to learn, explore, or see a demo, show the instant offline walkthrough first. If they ask to implement, use the blueprint as the preview and proceed once blocking decisions are resolved; do not make them choose a demo first. Mention the optional offline walkthrough only when it would reduce uncertainty.
+5. For material multi-step work, keep a compact `Billing setup` progress block and decision trail. Show only completed, current, next, and genuinely blocked items. Do not turn routine steps into approvals or expose internal mode names.
+6. Resolve the intake fields that materially affect the work: deployment model and region, environment, current system, billing model, customer/tenant identity, metrics and aggregation, lifecycle, event sources, payment/tax/invoice ownership, credits/commitments, migration/history, go-live, security/data residency, and owners. Mark unknowns. Ask one blocking question at a time, explain why it matters, and provide a safe recommended default when possible.
+7. Keep Lago calls behind a billing adapter or service. State the authority for customer identity, subscription state, usage, pricing, invoices, payments, and balances.
+8. Use an official Lago SDK when it fits the detected stack; otherwise use the current REST API. Verify version-sensitive fields and deployment settings from current official documentation or mark them for verification.
+9. Implement the smallest coherent slice with typed configuration where supported, environment-based API URL, existing secret management, timeouts, bounded retries, error classification, idempotency, input validation, structured redacted logs, tests, and explicit failure behavior.
+10. Validate behavior, not compilation. Use synthetic data and the smallest representative customer → subscription → usage → aggregation → draft/preview invoice → webhook → reconciliation flow. Calculate the expected amount independently and explain it in the user's product language.
+11. Report changed files, tests and evidence, untested areas, risks, open decisions, and the next safe action. State whether the result is an offline example, a repository implementation, a live self-hosted validation, or production-ready; never let `demo works` imply `ready for production`. Every blocked or completed response must end with a concrete recovery or continuation path.
 
 ## Invariants
 

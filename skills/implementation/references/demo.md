@@ -16,7 +16,7 @@ Treat all model names, usage, and prices as illustrative. Do not claim they are 
 
 ## Demo workflow
 
-1. Build the example offline first: synthetic scenario, application-to-Lago mapping, exact pricing formula, controlled usage events, and expected invoice calculation.
+1. Build the example offline first: synthetic scenario, application-to-Lago mapping, exact pricing formula, controlled usage events, and expected invoice calculation. Show this immediately when the user asks to learn or see a demo; it requires no Docker, credentials, or Lago account.
 2. If the user wants a live demo, inspect whether Docker and Docker Compose are available. Explain that the demo will download and start self-hosted Lago containers, bind local ports, and create disposable local data. Ask for approval immediately before those actions.
 3. Follow the current [official Docker instructions](https://docs.getlago.com/guide/lago-self-hosted/docker). Use a reviewed, pinned Lago release rather than `latest` for a reproducible demo.
 4. Isolate the demo with a dedicated directory, Compose project/container names, ports, network, and volumes. Do not reuse an existing Lago deployment or touch unrelated Docker resources.
@@ -26,5 +26,7 @@ Treat all model names, usage, and prices as illustrative. Do not claim they are 
 8. Offer teardown instructions. Stop containers or delete the dedicated demo data only after explicit approval for the exact project and volumes; never run broad Docker cleanup commands.
 
 If Docker is unavailable or the user declines local containers, keep the demo offline. Generated fixtures, calculations, mocks, and application code remain useful, but label live Lago behavior unverified.
+
+Call the result `offline example complete`, not `validated` or `production-ready`. After an isolated self-hosted run, call it `live self-hosted validation complete` and keep production readiness as a separate gate.
 
 Official context: [self-hosted overview](https://docs.getlago.com/guide/self-hosted), [Docker setup](https://docs.getlago.com/guide/lago-self-hosted/docker), and [integration testing](https://docs.getlago.com/guide/integration-testing).

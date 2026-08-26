@@ -55,11 +55,11 @@ class ScriptTests(unittest.TestCase):
         classes = {item["class"] for item in json.loads(result.stdout)["discrepancies"]}
         self.assertEqual(classes, {"amount mismatch", "missing in Lago", "missing in source"})
 
-    def test_eval_suite_has_all_45_unique_cases(self):
+    def test_eval_suite_has_all_48_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 45)
-        self.assertEqual(len({case["id"] for case in cases}), 45)
+        self.assertEqual(len(cases), 48)
+        self.assertEqual(len({case["id"] for case in cases}), 48)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -77,6 +77,9 @@ class ScriptTests(unittest.TestCase):
             "beginner-needs-primitives",
             "cloud-staging-demo-refusal",
             "canonical-per-token-demo",
+            "greenfield-blueprint-first",
+            "beginner-offline-walkthrough",
+            "demo-is-not-production-ready",
         }.issubset(ids))
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
@@ -96,6 +99,10 @@ class ScriptTests(unittest.TestCase):
         canonical_demo = (ROOT / "examples/per-token-ai.md").read_text(encoding="utf-8")
         self.assertIn("The model names and prices are illustrative", canonical_demo)
         self.assertIn("$0.37", canonical_demo)
+        guided = (ROOT / "skills/implementation/references/guided-experience.md").read_text(encoding="utf-8")
+        self.assertIn("the billing blueprint", guided)
+        self.assertIn("Offline example complete", guided)
+        self.assertIn("never let `demo works` imply `ready for production`", skill)
 
     def test_manifest_identity_and_versions_match(self):
         codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))

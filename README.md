@@ -80,7 +80,7 @@ The plugin silently inspects the workspace before responding. Then follow the pa
 4. **Wrong or empty folder:** it states the inspected path and evidence, then asks you to open the application repository or provide its path. It does not search broadly or clone private code.
 5. **Demo versus real environments:** a live seeded demo uses only an isolated self-hosted Lago instance. Lago Cloud—including staging—is never used for generic demo data. Validation against the user's real environment requires separate access and approval.
 
-If you ask to implement, the copilot shows the billing blueprint as a preview and then builds the smallest coherent slice. If you ask to learn or see a demo, it immediately shows an offline walkthrough and exact money calculation; Docker and a self-hosted Lago instance are offered only for optional live validation.
+If you ask to implement, the copilot shows the billing blueprint as a preview and then builds the smallest coherent slice. If you ask to learn, see a demo, or simply say `help me start` outside an application repository, it runs a bundled offline walkthrough immediately and makes clear that you do not need to configure anything. Docker and a self-hosted Lago instance are offered only for optional live validation.
 
 For longer work it keeps a compact progress block—application mapped, blueprint, implementation, money test, optional live validation—and a decision trail. It always distinguishes an offline example, a repository implementation, live self-hosted validation, and actual production readiness.
 
@@ -144,7 +144,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 48 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
+The 49 synthetic cases and scorecard are in [evals/implementation](evals/implementation). The bundled instant demo runs with `python3 skills/implementation/scripts/run_demo.py`. A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
 
 ## Updating and uninstalling
 

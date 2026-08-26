@@ -65,6 +65,8 @@ Wrong, content-only, documentation, or empty folder:
 >
 > Open the application repository in Codex, or give me its path. I do not locate or clone private applications automatically.
 
+Use that blocking response only when the user requested a real repository assessment or implementation. For `help me start`, `show me`, teaching, or demo intent, state the workspace finding briefly and then run the bundled offline demo. Say explicitly that the user does not need to do anything and that an application repository is needed only when they want the example applied to their product.
+
 Multiple candidates:
 
 > Lago Billing Engineer loaded. I inspected `<path>` and found multiple possible application repositories: `<candidates with evidence>`.

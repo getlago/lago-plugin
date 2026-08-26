@@ -8,6 +8,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - Blueprint-first beginner flow with one recommended default, an instant offline walkthrough path, compact progress and decision tracking, and precise completion levels.
 - Behavioral evals for greenfield blueprinting, demo-first teaching, and the boundary between a working demo and production readiness.
+- Dependency-free instant offline demo with duplicate-event and reconciliation evidence, plus a no-action-needed path for ambiguous beginner prompts outside an application repository.
 
 ## [0.1.0] - 2026-08-26
 

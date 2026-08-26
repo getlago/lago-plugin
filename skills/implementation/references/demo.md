@@ -12,11 +12,13 @@ Lago Cloud may be used only for explicitly approved validation of the user's rea
 
 Use the [OpenAI-style per-token demo](../../../examples/per-token-ai.md) unless the user asks for another scenario or the open application has a clearer product-specific billable action. The demo is based on Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai), adapted for isolated self-hosted Lago.
 
+For the instant offline experience, run `python3 scripts/run_demo.py` from the skill directory (or the equivalent resolved path). It uses only Python's standard library, writes no files, needs no credentials, and produces the canonical mapping, duplicate-event check, reconciliation result, and $0.37 money test. Use `--json` when machine-readable evidence is useful.
+
 Treat all model names, usage, and prices as illustrative. Do not claim they are current OpenAI models or prices. Keep the billable metric `field_name` and event property consistent, use deterministic transaction IDs and timestamps, and independently calculate the expected amount before sending anything.
 
 ## Demo workflow
 
-1. Build the example offline first: synthetic scenario, application-to-Lago mapping, exact pricing formula, controlled usage events, and expected invoice calculation. Show this immediately when the user asks to learn or see a demo; it requires no Docker, credentials, or Lago account.
+1. Run and show the offline example first. Begin by saying the user does not need to configure or do anything. Include the synthetic scenario, application-to-Lago mapping, exact pricing formula, controlled usage events, duplicate result, reconciliation result, and expected total. This requires no Docker, credentials, Lago account, or workspace mutation.
 2. If the user wants a live demo, inspect whether Docker and Docker Compose are available. Explain that the demo will download and start self-hosted Lago containers, bind local ports, and create disposable local data. Ask for approval immediately before those actions.
 3. Follow the current [official Docker instructions](https://docs.getlago.com/guide/lago-self-hosted/docker). Use a reviewed, pinned Lago release rather than `latest` for a reproducible demo.
 4. Isolate the demo with a dedicated directory, Compose project/container names, ports, network, and volumes. Do not reuse an existing Lago deployment or touch unrelated Docker resources.

@@ -27,11 +27,11 @@ Infer the path from intent:
 | User intent | Default experience |
 | --- | --- |
 | `implement`, `add billing`, or a concrete integration request | Inspect, show the blueprint, resolve the first blocker, then implement. The blueprint is the preview; do not require a demo. |
-| `show me`, `teach me`, `how would this work`, or explicit demo language | Show the offline product-to-Lago walkthrough and deterministic money example immediately. Offer isolated self-hosted validation afterward. |
-| Ambiguous beginner request | Recommend either the smallest implementation slice or offline walkthrough based on repository readiness, then ask only if the choice changes the work. |
-| Wrong workspace | Explain what was inspected, why application code is required, and the exact recovery action. Do not show a generic Lago questionnaire. |
+| `show me`, `teach me`, `how would this work`, or explicit demo language | Tell the user no action is required, run `../scripts/run_demo.py`, and show the offline product-to-Lago walkthrough and deterministic money result immediately. Offer isolated self-hosted validation only after the walkthrough. |
+| Ambiguous beginner request such as `help me start` | In an application, recommend the smallest implementation slice. Outside an application, run the instant offline demo so the user gets value before being asked to change workspaces. |
+| Wrong workspace with a concrete implementation request | Explain what was inspected, why application code is required, and the exact recovery action. Do not show a generic Lago questionnaire. |
 
-The offline walkthrough requires no Docker, credentials, or Lago account. A live seeded walkthrough is a separate optional step and must follow [the demo environment policy](demo.md).
+The offline walkthrough requires no Docker, credentials, Lago account, or workspace edits. Lead with `You do not need to do anything; I’m running the example offline now.` Do not ask the user to copy an event, calculate the bill, or choose a next step. A live seeded walkthrough is a separate optional step and must follow [the demo environment policy](demo.md).
 
 ## Compact progress and decisions
 

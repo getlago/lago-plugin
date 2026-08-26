@@ -55,11 +55,28 @@ class ScriptTests(unittest.TestCase):
         classes = {item["class"] for item in json.loads(result.stdout)["discrepancies"]}
         self.assertEqual(classes, {"amount mismatch", "missing in Lago", "missing in source"})
 
-    def test_eval_suite_has_all_48_unique_cases(self):
+    def test_instant_demo_is_runnable_and_reconciles(self):
+        result = run("run_demo.py", "--json")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        evidence = json.loads(result.stdout)
+        self.assertEqual(evidence["mode"], "offline_example")
+        self.assertEqual(evidence["events_accepted"], 4)
+        self.assertTrue(evidence["duplicate_retry_ignored"])
+        self.assertEqual(evidence["total_tokens"], 21_000)
+        self.assertEqual(evidence["expected_total"], "0.37")
+        self.assertEqual(evidence["actual_total"], "0.37")
+        self.assertEqual(evidence["reconciliation_discrepancy"], "0.00")
+        self.assertFalse(evidence["live_lago_contacted"])
+        human = run("run_demo.py")
+        self.assertEqual(human.returncode, 0, human.stdout + human.stderr)
+        self.assertIn("You do not need to do anything", human.stdout)
+        self.assertIn("Offline example complete", human.stdout)
+
+    def test_eval_suite_has_all_49_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 48)
-        self.assertEqual(len({case["id"] for case in cases}), 48)
+        self.assertEqual(len(cases), 49)
+        self.assertEqual(len({case["id"] for case in cases}), 49)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -80,6 +97,7 @@ class ScriptTests(unittest.TestCase):
             "greenfield-blueprint-first",
             "beginner-offline-walkthrough",
             "demo-is-not-production-ready",
+            "ambiguous-help-start-no-app",
         }.issubset(ids))
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
@@ -102,6 +120,8 @@ class ScriptTests(unittest.TestCase):
         guided = (ROOT / "skills/implementation/references/guided-experience.md").read_text(encoding="utf-8")
         self.assertIn("the billing blueprint", guided)
         self.assertIn("Offline example complete", guided)
+        self.assertIn("You do not need to do anything", guided)
+        self.assertIn("scripts/run_demo.py", skill)
         self.assertIn("never let `demo works` imply `ready for production`", skill)
 
     def test_manifest_identity_and_versions_match(self):

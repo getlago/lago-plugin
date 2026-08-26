@@ -1,9 +1,9 @@
 {
-  "name": "getlago",
-  "interface": {"displayName": "Lago"},
+  "name": "lago-plugins",
+  "interface": {"displayName": "Lago Plugins"},
   "plugins": [
     {
-      "name": "lago",
+      "name": "lago-billing",
       "source": {"source": "local", "path": "./"},
       "policy": {"installation": "AVAILABLE", "authentication": "ON_USE"},
       "category": "Developer Tools"

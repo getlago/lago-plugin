@@ -12,7 +12,7 @@ After this repository is public:
 
 ```text
 /plugin marketplace add getlago/lago-agent-plugin
-/plugin install lago@getlago
+/plugin install lago-billing@lago-plugins
 ```
 
 For local development:
@@ -25,9 +25,9 @@ claude --plugin-dir ./lago-agent-plugin
 Validate with `claude plugin validate ./lago-agent-plugin`. Invoke explicitly as:
 
 ```text
-/lago:implementation assess this repository for a Lago integration
-/lago:implementation implement the smallest Lago Cloud sandbox flow
-/lago:implementation migrate this Chargebee implementation to Lago
+/lago-billing:implementation assess this repository for a Lago integration
+/lago-billing:implementation implement the smallest Lago Cloud sandbox flow
+/lago-billing:implementation migrate this Chargebee implementation to Lago
 ```
 
 Claude may also select the skill automatically from a clear Lago implementation request.
@@ -38,15 +38,15 @@ After this repository is public:
 
 ```bash
 codex plugin marketplace add getlago/lago-agent-plugin
-codex plugin add lago@getlago
+codex plugin add lago-billing@lago-plugins
 ```
 
 Start a new Codex task after installation. Invoke explicitly as:
 
 ```text
-$lago:implementation design usage-based billing for this application
-$lago:implementation prepare a self-hosted Kubernetes deployment
-$lago:implementation migrate this Stripe Billing integration to Lago
+$lago-billing:implementation design usage-based billing for this application
+$lago-billing:implementation prepare a self-hosted Kubernetes deployment
+$lago-billing:implementation migrate this Stripe Billing integration to Lago
 ```
 
 Codex also discovers the skill automatically when the request matches its description. Current Codex plugin invocation is `$plugin:skill`; standalone skills use `$skill-name`.
@@ -85,9 +85,9 @@ The 34 synthetic cases and scorecard are in [evals/implementation](evals/impleme
 
 ## Updating and uninstalling
 
-Pull a tagged release, then update through the installed marketplace. For Claude Code use `claude plugin update lago@getlago`; for Codex refresh the marketplace with `codex plugin marketplace upgrade getlago` and reinstall with `codex plugin add lago@getlago`. Start a new task after an update.
+Pull a tagged release, then update through the installed marketplace. For Claude Code use `claude plugin update lago-billing@lago-plugins`; for Codex refresh the marketplace with `codex plugin marketplace upgrade lago-plugins` and reinstall with `codex plugin add lago-billing@lago-plugins`. Start a new task after an update.
 
-Uninstall with `claude plugin uninstall lago@getlago` or `codex plugin remove lago@getlago`. Removing the plugin does not change application code or any Lago environment.
+Uninstall with `claude plugin uninstall lago-billing@lago-plugins` or `codex plugin remove lago-billing@lago-plugins`. Removing the plugin does not change application code or any Lago environment.
 
 ## Troubleshooting
 

@@ -45,8 +45,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
     for label, data in (("Codex", codex_data), ("Claude", claude_data)):
         if isinstance(data, dict):
-            if data.get("name") != "lago":
-                failures.append(f"{label} manifest name must be lago")
+            if data.get("name") != "lago-billing":
+                failures.append(f"{label} manifest name must be lago-billing")
             if data.get("version") != "0.1.0":
                 failures.append(f"{label} manifest version must match release")
     if skill.is_file():

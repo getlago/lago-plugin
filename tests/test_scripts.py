@@ -67,7 +67,7 @@ class ScriptTests(unittest.TestCase):
         claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
         self.assertEqual(codex["name"], claude["name"])
         self.assertEqual(codex["version"], claude["version"])
-        self.assertEqual(codex["name"], "lago")
+        self.assertEqual(codex["name"], "lago-billing")
 
 
 if __name__ == "__main__":

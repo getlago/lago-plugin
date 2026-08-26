@@ -1,5 +1,5 @@
 {
-  "name": "lago",
+  "name": "lago-billing",
   "version": "0.1.0",
   "description": "Assess, design, implement, deploy, migrate, validate, reconcile, and troubleshoot Lago integrations.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},

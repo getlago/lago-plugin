@@ -15,4 +15,4 @@ Ship one shared `implementation` skill with eight explicit modes and progressive
 
 Application-generated code may call Lago through an official SDK or current REST API. The plugin never contacts Lago on load. Optional live tools remain isolated. Platform-specific behavior is limited to manifests, marketplace installation, and explicit invocation syntax.
 
-The repository is named `lago-agent-plugin`, the shareable marketplace is `getlago`, and the plugin manifest identity is `lago`. This produces the install target `lago@getlago` and the invocation commands `/lago:implementation` in Claude Code and `$lago:implementation` in Codex.
+The repository is named `lago-agent-plugin`, the shareable marketplace is `lago-plugins`, and the plugin manifest identity is `lago-billing`. This produces the install target `lago-billing@lago-plugins` and the invocation commands `/lago-billing:implementation` in Claude Code and `$lago-billing:implementation` in Codex.

@@ -12,4 +12,8 @@ Inspect the official release/chart for PostgreSQL, Redis, workers, scheduled job
 
 Deployment evidence must include rendered/validated manifests or Compose config, health checks, migration outcome, backup/restore result, and a rollback rehearsal proportional to risk.
 
+## Seeded demos
+
+All live demos use a dedicated local self-hosted instance; never reuse an existing self-hosted deployment. Inspect Docker availability, pin the Lago release, isolate names/ports/networks/volumes, and get approval before pulling images or starting containers. Read [demo environment](demo.md) before creating fake objects or usage.
+
 Sources: [self-hosted overview](https://docs.getlago.com/guide/self-hosted), [Docker](https://docs.getlago.com/guide/lago-self-hosted/docker), [official Helm chart](https://github.com/getlago/lago-helm-charts).

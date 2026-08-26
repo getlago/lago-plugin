@@ -55,11 +55,11 @@ class ScriptTests(unittest.TestCase):
         classes = {item["class"] for item in json.loads(result.stdout)["discrepancies"]}
         self.assertEqual(classes, {"amount mismatch", "missing in Lago", "missing in source"})
 
-    def test_eval_suite_has_all_43_unique_cases(self):
+    def test_eval_suite_has_all_44_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 43)
-        self.assertEqual(len({case["id"] for case in cases}), 43)
+        self.assertEqual(len(cases), 44)
+        self.assertEqual(len({case["id"] for case in cases}), 44)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -75,6 +75,7 @@ class ScriptTests(unittest.TestCase):
             "minimal-implement-prompt",
             "application-without-billing",
             "beginner-needs-primitives",
+            "cloud-staging-demo-refusal",
         }.issubset(ids))
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
@@ -88,6 +89,9 @@ class ScriptTests(unittest.TestCase):
         primitives = (ROOT / "skills/implementation/references/primitives.md").read_text(encoding="utf-8")
         self.assertIn("Your application → Lago", primitives)
         self.assertIn("Never quiz the user", primitives)
+        demo = (ROOT / "skills/implementation/references/demo.md").read_text(encoding="utf-8")
+        self.assertIn("Never seed demo customers", demo)
+        self.assertIn("including an account the user calls development, test, or staging", demo)
 
     def test_manifest_identity_and_versions_match(self):
         codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))

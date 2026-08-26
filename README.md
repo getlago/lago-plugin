@@ -10,7 +10,7 @@ Open the application repository you want to change before invoking the plugin. T
 
 - No prior Lago or billing expertise is required. The copilot starts from your product—who pays, what they buy, and what usage matters—then explains Lago primitives as they become relevant.
 - No Lago credentials, MCP connection, or running Lago instance are required for repository inspection, architecture work, code changes, fixtures, or offline tests.
-- Live sandbox validation requires Lago access later. The plugin will state exactly when it reaches that boundary.
+- Lago has no built-in sandbox. Offline examples need no Lago access; any live seeded demo uses a dedicated self-hosted instance, never Lago Cloud.
 - Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
 - On first run, expect a short activation message confirming the workspace, detected stack, whether billing already exists, current capabilities, and first next step.
 
@@ -36,7 +36,7 @@ Validate with `claude plugin validate ./lago-agent-plugin`. Invoke explicitly as
 
 ```text
 /lago-billing:implementation assess this repository for a Lago integration
-/lago-billing:implementation implement the smallest Lago Cloud sandbox flow
+/lago-billing:implementation implement the smallest Lago Cloud integration
 /lago-billing:implementation migrate this Chargebee implementation to Lago
 ```
 
@@ -73,9 +73,9 @@ The plugin silently inspects the workspace before responding. Then follow the pa
 
 1. **Existing application:** it confirms the repository and stack, maps existing customer, subscription, usage, billing, and provider code, then starts with the smallest repository-consistent change.
 2. **Application without billing:** it confirms the stack and application boundary, states that no billing integration was found, identifies the minimum customer and billable workflow, and asks only the next blocking business decision.
-3. **No credentials:** it continues with offline architecture, code, mocks, fixtures, calculations, and tests. Live runtime behavior is clearly marked unverified until sandbox access is available.
+3. **No credentials:** it continues with offline architecture, code, mocks, fixtures, calculations, and tests. Live runtime behavior is clearly marked unverified.
 4. **Wrong or empty folder:** it states the inspected path and evidence, then asks you to open the application repository or provide its path. It does not search broadly or clone private code.
-5. **Sandbox versus production:** sandbox reads or writes require available tools or credentials. Any production contact or mutation pauses for separate approval that names the target, action, scope, billing impact, and recovery plan.
+5. **Demo versus real environments:** a live seeded demo uses only an isolated self-hosted Lago instance. Lago Cloud—including staging—is never used for generic demo data. Validation against the user's real environment requires separate access and approval.
 
 Typical successful first response:
 
@@ -83,7 +83,7 @@ Typical successful first response:
 >
 > I’m working in `/path/to/app`, a Node.js application.
 >
-> I can inspect and edit this repository without Lago credentials. Live sandbox validation requires credentials later, and production actions require separate approval.
+> I can inspect and edit this repository without Lago credentials. A live seeded demo would use isolated self-hosted Lago; validation of a real environment requires separate access and approval.
 >
 > I’ll first map who pays, what they buy, and what usage affects the bill. I’ll explain the corresponding Lago concepts as we use them.
 
@@ -93,7 +93,7 @@ If the application has no billing integration yet, the response changes accordin
 >
 > I’m working in `/path/to/app`, a Node.js application. I found customer and authentication models, but no existing billing integration.
 >
-> I can design and implement the initial Lago integration without credentials. Live sandbox validation requires Lago access later.
+> I can design and implement the initial Lago integration without credentials. A live seeded demo would use isolated self-hosted Lago; validation of a real environment requires separate access and approval.
 >
 > I’ll first determine who should be billed and the smallest product action that should affect their bill. I’ll explain how those map to Lago, then ask for the first business decision that cannot be inferred from the code.
 
@@ -105,8 +105,8 @@ The copilot translates application concepts into a small core path: who pays bec
 
 The `implementation` skill infers the work required without asking users to choose an internal mode. It confirms activation, discovers the repository first, separates facts from assumptions, keeps provider calls behind a billing adapter, and validates the billed amount with a deterministic money test.
 
-- Lago Cloud: region-aware US/EU endpoints, sandbox-first integration, no generated Lago infrastructure.
-- Self-hosted: official Docker path for evaluation and official Helm path for Kubernetes; production adds explicit persistence, backup/restore, health, observability, upgrade, and rollback gates.
+- Lago Cloud: region-aware US/EU integration with no generic demo data. A Cloud account is one environment, not a built-in sandbox.
+- Self-hosted: official, isolated Docker path for live demos and local evaluation; official Helm path for Kubernetes; production adds explicit persistence, backup/restore, health, observability, upgrade, and rollback gates.
 - Stripe/Chargebee: mapping ledger, historical-record retention, restartable checkpoints, parallel validation, and double-billing prevention.
 - Reconciliation: read-only comparison by stable external IDs, event keys, periods, quantities, and amounts.
 
@@ -120,6 +120,10 @@ The skill pauses immediately before production contact or mutation and asks for 
 
 Lago MCP is optional. When compatible tools exist, they may add supported live reads or explicitly approved actions; offline and live validation remain separate claims. This repository does not bundle or duplicate MCP.
 
+### Demo data policy
+
+The copilot builds every example offline first. If the user asks for a live demo, it checks for Docker, explains the images, containers, ports, and disposable data involved, and asks before starting anything. It then uses a dedicated, version-pinned self-hosted Lago instance with isolated names, networks, and volumes. It refuses to seed fake customers or usage into any Lago Cloud account, even one dedicated to staging.
+
 ## Local development and tests
 
 Python 3.10+ is required only for the deterministic helpers; the skill itself is Markdown.
@@ -131,7 +135,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 43 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
+The 44 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
 
 ## Updating and uninstalling
 

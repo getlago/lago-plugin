@@ -8,7 +8,7 @@ Use this report shape:
 - Evidence: exact sanitized logs, responses, record IDs, timestamps, code paths, and reproduction.
 - Hypotheses: ranked and falsifiable.
 - Missing telemetry: what prevents confirmation.
-- Next check: smallest read-only or sandbox action that distinguishes hypotheses.
+- Next check: smallest offline or read-only action that distinguishes hypotheses. Use an isolated self-hosted instance if a synthetic live reproduction is required.
 
 Common discriminators: wrong US/EU/self-hosted base URL; key from another environment; missing/terminated subscription; metric code or dimension mismatch; random retry IDs; changed/missing timestamp on ClickHouse; late event after finalization; signature verification after body parsing; webhook dedupe race; worker backlog; partial-batch status loss; source/Lago period or rounding mismatch.
 

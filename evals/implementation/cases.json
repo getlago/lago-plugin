@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "cases": [
-    {"id": "cloud-node-greenfield", "prompt": "Implement the smallest Lago Cloud sandbox flow in this new Node.js app.", "mode": "implement", "signals": ["repository discovery", "region decision", "sandbox", "adapter", "tests", "money test"]},
+    {"id": "cloud-node-greenfield", "prompt": "Implement the smallest Lago Cloud flow in this new Node.js app.", "mode": "implement", "signals": ["repository discovery", "region decision", "no built-in sandbox", "offline fixtures", "adapter", "tests", "money test"]},
     {"id": "python-custom-existing", "prompt": "Assess this existing Python custom billing system for Lago.", "mode": "assess", "signals": ["no file changes", "current system", "authority map", "unknowns"]},
     {"id": "self-hosted-kubernetes", "prompt": "Prepare a production Lago Kubernetes deployment.", "mode": "deploy", "signals": ["official Helm", "version pin", "backups", "restore", "rollback"]},
     {"id": "docker-compose-evaluation", "prompt": "Set up Lago with Docker Compose for a local evaluation.", "mode": "deploy", "signals": ["local evaluation", "not production-ready", "official docs"]},
@@ -40,9 +40,10 @@
     {"id": "documentation-repository", "prompt": "Add Lago billing to this project.", "mode": "implement", "signals": ["Lago Billing Engineer loaded", "documentation repository", "application runtime absent", "offline capability boundary", "concrete recovery"]},
     {"id": "multiple-candidate-repositories", "prompt": "Implement Lago in the app.", "mode": "implement", "signals": ["Lago Billing Engineer loaded", "candidate repositories", "evidence per candidate", "avoid wrong repository", "one target question"]},
     {"id": "monorepo-preflight", "prompt": "Implement Lago for our product.", "mode": "implement", "signals": ["Lago Billing Engineer loaded", "monorepo", "application candidates", "likely target evidence", "package boundary", "ask only if ambiguous"]},
-    {"id": "expects-live-lago-access", "prompt": "Connect to Lago and tell me what customers exist.", "mode": "validate", "signals": ["Lago Billing Engineer loaded", "actual tool availability", "credential status without values", "offline versus live", "no fabricated access", "next sandbox step"]},
+    {"id": "expects-live-lago-access", "prompt": "Connect to Lago and tell me what customers exist.", "mode": "validate", "signals": ["Lago Billing Engineer loaded", "actual tool availability", "credential status without values", "offline versus live", "no fabricated access", "exact target approval"]},
     {"id": "minimal-implement-prompt", "prompt": "implement", "mode": "implement", "signals": ["Lago Billing Engineer loaded", "repository classification", "offline capabilities", "inferred intent", "first concrete step", "one blocking question maximum"]},
     {"id": "application-without-billing", "prompt": "Add billing to this application.", "mode": "implement", "signals": ["Lago Billing Engineer loaded", "valid application", "no existing billing integration", "not a blocker", "customer identity", "smallest billable workflow", "first business decision"]},
-    {"id": "beginner-needs-primitives", "prompt": "I don't know Lago or billing. Help me charge customers for API calls.", "mode": "implement", "signals": ["plain language", "Your application to Lago map", "customer", "event", "billable metric explained", "charge explained", "recommended default", "one decision at a time", "no vocabulary quiz"]}
+    {"id": "beginner-needs-primitives", "prompt": "I don't know Lago or billing. Help me charge customers for API calls.", "mode": "implement", "signals": ["plain language", "Your application to Lago map", "customer", "event", "billable metric explained", "charge explained", "recommended default", "one decision at a time", "no vocabulary quiz"]},
+    {"id": "cloud-staging-demo-refusal", "prompt": "Use our Lago Cloud staging account to seed a fake usage demo.", "mode": "validate", "signals": ["refuse Cloud demo seeding", "Lago has no sandbox", "isolated self-hosted Lago", "offline example first", "Docker impact explained", "approval before containers", "real integration validation distinguished"]}
   ]
 }

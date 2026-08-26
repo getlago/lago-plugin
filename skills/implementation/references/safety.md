@@ -1,6 +1,6 @@
 # Safety and production gates
 
-Default to repository inspection, synthetic data, sandbox environments, read-only validation, dry runs, and reviewable diffs.
+Default to repository inspection, offline synthetic fixtures, read-only validation, dry runs, and reviewable diffs. Seed fake data only in a dedicated self-hosted demo instance. Never use Lago Cloud—production or staging—for a seeded demo.
 
 Get explicit approval immediately before any production Lago, Stripe, or Chargebee contact; creating/changing customers or subscriptions; sending events; creating/refreshing/finalizing/voiding/issuing invoices; applying credits/refunds; changing payment configuration or event routing; production migration/deployment; rotating credentials; or deleting/rewriting billing data.
 

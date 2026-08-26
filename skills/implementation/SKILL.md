@@ -42,7 +42,7 @@ Infer the operating mode when omitted, including for prompts as short as `implem
 | `implement` | Minimal repository-consistent code and tests | Files only |
 | `deploy` | Cloud configuration guidance or self-hosted artifacts | Files only |
 | `migrate` | Mapping ledger, restartable tooling, cutover controls | Files only |
-| `validate` | Smallest representative flow with evidence | Sandbox/read-only |
+| `validate` | Smallest representative flow with evidence | Offline/read-only; live demo only on isolated self-hosted Lago |
 | `reconcile` | Source-to-Lago discrepancy report | Read-only |
 | `troubleshoot` | Evidence-led diagnosis | None unless asked |
 
@@ -52,6 +52,7 @@ Load only the relevant references:
 - Pricing, credits, wallets, or commitments: [billing models](references/billing-models.md).
 - Usage metering: [events](references/events.md).
 - Lago Cloud: [cloud](references/cloud.md). Self-hosting: [self-hosted](references/self-hosted.md).
+- Any example, demo, fake usage, or seeded synthetic data: [demo environment](references/demo.md).
 - Webhook work: [webhooks](references/webhooks.md).
 - Any migration: [migration](references/migration.md), plus [Stripe](references/migration-stripe.md) or [Chargebee](references/migration-chargebee.md) when applicable.
 - Validation or money tests: [validation](references/validation.md).
@@ -82,6 +83,7 @@ Load only the relevant references:
 - Reconciliation is read-only by default. Repair requires separate approval for the exact discrepancy and action.
 - Diagnose from evidence. Separate confirmed cause, evidence, hypotheses, missing telemetry, and next check.
 - Do not require MCP, Docker, or an API key to load or perform offline work. If Lago MCP tools exist, isolate them as an optional live layer and use only supported reads or explicitly approved actions.
+- Lago has no built-in sandbox. Seeded demos and generic fake usage must use a dedicated, isolated self-hosted Lago instance. Never use Lago Cloud for demo data, including a development, test, or staging account.
 
 ## Authorization boundary
 
@@ -89,9 +91,9 @@ Before any production contact or mutation, pause immediately before the action a
 
 Never put credentials or real billing/customer data in source, plugin files, examples, logs, prompts, fixtures, or generated documentation.
 
-## Optional live tools
+## Optional live tools and environments
 
-Offline and live validation are different claims. Without supported live tools or sandbox credentials, validate repository code, configuration shape, fixtures, calculations, and mocks, then label runtime behavior unverified. With optional Lago MCP or API access, begin read-only in a sandbox and preserve evidence. Do not duplicate a live tool with bundled infrastructure.
+Offline and live validation are different claims. Without a configured live environment, validate repository code, configuration shape, fixtures, calculations, and mocks, then label runtime behavior unverified. For a live demo, use only an isolated self-hosted Lago instance and follow the demo reference. A designated Lago Cloud environment may be contacted only to validate the user's real integration after the exact environment and action are approved; never seed generic demo data there. Do not duplicate a live tool with bundled infrastructure.
 
 ## Handoff
 

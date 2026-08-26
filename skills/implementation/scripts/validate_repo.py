@@ -40,7 +40,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     claude = root / ".claude-plugin/plugin.json"
     skill = root / "skills/implementation/SKILL.md"
     primitives = root / "skills/implementation/references/primitives.md"
-    for required in (codex, claude, skill, primitives, root / "README.md", root / "LICENSE"):
+    demo = root / "skills/implementation/references/demo.md"
+    for required in (codex, claude, skill, primitives, demo, root / "README.md", root / "LICENSE"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -65,6 +66,11 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         for teaching_signal in ("Your application → Lago", "Never quiz the user", "Billable metric", "Payment collection is a separate integration decision"):
             if teaching_signal not in text:
                 failures.append(f"missing beginner primitive guidance: {teaching_signal}")
+    if demo.is_file():
+        text = demo.read_text(encoding="utf-8")
+        for demo_signal in ("Lago has no built-in sandbox mode", "Never seed demo customers", "including an account the user calls development, test, or staging", "isolated self-hosted Lago instance"):
+            if demo_signal not in text:
+                failures.append(f"missing demo isolation guidance: {demo_signal}")
     denied = []
     if denylist:
         denied = [line.strip().lower() for line in denylist.read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#")]

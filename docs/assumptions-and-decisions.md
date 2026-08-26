@@ -12,7 +12,7 @@
 - Confirm Lago legal/brand approval for the plugin name, MIT license, and publisher metadata.
 - Confirm which Lago-owned marketplace/catalog, if any, will list the plugin.
 - Decide the supported minimum Claude Code and Codex versions after clean-machine testing.
-- Run and archive at least one authorized live Lago sandbox money test; local fixtures prove the calculation harness, not Lago runtime behavior.
+- Run and archive at least one authorized live money test on an isolated self-hosted Lago demo instance; local fixtures prove the calculation harness, not Lago runtime behavior. Never use Lago Cloud for seeded demo data.
 - Review every provider example against the release-date Lago, Stripe, and Chargebee specifications.
 
 No Metronome, Orb, Recurly, Zuora, or other migration adapter is claimed in version 1.

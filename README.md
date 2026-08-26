@@ -1,6 +1,6 @@
-# Lago for Coding Agents
+# Lago Billing Engineer
 
-A public, credential-free plugin that helps Claude Code and Codex assess, design, implement, deploy, migrate, validate, reconcile, and troubleshoot [Lago](https://www.getlago.com) integrations.
+A public, credential-free billing engineer copilot for Claude Code and Codex. It designs, implements, validates, migrates, reconciles, and troubleshoots [Lago](https://www.getlago.com) billing in applications with or without an existing billing integration.
 
 One shared skill supports Lago Cloud and self-hosted deployments, greenfield and existing applications, subscriptions, usage pricing, prepaid credits and wallets, minimum commitments, hybrid pricing, multi-tenancy, and migrations from Stripe Billing, Chargebee, or custom billing systems. Version 1 does not claim migration support for other providers.
 
@@ -11,7 +11,7 @@ Open the application repository you want to change before invoking the plugin. T
 - No Lago credentials, MCP connection, or running Lago instance are required for repository inspection, architecture work, code changes, fixtures, or offline tests.
 - Live sandbox validation requires Lago access later. The plugin will state exactly when it reaches that boundary.
 - Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
-- On first run, expect a short activation message confirming the workspace, detected stack, current capabilities, and first next step.
+- On first run, expect a short activation message confirming the workspace, detected stack, whether billing already exists, current capabilities, and first next step.
 
 ## Install
 
@@ -71,20 +71,30 @@ implement Lago
 The plugin silently inspects the workspace before responding. Then follow the path that matches what it finds:
 
 1. **Existing application:** it confirms the repository and stack, maps existing customer, subscription, usage, billing, and provider code, then starts with the smallest repository-consistent change.
-2. **New application:** it confirms the starter stack and application boundary, identifies the minimum customer and billing decisions, and asks only the next blocking question.
+2. **Application without billing:** it confirms the stack and application boundary, states that no billing integration was found, identifies the minimum customer and billable workflow, and asks only the next blocking business decision.
 3. **No credentials:** it continues with offline architecture, code, mocks, fixtures, calculations, and tests. Live runtime behavior is clearly marked unverified until sandbox access is available.
 4. **Wrong or empty folder:** it states the inspected path and evidence, then asks you to open the application repository or provide its path. It does not search broadly or clone private code.
 5. **Sandbox versus production:** sandbox reads or writes require available tools or credentials. Any production contact or mutation pauses for separate approval that names the target, action, scope, billing impact, and recovery plan.
 
 Typical successful first response:
 
-> Lago plugin loaded.
+> Lago Billing Engineer loaded.
 >
 > I’m working in `/path/to/app`, a Node.js application.
 >
 > I can inspect and edit this repository without Lago credentials. Live sandbox validation requires credentials later, and production actions require separate approval.
 >
 > I’ll first map the existing customer, subscription, and usage architecture.
+
+If the application has no billing integration yet, the response changes accordingly:
+
+> Lago Billing Engineer loaded.
+>
+> I’m working in `/path/to/app`, a Node.js application. I found customer and authentication models, but no existing billing integration.
+>
+> I can design and implement the initial Lago integration without credentials. Live sandbox validation requires Lago access later.
+>
+> I’ll first determine the customer identity and smallest billable workflow, then ask for the first business decision that cannot be inferred from the code.
 
 ## How it works
 
@@ -116,7 +126,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 41 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
+The 42 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
 
 ## Updating and uninstalling
 

@@ -1,7 +1,7 @@
 {
   "name": "lago-billing",
   "version": "0.1.0",
-  "description": "Inspects and edits the application open in your workspace to implement and validate Lago billing. No credentials are needed for offline work; Lago access is needed only for live validation.",
+  "description": "A billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing in new or existing applications. Offline work needs no Lago credentials.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",
@@ -9,9 +9,9 @@
   "keywords": ["lago", "billing", "metering", "subscriptions", "migration"],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Lago for Coding Agents",
-    "shortDescription": "Implement Lago in the application open in your workspace.",
-    "longDescription": "Open an application repository, then invoke the plugin. It inspects the stack and existing billing architecture before editing. Offline work needs no Lago credentials or MCP connection; live sandbox validation needs Lago access, and production actions require separate approval.",
+    "displayName": "Lago Billing Engineer",
+    "shortDescription": "Billing engineer copilot for new or existing applications.",
+    "longDescription": "Open an application repository, with or without billing code. The copilot inspects the stack, identifies whether billing already exists, and designs or improves the Lago integration. Offline work needs no Lago credentials or MCP connection; live sandbox validation needs Lago access, and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": ["Read", "Write"],

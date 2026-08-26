@@ -1,8 +1,8 @@
 {
   "name": "lago-billing",
-  "displayName": "Lago for Coding Agents",
+  "displayName": "Lago Billing Engineer",
   "version": "0.1.0",
-  "description": "Inspects and edits the application open in your workspace to implement and validate Lago billing. No credentials are needed for offline work; Lago access is needed only for live validation.",
+  "description": "A billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing in new or existing applications. Offline work needs no Lago credentials.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",

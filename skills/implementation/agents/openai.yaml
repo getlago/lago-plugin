@@ -1,4 +1,4 @@
 interface:
-  display_name: "Lago Implementation"
-  short_description: "Implement Lago in the application open here"
+  display_name: "Lago Billing Engineer"
+  short_description: "Billing copilot for new or existing applications"
   default_prompt: "Use $implementation to implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions."

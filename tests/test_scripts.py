@@ -55,11 +55,11 @@ class ScriptTests(unittest.TestCase):
         classes = {item["class"] for item in json.loads(result.stdout)["discrepancies"]}
         self.assertEqual(classes, {"amount mismatch", "missing in Lago", "missing in source"})
 
-    def test_eval_suite_has_all_41_unique_cases(self):
+    def test_eval_suite_has_all_42_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 41)
-        self.assertEqual(len({case["id"] for case in cases}), 41)
+        self.assertEqual(len(cases), 42)
+        self.assertEqual(len({case["id"] for case in cases}), 42)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -73,14 +73,17 @@ class ScriptTests(unittest.TestCase):
             "monorepo-preflight",
             "expects-live-lago-access",
             "minimal-implement-prompt",
+            "application-without-billing",
         }.issubset(ids))
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
         skill = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("Lago plugin loaded.", skill)
+        self.assertIn("Lago Billing Engineer loaded.", skill)
         self.assertIn("Mandatory first-run preflight", skill)
         self.assertIn("credentials are unnecessary for offline work", skill)
         self.assertIn("Ask only the next question", skill)
+        discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")
+        self.assertIn("No existing billing code is not a blocker.", discovery)
 
     def test_manifest_identity_and_versions_match(self):
         codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))

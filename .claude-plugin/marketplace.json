@@ -1,6 +1,6 @@
 {
   "name": "lago-plugins",
-  "metadata": {"description": "Implement Lago billing in the application open in your workspace. No credentials or MCP connection are required for offline inspection and editing; live validation requires Lago access."},
+  "metadata": {"description": "A billing engineer copilot for new or existing applications. It can design and implement Lago from scratch without credentials; live validation requires Lago access."},
   "owner": {"name": "Lago"},
-  "plugins": [{"name": "lago-billing", "source": "./", "description": "Inspects the open application before implementing Lago. Works offline without credentials; live validation requires Lago access."}]
+  "plugins": [{"name": "lago-billing", "source": "./", "description": "Designs or improves Lago billing after inspecting the open application. Existing billing code is not required; live validation requires Lago access."}]
 }

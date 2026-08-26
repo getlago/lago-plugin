@@ -1,6 +1,6 @@
 # Eval suite
 
-`cases.json` contains 41 synthetic scenarios. Run each in a fresh task against a minimal synthetic repository and score the actual output with `scorecard.md`.
+`cases.json` contains 42 synthetic scenarios. Run each in a fresh task against a minimal synthetic repository and score the actual output with `scorecard.md`.
 
 Deterministic preflight:
 

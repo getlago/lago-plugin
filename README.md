@@ -4,6 +4,15 @@ A public, credential-free plugin that helps Claude Code and Codex assess, design
 
 One shared skill supports Lago Cloud and self-hosted deployments, greenfield and existing applications, subscriptions, usage pricing, prepaid credits and wallets, minimum commitments, hybrid pricing, multi-tenancy, and migrations from Stripe Billing, Chargebee, or custom billing systems. Version 1 does not claim migration support for other providers.
 
+## Before you start
+
+Open the application repository you want to change before invoking the plugin. The plugin inspects and edits local files; it does not locate or clone private applications automatically.
+
+- No Lago credentials, MCP connection, or running Lago instance are required for repository inspection, architecture work, code changes, fixtures, or offline tests.
+- Live sandbox validation requires Lago access later. The plugin will state exactly when it reaches that boundary.
+- Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
+- On first run, expect a short activation message confirming the workspace, detected stack, current capabilities, and first next step.
+
 ## Install
 
 ### Claude Code
@@ -51,9 +60,35 @@ $lago-billing:implementation migrate this Stripe Billing integration to Lago
 
 Codex also discovers the skill automatically when the request matches its description. Current Codex plugin invocation is `$plugin:skill`; standalone skills use `$skill-name`.
 
+## Five-minute quickstart
+
+Invoke the plugin with a short request such as:
+
+```text
+implement Lago
+```
+
+The plugin silently inspects the workspace before responding. Then follow the path that matches what it finds:
+
+1. **Existing application:** it confirms the repository and stack, maps existing customer, subscription, usage, billing, and provider code, then starts with the smallest repository-consistent change.
+2. **New application:** it confirms the starter stack and application boundary, identifies the minimum customer and billing decisions, and asks only the next blocking question.
+3. **No credentials:** it continues with offline architecture, code, mocks, fixtures, calculations, and tests. Live runtime behavior is clearly marked unverified until sandbox access is available.
+4. **Wrong or empty folder:** it states the inspected path and evidence, then asks you to open the application repository or provide its path. It does not search broadly or clone private code.
+5. **Sandbox versus production:** sandbox reads or writes require available tools or credentials. Any production contact or mutation pauses for separate approval that names the target, action, scope, billing impact, and recovery plan.
+
+Typical successful first response:
+
+> Lago plugin loaded.
+>
+> I’m working in `/path/to/app`, a Node.js application.
+>
+> I can inspect and edit this repository without Lago credentials. Live sandbox validation requires credentials later, and production actions require separate approval.
+>
+> I’ll first map the existing customer, subscription, and usage architecture.
+
 ## How it works
 
-The `implementation` skill infers one or more modes: `assess`, `design`, `implement`, `deploy`, `migrate`, `validate`, `reconcile`, and `troubleshoot`. It discovers the repository first, separates facts from assumptions, keeps provider calls behind a billing adapter, and validates the billed amount with a deterministic money test.
+The `implementation` skill infers the work required without asking users to choose an internal mode. It confirms activation, discovers the repository first, separates facts from assumptions, keeps provider calls behind a billing adapter, and validates the billed amount with a deterministic money test.
 
 - Lago Cloud: region-aware US/EU endpoints, sandbox-first integration, no generated Lago infrastructure.
 - Self-hosted: official Docker path for evaluation and official Helm path for Kubernetes; production adds explicit persistence, backup/restore, health, observability, upgrade, and rollback gates.
@@ -81,7 +116,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 34 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
+The 41 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
 
 ## Updating and uninstalling
 

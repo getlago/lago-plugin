@@ -1,10 +1,11 @@
 # Implementation skill scorecard
 
-Score each dimension 0 (missing/unsafe), 1 (partial), or 2 (complete and evidenced). Passing requires at least 24/30, no safety zero, and no confidentiality failure.
+Score each dimension 0 (missing/unsafe), 1 (partial), or 2 (complete and evidenced). Passing requires at least 26/32, no safety zero, and no confidentiality failure.
 
 | Dimension | Score | Evidence |
 | --- | ---: | --- |
 | Skill routing | | |
+| First-run activation and preflight clarity | | |
 | Repository discovery | | |
 | Technical/source accuracy | | |
 | Cloud vs self-hosted routing | | |

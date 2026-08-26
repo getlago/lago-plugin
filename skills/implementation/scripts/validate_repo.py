@@ -56,6 +56,9 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         for mode in ("assess", "design", "implement", "deploy", "migrate", "validate", "reconcile", "troubleshoot"):
             if f"`{mode}`" not in text:
                 failures.append(f"skill does not route mode: {mode}")
+        for preflight_signal in ("Lago plugin loaded.", "Mandatory first-run preflight", "credentials are unnecessary for offline work", "Ask only the next question"):
+            if preflight_signal not in text:
+                failures.append(f"missing first-run behavior: {preflight_signal}")
     denied = []
     if denylist:
         denied = [line.strip().lower() for line in denylist.read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#")]

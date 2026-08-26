@@ -1,7 +1,7 @@
 {
   "name": "lago-billing",
   "version": "0.1.0",
-  "description": "Assess, design, implement, deploy, migrate, validate, reconcile, and troubleshoot Lago integrations.",
+  "description": "Inspects and edits the application open in your workspace to implement and validate Lago billing. No credentials are needed for offline work; Lago access is needed only for live validation.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",
@@ -10,13 +10,13 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Lago for Coding Agents",
-    "shortDescription": "Build and validate Lago billing integrations.",
-    "longDescription": "Repository-aware workflows for Lago Cloud and self-hosted implementations, migrations, billing validation, reconciliation, and troubleshooting.",
+    "shortDescription": "Implement Lago in the application open in your workspace.",
+    "longDescription": "Open an application repository, then invoke the plugin. It inspects the stack and existing billing architecture before editing. Offline work needs no Lago credentials or MCP connection; live sandbox validation needs Lago access, and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://www.getlago.com",
-    "defaultPrompt": ["Assess this repository for a Lago integration.", "Design usage-based billing with Lago.", "Validate this Lago integration end to end."],
+    "defaultPrompt": ["Implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions."],
     "brandColor": "#19212E"
   }
 }

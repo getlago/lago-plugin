@@ -12,4 +12,5 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Cloud, self-hosted, billing, events, webhook, migration, validation, reconciliation, troubleshooting, and safety references.
 - Stripe Billing, Chargebee, and custom migration workflows.
 - Offline event, money-test, reconciliation, and public-repository validators.
-- Thirty-four synthetic eval cases, scorecard, examples, and release controls.
+- Mandatory first-run workspace preflight, capability-boundary message, and contextual recovery guidance.
+- Forty-one synthetic eval cases, scorecard, examples, and release controls.

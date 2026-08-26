@@ -37,6 +37,7 @@ Validate with `claude plugin validate ./lago-agent-plugin`. Invoke explicitly as
 ```text
 /lago-billing:implementation assess this repository for a Lago integration
 /lago-billing:implementation implement the smallest Lago Cloud integration
+/lago-billing:implementation show the self-hosted per-token demo
 /lago-billing:implementation migrate this Chargebee implementation to Lago
 ```
 
@@ -124,6 +125,8 @@ Lago MCP is optional. When compatible tools exist, they may add supported live r
 
 The copilot builds every example offline first. If the user asks for a live demo, it checks for Docker, explains the images, containers, ports, and disposable data involved, and asks before starting anything. It then uses a dedicated, version-pinned self-hosted Lago instance with isolated names, networks, and volumes. It refuses to seed fake customers or usage into any Lago Cloud account, even one dedicated to staging.
 
+The default live walkthrough is an [OpenAI-style per-token demo](examples/per-token-ai.md), adapted from Lago's official template. It creates a synthetic AI customer, a token billable metric with model and input/output filters, a pay-as-you-go plan, a subscription, and deterministic token events. Prices and model names are explicitly illustrative; the demo verifies current usage and a $0.37 independent money calculation without claiming to reproduce current OpenAI pricing.
+
 ## Local development and tests
 
 Python 3.10+ is required only for the deterministic helpers; the skill itself is Markdown.
@@ -135,7 +138,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 44 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
+The 45 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
 
 ## Updating and uninstalling
 

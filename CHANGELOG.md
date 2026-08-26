@@ -15,5 +15,6 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Lago Billing Engineer positioning for applications with or without existing billing code.
 - Beginner-first guidance that maps product concepts to Lago primitives one decision at a time.
 - Hard isolation policy requiring self-hosted Lago for all seeded demos and prohibiting demo data in Lago Cloud.
+- Canonical self-hosted OpenAI-style per-token demo with illustrative pricing and deterministic usage evidence.
 - Mandatory first-run workspace and billing-state preflight, capability-boundary message, and contextual recovery guidance.
-- Forty-four synthetic eval cases, scorecard, examples, and release controls.
+- Forty-five synthetic eval cases, scorecard, examples, and release controls.

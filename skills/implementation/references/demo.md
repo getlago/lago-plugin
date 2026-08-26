@@ -8,6 +8,12 @@ All seeded demos and generic fake usage must target an isolated self-hosted Lago
 
 Lago Cloud may be used only for explicitly approved validation of the user's real integration and real non-production configuration. That is integration validation, not a demo, and must not introduce generic demo data.
 
+## Canonical demo
+
+Use the [OpenAI-style per-token demo](../../../examples/per-token-ai.md) unless the user asks for another scenario or the open application has a clearer product-specific billable action. The demo is based on Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai), adapted for isolated self-hosted Lago.
+
+Treat all model names, usage, and prices as illustrative. Do not claim they are current OpenAI models or prices. Keep the billable metric `field_name` and event property consistent, use deterministic transaction IDs and timestamps, and independently calculate the expected amount before sending anything.
+
 ## Demo workflow
 
 1. Build the example offline first: synthetic scenario, application-to-Lago mapping, exact pricing formula, controlled usage events, and expected invoice calculation.

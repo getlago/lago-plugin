@@ -1,4 +1,4 @@
 interface:
   display_name: "Lago Billing Engineer"
-  short_description: "Billing copilot for new or existing applications"
-  default_prompt: "Use $implementation to implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions."
+  short_description: "Beginner-friendly billing copilot for your application"
+  default_prompt: "Use $implementation to implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions. Assume I am new to Lago and billing; explain each primitive in plain language when it becomes relevant."

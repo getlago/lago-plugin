@@ -13,5 +13,6 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Stripe Billing, Chargebee, and custom migration workflows.
 - Offline event, money-test, reconciliation, and public-repository validators.
 - Lago Billing Engineer positioning for applications with or without existing billing code.
+- Beginner-first guidance that maps product concepts to Lago primitives one decision at a time.
 - Mandatory first-run workspace and billing-state preflight, capability-boundary message, and contextual recovery guidance.
-- Forty-two synthetic eval cases, scorecard, examples, and release controls.
+- Forty-three synthetic eval cases, scorecard, examples, and release controls.

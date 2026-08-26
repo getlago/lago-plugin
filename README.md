@@ -1,6 +1,6 @@
 # Lago Billing Engineer
 
-A public, credential-free billing engineer copilot for Claude Code and Codex. It designs, implements, validates, migrates, reconciles, and troubleshoots [Lago](https://www.getlago.com) billing in applications with or without an existing billing integration.
+A public, beginner-friendly billing engineer copilot for Claude Code and Codex. It designs, implements, validates, migrates, reconciles, and troubleshoots [Lago](https://www.getlago.com) billing in applications with or without an existing billing integration.
 
 One shared skill supports Lago Cloud and self-hosted deployments, greenfield and existing applications, subscriptions, usage pricing, prepaid credits and wallets, minimum commitments, hybrid pricing, multi-tenancy, and migrations from Stripe Billing, Chargebee, or custom billing systems. Version 1 does not claim migration support for other providers.
 
@@ -8,6 +8,7 @@ One shared skill supports Lago Cloud and self-hosted deployments, greenfield and
 
 Open the application repository you want to change before invoking the plugin. The plugin inspects and edits local files; it does not locate or clone private applications automatically.
 
+- No prior Lago or billing expertise is required. The copilot starts from your product—who pays, what they buy, and what usage matters—then explains Lago primitives as they become relevant.
 - No Lago credentials, MCP connection, or running Lago instance are required for repository inspection, architecture work, code changes, fixtures, or offline tests.
 - Live sandbox validation requires Lago access later. The plugin will state exactly when it reaches that boundary.
 - Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
@@ -84,7 +85,7 @@ Typical successful first response:
 >
 > I can inspect and edit this repository without Lago credentials. Live sandbox validation requires credentials later, and production actions require separate approval.
 >
-> I’ll first map the existing customer, subscription, and usage architecture.
+> I’ll first map who pays, what they buy, and what usage affects the bill. I’ll explain the corresponding Lago concepts as we use them.
 
 If the application has no billing integration yet, the response changes accordingly:
 
@@ -94,7 +95,11 @@ If the application has no billing integration yet, the response changes accordin
 >
 > I can design and implement the initial Lago integration without credentials. Live sandbox validation requires Lago access later.
 >
-> I’ll first determine the customer identity and smallest billable workflow, then ask for the first business decision that cannot be inferred from the code.
+> I’ll first determine who should be billed and the smallest product action that should affect their bill. I’ll explain how those map to Lago, then ask for the first business decision that cannot be inferred from the code.
+
+### The primitives you will learn as needed
+
+The copilot translates application concepts into a small core path: who pays becomes a Lago **customer**; the package and price become a **plan**; assigning that package creates a **subscription**; product activity becomes an **event**; a **billable metric** measures those events; a **charge** turns measured usage into money; and Lago produces an **invoice**. Wallets, coupons, commitments, and entitlements are introduced only when the product requires them.
 
 ## How it works
 
@@ -126,7 +131,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 42 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
+The 43 synthetic cases and scorecard are in [evals/implementation](evals/implementation). A live money test additionally requires a separately approved Lago sandbox; never point evals at production.
 
 ## Updating and uninstalling
 

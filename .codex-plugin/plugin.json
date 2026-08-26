@@ -1,7 +1,7 @@
 {
   "name": "lago-billing",
   "version": "0.1.0",
-  "description": "A billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing in new or existing applications. Offline work needs no Lago credentials.",
+  "description": "A beginner-friendly billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise—or credentials for offline work—is required.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",
@@ -10,13 +10,13 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Lago Billing Engineer",
-    "shortDescription": "Billing engineer copilot for new or existing applications.",
-    "longDescription": "Open an application repository, with or without billing code. The copilot inspects the stack, identifies whether billing already exists, and designs or improves the Lago integration. Offline work needs no Lago credentials or MCP connection; live sandbox validation needs Lago access, and production actions require separate approval.",
+    "shortDescription": "Beginner-friendly billing copilot for your application.",
+    "longDescription": "No Lago or billing expertise is required. Open an application repository, with or without billing code. The copilot inspects the product and stack, maps application concepts to Lago primitives, explains each decision in plain language, and designs or improves the integration. Offline work needs no credentials or MCP connection; live sandbox validation needs Lago access, and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": ["Read", "Write"],
     "websiteURL": "https://www.getlago.com",
-    "defaultPrompt": ["Implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions."],
+    "defaultPrompt": ["Implement Lago in the application currently open in this workspace. First confirm the repository, explain what you can do offline, inspect the existing architecture, and ask only for blocking decisions. Assume I am new to Lago and billing; explain each primitive in plain language when it becomes relevant."],
     "brandColor": "#19212E"
   }
 }

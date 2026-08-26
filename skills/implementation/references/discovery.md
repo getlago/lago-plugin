@@ -43,7 +43,7 @@ Application with existing billing found:
 >
 > I can inspect and edit this repository without Lago credentials. `<Connected-tool status>` Live sandbox validation requires credentials later, and production actions require separate approval.
 >
-> I’ll first map the existing customer, subscription, and usage architecture.
+> I’ll first map who pays, what they buy, and what usage affects the bill. I’ll explain the corresponding Lago concepts as we use them.
 
 Application without billing:
 
@@ -53,7 +53,7 @@ Application without billing:
 >
 > I can design and implement the initial Lago integration without credentials. `<Connected-tool status>` Live sandbox validation requires Lago access later, and production actions require separate approval.
 >
-> I’ll first determine the customer identity and smallest billable workflow, then ask for the first business decision that cannot be inferred from the code.
+> I’ll first determine who should be billed and the smallest product action that should affect their bill. I’ll explain how those map to Lago, then ask for the first business decision that cannot be inferred from the code.
 
 Wrong, content-only, documentation, or empty folder:
 

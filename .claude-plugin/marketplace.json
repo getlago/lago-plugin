@@ -1,6 +1,6 @@
 {
   "name": "lago-plugins",
-  "metadata": {"description": "A billing engineer copilot for new or existing applications. It can design and implement Lago from scratch without credentials; live validation requires Lago access."},
+  "metadata": {"description": "A beginner-friendly billing engineer copilot for new or existing applications. No Lago or billing expertise is required; live validation requires Lago access."},
   "owner": {"name": "Lago"},
-  "plugins": [{"name": "lago-billing", "source": "./", "description": "Designs or improves Lago billing after inspecting the open application. Existing billing code is not required; live validation requires Lago access."}]
+  "plugins": [{"name": "lago-billing", "source": "./", "description": "Walks users through Lago primitives while designing or improving billing in the open application. Existing billing code or prior Lago knowledge is not required."}]
 }

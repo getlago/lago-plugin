@@ -71,12 +71,13 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(human.returncode, 0, human.stdout + human.stderr)
         self.assertIn("You do not need to do anything", human.stdout)
         self.assertIn("Offline example complete", human.stdout)
+        self.assertIn("expert mode", human.stdout)
 
-    def test_eval_suite_has_all_49_unique_cases(self):
+    def test_eval_suite_has_all_50_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 49)
-        self.assertEqual(len({case["id"] for case in cases}), 49)
+        self.assertEqual(len(cases), 50)
+        self.assertEqual(len({case["id"] for case in cases}), 50)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -98,6 +99,7 @@ class ScriptTests(unittest.TestCase):
             "beginner-offline-walkthrough",
             "demo-is-not-production-ready",
             "ambiguous-help-start-no-app",
+            "expert-mode-opt-out",
         }.issubset(ids))
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
@@ -121,6 +123,9 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("the billing blueprint", guided)
         self.assertIn("Offline example complete", guided)
         self.assertIn("You do not need to do anything", guided)
+        self.assertIn("Gratification before intake", guided)
+        self.assertIn("expert mode", skill)
+        self.assertIn("guided mode", skill)
         self.assertIn("scripts/run_demo.py", skill)
         self.assertIn("never let `demo works` imply `ready for production`", skill)
 

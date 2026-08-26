@@ -13,6 +13,7 @@ Open the application repository you want to change before invoking the plugin. T
 - Lago has no built-in sandbox. Offline examples need no Lago access; any live seeded demo uses a dedicated self-hosted instance, never Lago Cloud.
 - Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
 - On first run, expect a short activation message confirming the workspace, detected stack, whether billing already exists, current capabilities, and first next step.
+- The default experience is hands-on and guided: it produces a useful result first, takes the next safe step, and asks only for decisions that materially change the bill or implementation. Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution; say `guided mode` to restore explanations.
 
 The first useful artifact is a one-screen billing blueprint, not a terminology lesson: who pays, what they buy, what action affects the bill, how the amount is calculated, the smallest code slice to build, and the one decision needed next. The copilot recommends a default from repository evidence instead of presenting a menu of equally weighted options.
 
@@ -144,7 +145,7 @@ claude plugin validate .
 python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 49 synthetic cases and scorecard are in [evals/implementation](evals/implementation). The bundled instant demo runs with `python3 skills/implementation/scripts/run_demo.py`. A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
+The 50 synthetic cases and scorecard are in [evals/implementation](evals/implementation). The bundled instant demo runs with `python3 skills/implementation/scripts/run_demo.py`. A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
 
 ## Updating and uninstalling
 

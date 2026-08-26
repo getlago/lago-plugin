@@ -130,6 +130,7 @@ def render(result: dict[str, object]) -> str:
             "",
             "Offline example complete. No Lago API, Docker, account, or credentials were used.",
             "When you want this applied to your product, open its repository and say: implement Lago.",
+            "Prefer concise execution without the walkthrough? Say: expert mode.",
         ]
     )
     return "\n".join(lines)

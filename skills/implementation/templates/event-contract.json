@@ -1,0 +1,16 @@
+{
+  "name": "synthetic_api_request",
+  "code": "api_requests",
+  "transaction_id_strategy": "api_request:{durable_request_id}",
+  "external_subscription_id_strategy": "subscription:{durable_subscription_id}",
+  "timestamp": "source occurred_at, Unix seconds, preserved on retry",
+  "properties": {
+    "quantity": "finite decimal number",
+    "region": "approved dimension value"
+  },
+  "source": "application_usage_ledger",
+  "schema_version": 1,
+  "duplicate_behavior": "resend identical transaction_id and timestamp",
+  "correction_behavior": "verify target Lago event store before choosing mechanism",
+  "reconciliation_key": "transaction_id + timestamp when required"
+}

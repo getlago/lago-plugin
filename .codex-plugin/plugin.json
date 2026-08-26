@@ -1,0 +1,22 @@
+{
+  "name": "lago",
+  "version": "0.1.0",
+  "description": "Assess, design, implement, deploy, migrate, validate, reconcile, and troubleshoot Lago integrations.",
+  "author": {"name": "Lago", "url": "https://www.getlago.com"},
+  "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
+  "repository": "https://github.com/getlago/lago-agent-plugin",
+  "license": "MIT",
+  "keywords": ["lago", "billing", "metering", "subscriptions", "migration"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Lago for Coding Agents",
+    "shortDescription": "Build and validate Lago billing integrations.",
+    "longDescription": "Repository-aware workflows for Lago Cloud and self-hosted implementations, migrations, billing validation, reconciliation, and troubleshooting.",
+    "developerName": "Lago",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://www.getlago.com",
+    "defaultPrompt": ["Assess this repository for a Lago integration.", "Design usage-based billing with Lago.", "Validate this Lago integration end to end."],
+    "brandColor": "#19212E"
+  }
+}

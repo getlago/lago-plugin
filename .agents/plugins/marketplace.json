@@ -1,0 +1,12 @@
+{
+  "name": "lago",
+  "interface": {"displayName": "Lago"},
+  "plugins": [
+    {
+      "name": "lago",
+      "source": {"source": "local", "path": "./"},
+      "policy": {"installation": "AVAILABLE", "authentication": "ON_USE"},
+      "category": "Developer Tools"
+    }
+  ]
+}

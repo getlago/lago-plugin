@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lago Implementation"
+  short_description: "Implement and validate Lago billing integrations"
+  default_prompt: "Assess this repository and design the safest Lago integration."

@@ -12,7 +12,7 @@ After this repository is public:
 
 ```text
 /plugin marketplace add getlago/lago-agent-plugin
-/plugin install lago@lago
+/plugin install lago@lago-agent-plugin
 ```
 
 For local development:
@@ -38,7 +38,7 @@ After this repository is public:
 
 ```bash
 codex plugin marketplace add getlago/lago-agent-plugin
-codex plugin add lago@lago
+codex plugin add lago@lago-agent-plugin
 ```
 
 Start a new Codex task after installation. Invoke explicitly as:
@@ -85,9 +85,9 @@ The 34 synthetic cases and scorecard are in [evals/implementation](evals/impleme
 
 ## Updating and uninstalling
 
-Pull a tagged release, then update through the installed marketplace. For Claude Code use `claude plugin update lago@lago`; for Codex refresh the marketplace with `codex plugin marketplace upgrade lago` and reinstall with `codex plugin add lago@lago`. Start a new task after an update.
+Pull a tagged release, then update through the installed marketplace. For Claude Code use `claude plugin update lago@lago-agent-plugin`; for Codex refresh the marketplace with `codex plugin marketplace upgrade lago-agent-plugin` and reinstall with `codex plugin add lago@lago-agent-plugin`. Start a new task after an update.
 
-Uninstall with `claude plugin uninstall lago@lago` or `codex plugin remove lago@lago`. Removing the plugin does not change application code or any Lago environment.
+Uninstall with `claude plugin uninstall lago@lago-agent-plugin` or `codex plugin remove lago@lago-agent-plugin`. Removing the plugin does not change application code or any Lago environment.
 
 ## Troubleshooting
 

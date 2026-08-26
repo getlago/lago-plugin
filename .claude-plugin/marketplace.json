@@ -1,5 +1,5 @@
 {
-  "name": "lago",
+  "name": "lago-agent-plugin",
   "metadata": {"description": "Official Lago skills for billing implementation and migration workflows."},
   "owner": {"name": "Lago"},
   "plugins": [{"name": "lago", "source": "./", "description": "Build and validate Lago billing integrations."}]

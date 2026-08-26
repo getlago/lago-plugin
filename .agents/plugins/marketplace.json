@@ -1,6 +1,6 @@
 {
-  "name": "lago",
-  "interface": {"displayName": "Lago"},
+  "name": "lago-agent-plugin",
+  "interface": {"displayName": "Lago Agent Plugin"},
   "plugins": [
     {
       "name": "lago",

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Deterministic public-plugin checks; standard library only."""
 
+from __future__ import annotations
+
 import argparse
 import json
 import re
@@ -11,6 +13,7 @@ TEXT_SUFFIXES = {".md", ".json", ".yaml", ".yml", ".py", ".txt", ".csv"}
 SECRET_PATTERNS = {
     "Lago API key": re.compile(r"\blago_[A-Za-z0-9]{24,}\b", re.I),
     "Stripe live key": re.compile(r"\b(?:sk|rk)_live_[A-Za-z0-9]{16,}\b"),
+    "Lago key assignment": re.compile(r"LAGO_[A-Z_]*KEY\s*[=:]\s*['\"][A-Za-z0-9-]{20,}['\"]", re.I),
     "Chargebee key assignment": re.compile(r"CHARGEBEE_[A-Z_]*KEY\s*=\s*['\"][^_\s][^'\"]{12,}['\"]", re.I),
     "private key": re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
 }

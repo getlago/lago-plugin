@@ -19,28 +19,28 @@ PRICES_PER_THOUSAND = {
 EVENTS = [
     {
         "transaction_id": "demo_evt_small_input",
-        "timestamp": "2026-08-01T10:00:00Z",
+        "timestamp": 1785578400,  # 2026-08-01T10:00:00Z
         "model": "demo-small",
         "type": "input",
         "tokens": 12_000,
     },
     {
         "transaction_id": "demo_evt_small_output",
-        "timestamp": "2026-08-01T10:01:00Z",
+        "timestamp": 1785578460,  # 2026-08-01T10:01:00Z
         "model": "demo-small",
         "type": "output",
         "tokens": 3_000,
     },
     {
         "transaction_id": "demo_evt_large_input",
-        "timestamp": "2026-08-01T10:02:00Z",
+        "timestamp": 1785578520,  # 2026-08-01T10:02:00Z
         "model": "demo-large",
         "type": "input",
         "tokens": 5_000,
     },
     {
         "transaction_id": "demo_evt_large_output",
-        "timestamp": "2026-08-01T10:03:00Z",
+        "timestamp": 1785578580,  # 2026-08-01T10:03:00Z
         "model": "demo-large",
         "type": "output",
         "tokens": 1_000,

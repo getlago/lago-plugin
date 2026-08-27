@@ -19,4 +19,4 @@ Use a decision ledger:
 | Decision | Options | Evidence | Owner | Status |
 | --- | --- | --- | --- | --- |
 
-Sources: [Lago plans](https://docs.getlago.com/guide/plans), [billable metrics](https://docs.getlago.com/guide/billable-metrics), [wallets](https://docs.getlago.com/guide/wallets), [commitments](https://docs.getlago.com/guide/plans/charges/minimum-commitment).
+Sources: [Lago plans](https://docs.getlago.com/guide/plans), [billable metrics](https://docs.getlago.com/guide/billable-metrics), [wallets](https://docs.getlago.com/guide/wallet-and-prepaid-credits/overview), [commitments](https://docs.getlago.com/guide/plans/commitment).

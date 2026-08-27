@@ -31,4 +31,4 @@ If Docker is unavailable or the user declines local containers, keep the demo of
 
 Call the result `offline example complete`, not `validated` or `production-ready`. After an isolated self-hosted run, call it `live self-hosted validation complete` and keep production readiness as a separate gate.
 
-Official context: [self-hosted overview](https://docs.getlago.com/guide/self-hosted), [Docker setup](https://docs.getlago.com/guide/lago-self-hosted/docker), and [integration testing](https://docs.getlago.com/guide/integration-testing).
+Official context: [self-hosted overview](https://docs.getlago.com/guide/lago-self-hosted/overview), [Docker setup](https://docs.getlago.com/guide/lago-self-hosted/docker), and [integration testing](https://docs.getlago.com/guide/integration-testing).

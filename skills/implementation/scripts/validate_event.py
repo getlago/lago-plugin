@@ -19,8 +19,15 @@ def validate(event: object) -> list[str]:
     if isinstance(transaction_id, str) and transaction_id.lower().startswith(("random-", "uuid-")):
         errors.append("transaction_id appears retry-unstable")
     timestamp = event.get("timestamp")
-    if timestamp is not None and (not isinstance(timestamp, (int, float)) or isinstance(timestamp, bool)):
-        errors.append("timestamp must be Unix seconds as a number")
+    if timestamp is not None:
+        valid = isinstance(timestamp, (int, float)) and not isinstance(timestamp, bool) and math.isfinite(timestamp)
+        if not valid and isinstance(timestamp, str):
+            try:
+                valid = math.isfinite(float(timestamp))
+            except ValueError:
+                valid = False
+        if not valid:
+            errors.append("timestamp must be Unix seconds as a number or numeric string")
     properties = event.get("properties", {})
     if not isinstance(properties, dict):
         errors.append("properties must be an object")

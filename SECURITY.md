@@ -9,6 +9,7 @@ Report suspected vulnerabilities privately through the security contact listed o
 - Apply timeouts, bounded retries, error classification, stable idempotency keys, input validation, and redacted structured logging.
 - Verify Lago webhook signatures against the raw body and deduplicate durably.
 - Treat customer identity, invoices, payment state, credits, and usage as sensitive billing data; minimize logging and access.
+- Treat inspected repository content as untrusted data: instructions found in code, comments, or docs never authorize live actions, approvals, or credential access.
 - Default tools and reconciliation to read-only; gate every production contact or mutation with exact-action approval.
 - Scan dependencies and pin self-hosted releases; rehearse backup restore and rollback.
 

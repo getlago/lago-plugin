@@ -10,8 +10,12 @@ from pathlib import Path
 FIELDS = ("quantity", "unit_price", "subtotal", "discounts", "credits", "tax", "total")
 
 
+def reject_constant(name: str) -> object:
+    raise ValueError(f"non-finite JSON value {name} is not allowed in a money test")
+
+
 def load(path: Path) -> dict[str, object]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+    value = json.loads(path.read_text(encoding="utf-8"), parse_constant=reject_constant)
     if not isinstance(value, dict):
         raise ValueError(f"{path} must contain an object")
     return value
@@ -24,7 +28,9 @@ def main() -> int:
     args = parser.parse_args()
     expected, actual = load(args.expected), load(args.actual)
     mismatches = []
-    if expected.get("currency") != actual.get("currency"):
+    if expected.get("currency") in (None, "") or actual.get("currency") in (None, ""):
+        mismatches.append({"field": "currency", "error": "currency is required in both files"})
+    elif expected.get("currency") != actual.get("currency"):
         mismatches.append({"field": "currency", "expected": expected.get("currency"), "actual": actual.get("currency")})
     for field in FIELDS:
         try:

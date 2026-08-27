@@ -1,61 +1,76 @@
 # Lago Billing Engineer
 
-A public, beginner-friendly billing engineer copilot for Claude Code and Codex. It designs, implements, validates, migrates, reconciles, and troubleshoots [Lago](https://www.getlago.com) billing in applications with or without an existing billing integration.
+Turn a product’s pricing and usage model into a testable [Lago](https://www.getlago.com) integration from Claude Code or Codex.
 
-One shared skill supports Lago Cloud and self-hosted deployments, greenfield and existing applications, subscriptions, usage pricing, prepaid credits and wallets, minimum commitments, hybrid pricing, multi-tenancy, and migrations from Stripe Billing, Chargebee, or custom billing systems. Version 1 does not claim migration support for other providers.
+The plugin works inside an application repository. It finds the customer and subscription boundaries, maps product behavior to Lago, implements the smallest coherent billing slice, and verifies the expected amount independently.
 
-## Before you start
+## What it does
 
-Open the application repository you want to change before invoking the plugin. The plugin inspects and edits local files; it does not locate or clone private applications automatically.
+- **Understands the application:** inspects customer, tenant, subscription, usage, webhook, payment, tax, and existing billing code before proposing changes.
+- **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
+- **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
+- **Proves the money:** compares expected quantity and invoice amounts using exact deterministic calculations. Compilation or a successful API response is not treated as billing correctness.
+- **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
 
-- No prior Lago or billing expertise is required. The copilot starts from your product—who pays, what they buy, and what usage matters—then explains Lago primitives as they become relevant.
-- No Lago credentials, MCP connection, or running Lago instance are required for repository inspection, architecture work, code changes, fixtures, or offline tests.
-- Lago has no built-in sandbox. Offline examples need no Lago access; any live seeded demo uses a dedicated self-hosted instance, never Lago Cloud.
-- Production contact or mutation is never implied by installation or invocation and always requires separate explicit approval for the exact action.
-- On first run, expect a short activation message confirming the workspace, detected stack, whether billing already exists, current capabilities, and first next step.
-- The default experience is hands-on and guided: it produces a useful result first, takes the next safe step, and asks only for decisions that materially change the bill or implementation. Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution; say `guided mode` to restore explanations.
+No prior Lago or billing expertise is required.
 
-The first useful artifact is a one-screen billing blueprint, not a terminology lesson: who pays, what they buy, what action affects the bill, how the amount is calculated, the smallest code slice to build, and the one decision needed next. The copilot recommends a default from repository evidence instead of presenting a menu of equally weighted options.
+## Start here
+
+After installation, open the application repository and ask:
+
+```text
+implement Lago
+```
+
+The plugin silently inspects the workspace, gives you the first useful result, recommends one path, and takes the next safe step. It asks only when a decision materially changes money, architecture, lifecycle behavior, or authorization.
+
+Want to understand the flow first? Ask:
+
+```text
+help me start
+show me a billing demo
+```
+
+The plugin immediately runs a dependency-free offline example with a product-to-Lago mapping, deterministic events, duplicate protection, reconciliation, and an exact `$0.37` money test. You do not need a Lago account, credentials, Docker, MCP, or even an application repository for this walkthrough.
+
+### Guided or concise
+
+The default experience is hands-on and guided. Lago concepts are explained only when they become relevant, and every response ends with one clear next step.
+
+Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution. The plugin will omit primers and routine narration while preserving material decisions, diffs, tests, risks, approvals, and money evidence. Say `guided mode` to restore explanations.
 
 ## Install
 
 ### Claude Code
-
-After this repository is public:
 
 ```text
 /plugin marketplace add getlago/lago-agent-plugin
 /plugin install lago-billing@lago-plugins
 ```
 
-For local development:
+Example prompts:
+
+```text
+/lago-billing:implementation implement the smallest Lago Cloud integration
+/lago-billing:implementation show me the offline per-token demo
+/lago-billing:implementation migrate this Chargebee implementation to Lago
+```
+
+For local plugin development:
 
 ```bash
 git clone https://github.com/getlago/lago-agent-plugin.git
 claude --plugin-dir ./lago-agent-plugin
 ```
 
-Validate with `claude plugin validate ./lago-agent-plugin`. Invoke explicitly as:
-
-```text
-/lago-billing:implementation assess this repository for a Lago integration
-/lago-billing:implementation implement the smallest Lago Cloud integration
-/lago-billing:implementation show the self-hosted per-token demo
-/lago-billing:implementation migrate this Chargebee implementation to Lago
-```
-
-Claude may also select the skill automatically from a clear Lago implementation request.
-
 ### Codex
-
-After this repository is public:
 
 ```bash
 codex plugin marketplace add getlago/lago-agent-plugin
 codex plugin add lago-billing@lago-plugins
 ```
 
-Start a new Codex task after installation. Invoke explicitly as:
+Start a new Codex task after installation. Example prompts:
 
 ```text
 $lago-billing:implementation design usage-based billing for this application
@@ -63,104 +78,98 @@ $lago-billing:implementation prepare a self-hosted Kubernetes deployment
 $lago-billing:implementation migrate this Stripe Billing integration to Lago
 ```
 
-Codex also discovers the skill automatically when the request matches its description. Current Codex plugin invocation is `$plugin:skill`; standalone skills use `$skill-name`.
+Claude and Codex may also select the skill automatically when a request clearly involves implementing or operating Lago billing.
 
-## Five-minute quickstart
+## What happens after a prompt
 
-Invoke the plugin with a short request such as:
+1. **Workspace preflight:** confirms the repository, stack, application boundary, existing billing state, and available tools without printing credentials.
+2. **First useful result:** produces a repository finding, billing blueprint, completed offline demo, code change, or verified test before collecting optional context.
+3. **Smallest coherent implementation:** works through the application’s existing conventions and keeps provider calls behind a billing boundary.
+4. **Behavior validation:** exercises a representative customer → subscription → usage → aggregation → invoice → webhook → reconciliation flow with synthetic data.
+5. **Precise handoff:** distinguishes an offline example, repository implementation, live self-hosted validation, and actual production readiness.
 
-```text
-implement Lago
+If the current workspace is not an application, the plugin says what it inspected. A concrete implementation request gets one recovery action. A beginner or demo request gets the offline walkthrough first, so the first interaction is still useful.
+
+## Supported work
+
+| Area | Support |
+| --- | --- |
+| Deployment | Lago Cloud US/EU and self-hosted Docker or Kubernetes guidance |
+| Pricing | Subscriptions, usage, hybrid pricing, wallets, prepaid credits, and minimum commitments |
+| Application shape | Greenfield, existing billing integrations, and multi-tenant applications |
+| Migrations | Stripe Billing, Chargebee, and custom billing systems |
+| Reliability | Stable event identity, duplicate protection, retries, late events, replay, webhooks, and reconciliation |
+| Operations | Validation, production-readiness gates, diagnosis, and rollback planning |
+
+Version 1 does not claim migration support for providers other than Stripe Billing, Chargebee, and custom systems.
+
+## Why MCP is optional
+
+Most of the useful work happens in the application repository: understanding the data model, designing the billing flow, implementing the adapter, validating events, and testing the expected invoice amount.
+
+Making MCP mandatory would put connection setup, authentication, and permissions in front of the first useful result. The plugin therefore works offline across Claude Code and Codex, for Lago Cloud and self-hosted deployments. When compatible Lago tools are already available, MCP may add supported live reads or explicitly approved actions, but it never gates the core experience and this repository does not bundle or duplicate it.
+
+## Credentials, environments, and safety
+
+No API key, MCP server, Docker runtime, package install, or custom telemetry is required to load the plugin or perform repository inspection, architecture work, code changes, fixtures, calculations, and offline tests.
+
+Production contact or mutation always requires separate approval for the exact environment, action, affected objects, billing impact, infrastructure impact, and recovery plan. Reconciliation is read-only by default and never repairs discrepancies automatically.
+
+Lago has no built-in sandbox. Offline examples contact no Lago runtime. Any seeded live demo must use a dedicated, version-pinned self-hosted Lago instance with isolated containers, ports, networks, and volumes. The plugin never seeds generic demo data into Lago Cloud, including an account called development, test, or staging.
+
+Validation of a user’s real Lago environment is separate from a demo and requires explicit access and approval. Application credentials belong in the repository’s existing secret manager and must never be committed.
+
+## Canonical offline demo
+
+The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It creates four deterministic token events across model and input/output filters, replays a duplicate, reconciles 21,000 tokens, and verifies an expected total of `$0.37`.
+
+Run it directly while developing the plugin:
+
+```bash
+python3 skills/implementation/scripts/run_demo.py
 ```
 
-The plugin silently inspects the workspace before responding. Then follow the path that matches what it finds:
+This writes no files and contacts no external service. Optional live validation follows the isolated self-hosted policy above and must not claim to reproduce current OpenAI pricing.
 
-1. **Existing application:** it confirms the repository and stack, maps existing customer, subscription, usage, billing, and provider code, then starts with the smallest repository-consistent change.
-2. **Application without billing:** it confirms the stack and application boundary, states that no billing integration was found, identifies the minimum customer and billable workflow, and asks only the next blocking business decision.
-3. **No credentials:** it continues with offline architecture, code, mocks, fixtures, calculations, and tests. Live runtime behavior is clearly marked unverified.
-4. **Wrong or empty folder:** it states the inspected path and evidence, then asks you to open the application repository or provide its path. It does not search broadly or clone private code.
-5. **Demo versus real environments:** a live seeded demo uses only an isolated self-hosted Lago instance. Lago Cloud—including staging—is never used for generic demo data. Validation against the user's real environment requires separate access and approval.
+## Local development and validation
 
-If you ask to implement, the copilot shows the billing blueprint as a preview and then builds the smallest coherent slice. If you ask to learn, see a demo, or simply say `help me start` outside an application repository, it runs a bundled offline walkthrough immediately and makes clear that you do not need to configure anything. Docker and a self-hosted Lago instance are offered only for optional live validation.
-
-For longer work it keeps a compact progress block—application mapped, blueprint, implementation, money test, optional live validation—and a decision trail. It always distinguishes an offline example, a repository implementation, live self-hosted validation, and actual production readiness.
-
-Typical successful first response:
-
-> Lago Billing Engineer loaded.
->
-> I’m working in `/path/to/app`, a Node.js application.
->
-> I can inspect and edit this repository without Lago credentials. A live seeded demo would use isolated self-hosted Lago; validation of a real environment requires separate access and approval.
->
-> I’ll first map who pays, what they buy, and what usage affects the bill. I’ll explain the corresponding Lago concepts as we use them.
-
-If the application has no billing integration yet, the response changes accordingly:
-
-> Lago Billing Engineer loaded.
->
-> I’m working in `/path/to/app`, a Node.js application. I found customer and authentication models, but no existing billing integration.
->
-> I can design and implement the initial Lago integration without credentials. A live seeded demo would use isolated self-hosted Lago; validation of a real environment requires separate access and approval.
->
-> I’ll first determine who should be billed and the smallest product action that should affect their bill. I’ll explain how those map to Lago, then ask for the first business decision that cannot be inferred from the code.
-
-### The primitives you will learn as needed
-
-The copilot translates application concepts into a small core path: who pays becomes a Lago **customer**; the package and price become a **plan**; assigning that package creates a **subscription**; product activity becomes an **event**; a **billable metric** measures those events; a **charge** turns measured usage into money; and Lago produces an **invoice**. Wallets, coupons, commitments, and entitlements are introduced only when the product requires them.
-
-## How it works
-
-The `implementation` skill infers the work required without asking users to choose an internal mode. It confirms activation, discovers the repository first, recommends one repository-backed billing blueprint, separates facts from assumptions, keeps provider calls behind a billing adapter, and validates the billed amount with a deterministic money test.
-
-- Lago Cloud: region-aware US/EU integration with no generic demo data. A Cloud account is one environment, not a built-in sandbox.
-- Self-hosted: official, isolated Docker path for live demos and local evaluation; official Helm path for Kubernetes; production adds explicit persistence, backup/restore, health, observability, upgrade, and rollback gates.
-- Stripe/Chargebee: mapping ledger, historical-record retention, restartable checkpoints, parallel validation, and double-billing prevention.
-- Reconciliation: read-only comparison by stable external IDs, event keys, periods, quantities, and amounts.
-
-See [examples](examples), the [architecture decision](docs/architecture.md), and the [benchmark](docs/benchmark.md).
-
-## Credentials, safety, and MCP
-
-No API key, MCP server, Docker runtime, package install, or custom telemetry is needed to load this plugin or perform offline work. Never commit credentials. Application integrations should use the repository's existing secret manager and least privilege.
-
-The skill pauses immediately before production contact or mutation and asks for approval for the exact target, action, objects, billing impact, infrastructure impact, and recovery plan. Reconciliation never repairs automatically.
-
-Lago MCP is optional. When compatible tools exist, they may add supported live reads or explicitly approved actions; offline and live validation remain separate claims. This repository does not bundle or duplicate MCP.
-
-### Demo data policy
-
-The copilot builds every example offline first. If the user asks for a live demo, it checks for Docker, explains the images, containers, ports, and disposable data involved, and asks before starting anything. It then uses a dedicated, version-pinned self-hosted Lago instance with isolated names, networks, and volumes. It refuses to seed fake customers or usage into any Lago Cloud account, even one dedicated to staging.
-
-The default live walkthrough is an [OpenAI-style per-token demo](examples/per-token-ai.md), adapted from Lago's official template. It creates a synthetic AI customer, a token billable metric with model and input/output filters, a pay-as-you-go plan, a subscription, and deterministic token events. Prices and model names are explicitly illustrative; the demo verifies current usage and a $0.37 independent money calculation without claiming to reproduce current OpenAI pricing.
-
-## Local development and tests
-
-Python 3.10+ is required only for the deterministic helpers; the skill itself is Markdown.
+Python 3.10+ is required only for the deterministic helpers. The skill itself is Markdown.
 
 ```bash
 python3 skills/implementation/scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
 claude plugin validate .
-python3 /path/to/plugin-creator/scripts/validate_plugin.py .
 ```
 
-The 50 synthetic cases and scorecard are in [evals/implementation](evals/implementation). The bundled instant demo runs with `python3 skills/implementation/scripts/run_demo.py`. A live demo money test additionally requires a separately approved isolated self-hosted Lago instance; never point evals at Lago Cloud or production.
+The repository includes 50 synthetic behavioral cases and deterministic tests for event validation, money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
-## Updating and uninstalling
+## Update or uninstall
 
-Pull a tagged release, then update through the installed marketplace. For Claude Code use `claude plugin update lago-billing@lago-plugins`; for Codex refresh the marketplace with `codex plugin marketplace upgrade lago-plugins` and reinstall with `codex plugin add lago-billing@lago-plugins`. Start a new task after an update.
+Claude Code:
 
-Uninstall with `claude plugin uninstall lago-billing@lago-plugins` or `codex plugin remove lago-billing@lago-plugins`. Removing the plugin does not change application code or any Lago environment.
+```bash
+claude plugin update lago-billing@lago-plugins
+claude plugin uninstall lago-billing@lago-plugins
+```
+
+Codex:
+
+```bash
+codex plugin marketplace upgrade lago-plugins
+codex plugin add lago-billing@lago-plugins
+codex plugin remove lago-billing@lago-plugins
+```
+
+Start a new task after an update. Removing the plugin does not change application code or a Lago environment.
 
 ## Troubleshooting
 
-- Skill absent: verify the manifest, marketplace, installation, and start a new task. Claude local development can use `--plugin-dir` and `/reload-plugins`.
-- Wrong Cloud endpoint: confirm region; current documented bases are `https://api.getlago.com` (US) and `https://api.eu.getlago.com` (EU).
-- No credentials: offline assess/design/code/fixtures still work; report live behavior as unverified.
-- Validation failure: run the repository validator, then platform validators, and fix the first structural error.
+- **Skill not available:** verify the marketplace and installation, then start a new task. Claude local development can use `--plugin-dir` and `/reload-plugins`.
+- **No credentials:** continue with repository implementation, fixtures, calculations, and offline tests. Live runtime behavior remains unverified.
+- **Wrong Lago Cloud endpoint:** confirm the region. Current documented bases are `https://api.getlago.com` for US and `https://api.eu.getlago.com` for EU.
+- **Validation failure:** run the repository validator, then platform validators, and fix the first structural error.
 
-Authoritative sources: [Lago docs](https://docs.getlago.com), [Lago API](https://docs.getlago.com/api-reference/intro), [Lago OpenAPI](https://swagger.getlago.com/openapi.yaml), [Claude Code plugins](https://code.claude.com/docs/en/plugins), and official OpenAI Codex documentation plus the installed `codex plugin --help` for the current CLI.
+Authoritative sources: [Lago documentation](https://docs.getlago.com), [Lago API reference](https://docs.getlago.com/api-reference/intro), [Lago OpenAPI](https://swagger.getlago.com/openapi.yaml), [Claude Code plugins](https://code.claude.com/docs/en/plugins), and official OpenAI Codex documentation plus the installed `codex plugin --help` for current CLI behavior.
 
 ## Contributing
 

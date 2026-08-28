@@ -10,13 +10,18 @@
   "_basis": {
     "quantity": "sum of invoice fee units",
     "unit_price": "effective subtotal divided by quantity",
-    "credits": "residual required to reconcile subtotal, discounts, tax, and total",
+    "credits": "credit notes + prepaid credits + progressive-billing credits",
+    "credit_components": {
+      "credit_notes_amount_cents": "1",
+      "prepaid_credit_amount_cents": "0",
+      "progressive_billing_credit_amount_cents": "0"
+    },
     "item_code": "api_requests"
   },
   "_evidence": {
     "generated_by": "extract_actual.py",
     "source_kind": "invoice",
     "source_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
-    "source_sha256": "70f75612ea6a67cbd446ce3c8f19dfa84170082de1d7e8ed2f85756f20cc9fd5"
+    "source_sha256": "86fcff470dd80300820302f3bff6c6a87dada76e85e87596c100be677472efec"
   }
 }

@@ -6,12 +6,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 from extract_actual import ExtractionError, extract, reject_constant as reject_source_constant
 
 FIELDS = ("quantity", "unit_price", "subtotal", "discounts", "credits", "tax", "total")
+CURRENCY = re.compile(r"^[A-Z]{3}$")
+DECIMAL = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$")
 
 
 def reject_constant(name: str) -> object:
@@ -78,13 +81,20 @@ def evidence_errors(
 
 
 def decimal_field(payload: dict[str, object], field: str) -> Decimal:
+    value = payload.get(field)
+    if isinstance(value, bool) or isinstance(value, float):
+        raise ValueError("use an exact decimal string or integer, not a boolean or float")
+    if not isinstance(value, (str, int)) or not DECIMAL.fullmatch(str(value)):
+        raise ValueError("value must be an exact finite decimal string or integer")
     try:
-        value = Decimal(str(payload[field]))
-    except (KeyError, InvalidOperation) as error:
+        parsed = Decimal(str(value))
+    except InvalidOperation as error:
         raise ValueError(str(error)) from error
-    if not value.is_finite():
+    if not parsed.is_finite():
         raise ValueError("value must be finite")
-    return value
+    if parsed < 0:
+        raise ValueError("value must be non-negative")
+    return parsed
 
 
 def formula_error(payload: dict[str, object], label: str) -> dict[str, str] | None:
@@ -127,14 +137,27 @@ def main() -> int:
     mismatches: list[dict[str, str]] = evidence_errors(
         actual, args.actual_source, args.max_bytes
     )
-    if expected.get("currency") in (None, "") or actual.get("currency") in (None, ""):
-        mismatches.append({"field": "currency", "error": "currency is required in both files"})
-    elif expected.get("currency") != actual.get("currency"):
+    expected_currency, actual_currency = expected.get("currency"), actual.get("currency")
+    if not isinstance(expected_currency, str) or not CURRENCY.fullmatch(expected_currency):
+        mismatches.append(
+            {"field": "currency", "error": "expected currency must be an uppercase three-letter code"}
+        )
+    if not isinstance(actual_currency, str) or not CURRENCY.fullmatch(actual_currency):
+        mismatches.append(
+            {"field": "currency", "error": "actual currency must be an uppercase three-letter code"}
+        )
+    if (
+        isinstance(expected_currency, str)
+        and CURRENCY.fullmatch(expected_currency)
+        and isinstance(actual_currency, str)
+        and CURRENCY.fullmatch(actual_currency)
+        and expected_currency != actual_currency
+    ):
         mismatches.append(
             {
                 "field": "currency",
-                "expected": str(expected.get("currency")),
-                "actual": str(actual.get("currency")),
+                "expected": expected_currency,
+                "actual": actual_currency,
             }
         )
     for field in FIELDS:

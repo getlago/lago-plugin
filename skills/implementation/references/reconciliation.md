@@ -17,4 +17,4 @@ Normalize timestamps, currencies, decimal precision, and status vocabulary expli
 
 Output counts, totals, discrepancy rows, evidence, and recommended next check. Do not repair automatically. A repair plan names exact records, billing impact, approvals, and rollback.
 
-`reconcile.py` requires stable key, amount, and currency columns. Exit `0` means a non-empty exact pass, `1` means the inputs cannot support reconciliation, and `2` means classified differences exist. Missing columns, invalid amounts, unreadable files, and empty inputs return structured failures; they must never surface as a traceback or a pass.
+`reconcile.py` requires stable key, exact decimal amount, and uppercase three-letter currency columns. It accepts UTF-8 CSV with or without a BOM, rejects duplicate headers, and reports row/unique-key counts plus input totals by currency. Exit `0` means a non-empty exact pass, `1` means the inputs cannot support reconciliation, and `2` means classified differences exist. Missing columns, invalid amounts/currencies, unreadable files, and empty inputs return structured failures; they must never surface as a traceback or a pass.

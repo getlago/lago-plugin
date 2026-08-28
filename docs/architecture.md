@@ -9,7 +9,7 @@ Ship one shared `implementation` skill with eight explicit modes and progressive
 - One skill preserves a single safety and billing-correctness contract across the lifecycle.
 - Mode routing avoids overlapping commands while letting detailed references load only when needed.
 - Credential-free offline work keeps installation low-friction and MCP optional.
-- Deterministic event, money, reconciliation, manifest, link, secret, and public-content checks provide evidence beyond prompt text.
+- Deterministic event, money, reconciliation, demo-target, release-integrity, manifest, link, secret, and public-content checks provide evidence beyond prompt text.
 
 ## Boundaries
 

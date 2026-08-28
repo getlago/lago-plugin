@@ -12,6 +12,6 @@ Stable mappings:
 
 Evaluate new-only, phased cohort, renewal-date, parallel, and full-cutover strategies. Default to retaining finalized financial documents and audit records in Chargebee. Do not assume similarly named fields behave alike.
 
-The cutover plan must assign ownership for catalog freeze, customer/subscription sync, event routing, webhooks, payment gateway, dunning, invoices, credits/balances, scheduled changes, cancellations, reconciliation, rollback, and the Chargebee read-access period. One system owns each customer and billing period.
+The cutover plan must assign ownership for catalog freeze, customer/subscription sync, event routing, webhooks, payment gateway, dunning, invoices, credits/balances, scheduled changes, cancellations, reconciliation, rollback, and the Chargebee read-access period. One system owns each customer and billing period. Do not cancel a Chargebee subscription until the exact renewal/cutover boundary, route ownership, Lago parity, reconciliation, and rollback checkpoint are evidenced and the named cancellation is separately approved.
 
 Sources: [Chargebee API](https://apidocs.chargebee.com/docs/api), [Product Catalog](https://www.chargebee.com/docs/billing/2.0/product-catalog/product-catalog), [Lago API](https://docs.getlago.com/api-reference/intro).

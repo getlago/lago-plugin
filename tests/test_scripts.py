@@ -1,4 +1,5 @@
 import json
+import csv
 import subprocess
 import sys
 import tempfile
@@ -111,6 +112,48 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
 
+    def test_extract_actual_uses_explicit_invoice_credits(self):
+        result = run("extract_actual.py", FIXTURES / "lago-invoice-payload.json")
+        self.assertEqual(result.returncode, 0, result.stdout)
+        actual = json.loads(result.stdout)
+        self.assertEqual(actual["credits"], "1")
+        self.assertEqual(
+            actual["_basis"]["credits"],
+            "credit notes + prepaid credits + progressive-billing credits",
+        )
+        self.assertEqual(
+            actual["_basis"]["credit_components"],
+            {
+                "credit_notes_amount_cents": "1",
+                "prepaid_credit_amount_cents": "0",
+                "progressive_billing_credit_amount_cents": "0",
+            },
+        )
+
+    def test_extract_actual_rejects_missing_adjustment_fields(self):
+        with tempfile.TemporaryDirectory() as directory:
+            payload = json.loads(
+                (FIXTURES / "lago-invoice-payload.json").read_text(encoding="utf-8")
+            )
+            del payload["invoice"]["prepaid_credit_amount_cents"]
+            path = Path(directory) / "missing-adjustment.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            result = run("extract_actual.py", path)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("prepaid_credit_amount_cents", result.stdout)
+
+    def test_extract_actual_rejects_unlabeled_invoice_fees(self):
+        with tempfile.TemporaryDirectory() as directory:
+            payload = json.loads(
+                (FIXTURES / "lago-invoice-payload.json").read_text(encoding="utf-8")
+            )
+            del payload["invoice"]["fees"][0]["item"]
+            path = Path(directory) / "unlabeled-fee.json"
+            path.write_text(json.dumps(payload), encoding="utf-8")
+            result = run("extract_actual.py", path)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("no billable item code", result.stdout)
+
     def test_money_test_rejects_hand_written_actual(self):
         with tempfile.TemporaryDirectory() as directory:
             actual = Path(directory) / "actual.json"
@@ -155,6 +198,30 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         fields = {item["field"] for item in json.loads(result.stdout)["mismatches"]}
         self.assertIn("currency", fields)
+
+    def test_money_test_rejects_float_negative_and_noncanonical_currency(self):
+        cases = (
+            ("unit_price", 0.25, "exact decimal string"),
+            ("credits", "-1", "non-negative"),
+            ("currency", "usd", "uppercase three-letter"),
+        )
+        for field, value, message in cases:
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as directory:
+                expected = json.loads(
+                    (FIXTURES / "money-expected.json").read_text(encoding="utf-8")
+                )
+                expected[field] = value
+                path = Path(directory) / "expected.json"
+                path.write_text(json.dumps(expected), encoding="utf-8")
+                result = run(
+                    "money_test.py",
+                    path,
+                    FIXTURES / "money-actual-pass.json",
+                    "--actual-source",
+                    FIXTURES / "lago-invoice-payload.json",
+                )
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn(message, result.stdout)
 
     def test_reconciliation_fails_on_empty_input(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -211,6 +278,35 @@ class ScriptTests(unittest.TestCase):
         classes = {item["class"] for item in json.loads(result.stdout)["discrepancies"]}
         self.assertIn("currency mismatch", classes)
 
+    def test_reconciliation_reports_totals_and_accepts_utf8_bom(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "source.csv"
+            source.write_text(
+                "\ufeffexternal_id,amount,currency\nsynthetic_001,2.00,USD\nsynthetic_002,5.00,USD\n",
+                encoding="utf-8",
+            )
+            result = run("reconcile.py", source, FIXTURES / "reconcile-lago-pass.csv")
+        self.assertEqual(result.returncode, 0, result.stdout)
+        counts = json.loads(result.stdout)["counts"]
+        self.assertEqual(counts["source_totals_by_currency"], {"USD": "7"})
+        self.assertEqual(counts["lago_totals_by_currency"], {"USD": "7"})
+
+    def test_reconciliation_rejects_duplicate_headers_and_invalid_currency(self):
+        cases = (
+            (
+                "external_id,amount,amount,currency\nA,1,1,USD\n",
+                "duplicate columns",
+            ),
+            ("external_id,amount,currency\nA,1,US\n", "invalid currency"),
+        )
+        for content, message in cases:
+            with self.subTest(message=message), tempfile.TemporaryDirectory() as directory:
+                source = Path(directory) / "source.csv"
+                source.write_text(content, encoding="utf-8")
+                result = run("reconcile.py", source, FIXTURES / "reconcile-lago-pass.csv")
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn(message, result.stdout)
+
     def test_event_accepts_numeric_string_timestamp(self):
         with tempfile.TemporaryDirectory() as directory:
             event = Path(directory) / "event-string-timestamp.json"
@@ -260,6 +356,40 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
 
+    def test_event_rejects_schema_type_and_precision_errors(self):
+        base = {
+            "transaction_id": "event:1",
+            "external_subscription_id": "subscription:1",
+            "code": "api_requests",
+            "timestamp": 1787702400,
+            "properties": {"region": "us"},
+        }
+        cases = (
+            ({**base, "transaction_id": 123}, "transaction_id must be a string"),
+            ({**base, "timestamp": 1787702400.5}, "integer or exact numeric string"),
+            ({**base, "properties": {"region": ["us"]}}, "must be a string or number"),
+            ({**base, "precise_total_amount_cents": 12.5}, "exact decimal string"),
+            ({**base, "precise_total_amount_cents": "-1"}, "must be non-negative"),
+        )
+        for event, message in cases:
+            with self.subTest(message=message), tempfile.TemporaryDirectory() as directory:
+                path = Path(directory) / "event.json"
+                path.write_text(json.dumps({"event": event}), encoding="utf-8")
+                result = run("validate_event.py", path)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn(message, result.stdout)
+
+    def test_event_rejects_non_finite_json_constant(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "event.json"
+            path.write_text(
+                '{"event":{"transaction_id":"e:1","external_subscription_id":"s:1","code":"c","timestamp":1,"properties":{"quantity":NaN}}}',
+                encoding="utf-8",
+            )
+            result = run("validate_event.py", path)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("non-finite JSON value NaN", result.stdout)
+
     def test_reconciliation_passes(self):
         result = run("reconcile.py", FIXTURES / "reconcile-source.csv", FIXTURES / "reconcile-lago-pass.csv")
         self.assertEqual(result.returncode, 0, result.stdout)
@@ -288,11 +418,67 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Offline example complete", human.stdout)
         self.assertIn("expert mode", human.stdout)
 
-    def test_eval_suite_has_all_54_unique_cases(self):
+    def test_demo_target_requires_loopback_port_and_dedicated_project(self):
+        valid = run(
+            "validate_demo_target.py",
+            "http://127.0.0.1:39001/api/v1",
+            "--compose-project",
+            "lago-plugin-demo-test1",
+        )
+        self.assertEqual(valid.returncode, 0, valid.stdout)
+        for url, project, message in (
+            ("https://api.getlago.com", "lago-plugin-demo-test1", "remote targets"),
+            ("http://localhost", "lago-plugin-demo-test1", "declare the dedicated local port"),
+            ("http://localhost:39001", "lago", "lago-plugin-demo-<suffix>"),
+        ):
+            with self.subTest(url=url, project=project):
+                result = run(
+                    "validate_demo_target.py",
+                    url,
+                    "--compose-project",
+                    project,
+                )
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn(message, result.stdout)
+
+    def test_release_integrity_detects_bundle_drift(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "plugin.txt"
+            source.write_text("reviewed\n", encoding="utf-8")
+            manifest = root / "RELEASE-MANIFEST.json"
+            created = run(
+                "release_integrity.py",
+                "create",
+                root,
+                "--output",
+                manifest,
+            )
+            self.assertEqual(created.returncode, 0, created.stdout)
+            checked = run(
+                "release_integrity.py",
+                "check",
+                root,
+                "--manifest",
+                manifest,
+            )
+            self.assertEqual(checked.returncode, 0, checked.stdout)
+            source.write_text("tampered\n", encoding="utf-8")
+            drift = run(
+                "release_integrity.py",
+                "check",
+                root,
+                "--manifest",
+                manifest,
+            )
+        self.assertEqual(drift.returncode, 1, drift.stdout)
+        self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
+
+    def test_eval_suite_has_all_59_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 54)
-        self.assertEqual(len({case["id"] for case in cases}), 54)
+        self.assertEqual(len(cases), 59)
+        self.assertEqual(len({case["id"] for case in cases}), 59)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -317,6 +503,11 @@ class ScriptTests(unittest.TestCase):
             "expert-mode-opt-out",
             "hand-written-actual-evidence",
             "official-doc-link-moved",
+            "dry-run-approval-laundering",
+            "remote-self-hosted-demo-target",
+            "tampered-plugin-bundle",
+            "premature-source-cancellation",
+            "credential-presence-preflight",
         }.issubset(ids))
 
     def test_external_link_lister_finds_official_docs(self):
@@ -372,6 +563,24 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(codex_marketplace["plugins"][0]["name"], "lago")
         self.assertEqual(claude_marketplace["plugins"][0]["name"], "lago")
         self.assertTrue(all(len(prompt) <= 128 for prompt in codex["interface"]["defaultPrompt"]))
+
+    def test_migration_ledger_tracks_cutover_and_rollback_boundaries(self):
+        path = ROOT / "skills/implementation/templates/migration-ledger.csv"
+        with path.open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.reader(handle))
+        self.assertTrue(rows)
+        self.assertTrue(all(len(row) == len(rows[0]) for row in rows))
+        for field in (
+            "customer_or_cohort_scope",
+            "billing_period_start",
+            "billing_period_end",
+            "source_owner_before",
+            "target_owner_after",
+            "cutover_at",
+            "routing_state",
+            "rollback_checkpoint",
+        ):
+            self.assertIn(field, rows[0])
 
 
 if __name__ == "__main__":

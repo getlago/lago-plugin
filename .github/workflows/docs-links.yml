@@ -1,0 +1,30 @@
+name: Official documentation links
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 9 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  resolve-official-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: List official links
+        run: >-
+          python3 skills/implementation/scripts/list_external_links.py .
+          --domain docs.getlago.com
+          --domain doc.getlago.com
+          --domain swagger.getlago.com
+          --domain docs.stripe.com
+          --domain chargebee.com
+          > official-links.txt
+      - name: Resolve official links
+        run: |
+          while IFS= read -r url; do
+            curl --fail --location --silent --show-error --retry 3 --max-time 30 --output /dev/null "$url"
+          done < official-links.txt

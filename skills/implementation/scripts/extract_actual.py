@@ -6,12 +6,16 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
 
 
 class ExtractionError(ValueError):
     """The payload cannot support the seven-field money test."""
+
+
+CURRENCY = re.compile(r"^[A-Z]{3}$")
 
 
 def reject_constant(name: str) -> object:
@@ -73,8 +77,11 @@ def quantity_from_items(items: object, path: str) -> tuple[Decimal, set[str]]:
             code = item["billable_metric"].get("code")
         if code is None and isinstance(item.get("item"), dict):
             code = item["item"].get("code")
-        if code:
-            item_codes.add(str(code))
+        if not code:
+            raise ExtractionError(
+                f"{path}[{index}] has no billable item code; do not combine unlabeled fees with usage"
+            )
+        item_codes.add(str(code))
     if len(item_codes) > 1:
         raise ExtractionError(
             "payload mixes multiple billable item codes; extract and compare each pricing dimension separately"
@@ -84,8 +91,8 @@ def quantity_from_items(items: object, path: str) -> tuple[Decimal, set[str]]:
 
 def extract_current_usage(usage: dict[str, object]) -> dict[str, object]:
     currency = usage.get("currency")
-    if not isinstance(currency, str) or not currency:
-        raise ExtractionError("customer_usage.currency is required")
+    if not isinstance(currency, str) or not CURRENCY.fullmatch(currency):
+        raise ExtractionError("customer_usage.currency must be an uppercase three-letter code")
     subtotal = cents(usage.get("amount_cents"), "customer_usage.amount_cents")
     tax = cents(usage.get("taxes_amount_cents"), "customer_usage.taxes_amount_cents")
     total = cents(usage.get("total_amount_cents"), "customer_usage.total_amount_cents")
@@ -116,18 +123,27 @@ def extract_current_usage(usage: dict[str, object]) -> dict[str, object]:
 
 def extract_invoice(invoice: dict[str, object]) -> dict[str, object]:
     currency = invoice.get("currency")
-    if not isinstance(currency, str) or not currency:
-        raise ExtractionError("invoice.currency is required")
+    if not isinstance(currency, str) or not CURRENCY.fullmatch(currency):
+        raise ExtractionError("invoice.currency must be an uppercase three-letter code")
     subtotal = cents(invoice.get("fees_amount_cents"), "invoice.fees_amount_cents")
     discounts = cents(
         invoice.get("coupons_amount_cents", 0), "invoice.coupons_amount_cents"
     )
     tax = cents(invoice.get("taxes_amount_cents"), "invoice.taxes_amount_cents")
+    credit_components = {
+        field: cents(invoice.get(field), f"invoice.{field}")
+        for field in (
+            "credit_notes_amount_cents",
+            "prepaid_credit_amount_cents",
+            "progressive_billing_credit_amount_cents",
+        )
+    }
+    credits = sum(credit_components.values(), Decimal(0))
     total = cents(invoice.get("total_amount_cents"), "invoice.total_amount_cents")
-    credits = subtotal - discounts + tax - total
-    if credits < 0:
+    calculated_total = subtotal - discounts - credits + tax
+    if calculated_total != total:
         raise ExtractionError(
-            "invoice fields do not reconcile: derived credits would be negative"
+            "invoice fields do not reconcile from explicit fees, coupons, credits, tax, and total"
         )
     quantity, item_codes = quantity_from_items(invoice.get("fees"), "invoice.fees")
     unit_price = effective_unit_price(subtotal, quantity)
@@ -143,7 +159,11 @@ def extract_invoice(invoice: dict[str, object]) -> dict[str, object]:
         "_basis": {
             "quantity": "sum of invoice fee units",
             "unit_price": "effective subtotal divided by quantity",
-            "credits": "residual required to reconcile subtotal, discounts, tax, and total",
+            "credits": "credit notes + prepaid credits + progressive-billing credits",
+            "credit_components": {
+                field: decimal_text(value)
+                for field, value in credit_components.items()
+            },
             "item_code": next(iter(item_codes), None),
         },
     }

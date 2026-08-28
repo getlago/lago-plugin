@@ -11,5 +11,6 @@ Checked by `skills/implementation/scripts/validate_repo.py` and a private denyli
 - No internal CRM, messaging, meeting, email, or document-system dependencies
 - No credentials or real billing/usage data
 - No custom telemetry
+- No company-only plugin identity or private marketplace dependency
 
 The committed validator performs public baseline scans. Maintainers supply a non-committed denylist of confidential names and terms for the final release audit.

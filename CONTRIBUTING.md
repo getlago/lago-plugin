@@ -7,7 +7,10 @@ For behavior changes, add or update an eval case and test observable outcomes. R
 ```bash
 python3 skills/implementation/scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
+python3 skills/implementation/scripts/release_integrity.py check . --manifest RELEASE-MANIFEST.json
 claude plugin validate .
 ```
+
+After any source change, regenerate `RELEASE-MANIFEST.json` before the final validation commit. Never “fix” an integrity failure by updating only the hash without reviewing the changed file.
 
 Document version-sensitive claims with a focused official link. Report offline and live validation separately. Use conventional commits and include changed behavior, evidence, risks, and compatibility in the pull request.

@@ -14,6 +14,6 @@ Deployment evidence must include rendered/validated manifests or Compose config,
 
 ## Seeded demos
 
-All live demos use a dedicated local self-hosted instance; never reuse an existing self-hosted deployment. Inspect Docker availability, pin the Lago release, isolate names/ports/networks/volumes, and get approval before pulling images or starting containers. Read [demo environment](demo.md) before creating fake objects or usage.
+All live demos use a dedicated local self-hosted instance; never reuse an existing self-hosted deployment. Inspect Docker availability, pin the Lago release, isolate names/ports/networks/volumes, and get approval before pulling images or starting containers. Require the deterministic demo-target check plus evidence that the loopback port belongs to the exact approved Compose project. Read [demo environment](demo.md) before creating fake objects or usage.
 
 Sources: [self-hosted overview](https://docs.getlago.com/guide/lago-self-hosted/overview), [Docker](https://docs.getlago.com/guide/lago-self-hosted/docker), [official Helm chart](https://github.com/getlago/lago-helm-charts).

@@ -6,7 +6,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-from collections import Counter
+import re
+from collections import Counter, defaultdict
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
@@ -15,23 +16,47 @@ class StructuralError(ValueError):
     """Input cannot support a trustworthy reconciliation."""
 
 
+CURRENCY = re.compile(r"^[A-Z]{3}$")
+DECIMAL = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$")
+
+
+def decimal_text(value: Decimal) -> str:
+    rendered = format(value, "f")
+    if "." in rendered:
+        rendered = rendered.rstrip("0").rstrip(".")
+    return rendered or "0"
+
+
 def read_rows(
     path: Path, key: str, amount: str, currency: str, side: str, max_bytes: int
-) -> tuple[dict[str, dict[str, str]], int, list[dict[str, object]]]:
+) -> tuple[
+    dict[str, dict[str, str]],
+    int,
+    list[dict[str, object]],
+    dict[str, str],
+]:
     try:
         size = path.stat().st_size
         if size > max_bytes:
             raise StructuralError(
                 f"{side} CSV is {size} bytes; limit is {max_bytes} bytes"
             )
-        with path.open(newline="", encoding="utf-8") as handle:
+        with path.open(newline="", encoding="utf-8-sig") as handle:
             reader = csv.DictReader(handle)
             headers = reader.fieldnames or []
+            duplicate_headers = sorted(
+                header for header, count in Counter(headers).items() if count > 1
+            )
+            if duplicate_headers:
+                raise StructuralError(
+                    f"{side} CSV has duplicate columns: {', '.join(duplicate_headers)}"
+                )
             for required in (key, amount, currency):
                 if required not in headers:
                     raise StructuralError(f"{side} CSV is missing required column: {required}")
             result: dict[str, dict[str, str]] = {}
             key_counts: Counter[str] = Counter()
+            totals: defaultdict[str, Decimal] = defaultdict(Decimal)
             row_count = 0
             for index, row in enumerate(reader, start=2):
                 row_count += 1
@@ -44,6 +69,14 @@ def read_rows(
                     raise StructuralError(f"{side} CSV row {index} is missing {amount}")
                 if not raw_currency:
                     raise StructuralError(f"{side} CSV row {index} is missing {currency}")
+                if not CURRENCY.fullmatch(raw_currency):
+                    raise StructuralError(
+                        f"{side} CSV row {index} has invalid {currency}: {raw_currency}"
+                    )
+                if not DECIMAL.fullmatch(raw_amount):
+                    raise StructuralError(
+                        f"{side} CSV row {index} has invalid {amount}: {raw_amount}"
+                    )
                 try:
                     parsed_amount = Decimal(raw_amount)
                 except InvalidOperation as error:
@@ -55,6 +88,7 @@ def read_rows(
                         f"{side} CSV row {index} has non-finite {amount}: {raw_amount}"
                     )
                 key_counts[value] += 1
+                totals[raw_currency] += parsed_amount
                 if value not in result:
                     result[value] = {**row, amount: raw_amount, currency: raw_currency}
     except StructuralError:
@@ -67,7 +101,10 @@ def read_rows(
         for value, count in sorted(key_counts.items())
         if count > 1
     ]
-    return result, row_count, duplicates
+    return result, row_count, duplicates, {
+        currency_code: decimal_text(total)
+        for currency_code, total in sorted(totals.items())
+    }
 
 
 def main() -> int:
@@ -81,10 +118,10 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
-        source, source_count, source_duplicates = read_rows(
+        source, source_count, source_duplicates, source_totals = read_rows(
             args.source, args.key, args.amount, args.currency, "source", args.max_bytes
         )
-        lago, lago_count, lago_duplicates = read_rows(
+        lago, lago_count, lago_duplicates, lago_totals = read_rows(
             args.lago, args.key, args.amount, args.currency, "Lago", args.max_bytes
         )
     except StructuralError as error:
@@ -96,6 +133,8 @@ def main() -> int:
         "source_unique_keys": len(source),
         "lago_rows": lago_count,
         "lago_unique_keys": len(lago),
+        "source_totals_by_currency": source_totals,
+        "lago_totals_by_currency": lago_totals,
     }
     if not source or not lago:
         print(

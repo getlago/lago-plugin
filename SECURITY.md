@@ -14,3 +14,9 @@ Report suspected vulnerabilities privately through the security contact listed o
 - Scan dependencies and pin self-hosted releases; rehearse backup restore and rollback.
 
 This plugin collects no telemetry and requires no credential to load.
+
+## Distribution integrity
+
+Release artifacts must come from a reviewed commit on the protected default branch, a verified annotated tag, and the matching GitHub release. The release includes `RELEASE-MANIFEST.json`, which SHA-256 covers every bundled file except itself. Run `python3 skills/implementation/scripts/release_integrity.py check . --manifest RELEASE-MANIFEST.json` before executing bundled helpers or publishing an archive.
+
+The manifest detects drift; the verified tag/release is the trust anchor. A manifest modified by the same attacker as the bundle is not proof of origin. Do not run helper scripts copied from an inspected application repository or from an unverified archive.

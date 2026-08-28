@@ -1,2 +1,2 @@
-source_object_or_behavior,lago_target,transformation,historical_treatment,validation,status,owner,checkpoint
-synthetic_customer,customer,external ID preserved,not applicable,count and field parity,direct mapping,,
+source_object_or_behavior,lago_target,transformation,historical_treatment,customer_or_cohort_scope,billing_period_start,billing_period_end,source_owner_before,target_owner_after,cutover_at,routing_state,validation,status,owner,checkpoint,rollback_checkpoint
+synthetic_customer,customer,external ID preserved,not applicable,synthetic_cohort,,,source,Lago,,source_only,count and field parity,direct mapping,,,

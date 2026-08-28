@@ -1,12 +1,21 @@
 {
   "name": "lago",
   "version": "0.1.0",
-  "description": "A beginner-friendly billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise—or credentials for offline work—is required.",
-  "author": {"name": "Lago", "url": "https://www.getlago.com"},
+  "description": "A beginner-friendly billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise\u2014or credentials for offline work\u2014is required.",
+  "author": {
+    "name": "Lago",
+    "url": "https://www.getlago.com"
+  },
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",
   "license": "MIT",
-  "keywords": ["lago", "billing", "metering", "subscriptions", "migration"],
+  "keywords": [
+    "lago",
+    "billing",
+    "metering",
+    "subscriptions",
+    "migration"
+  ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Lago Billing Engineer",
@@ -14,9 +23,18 @@
     "longDescription": "No Lago or billing expertise is required. Open an application repository, with or without billing code. The copilot maps application concepts to Lago primitives and explains each decision in plain language. Offline work needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
-    "capabilities": ["Read", "Write"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://www.getlago.com",
-    "defaultPrompt": ["Implement the smallest safe Lago integration in this app. Inspect the repository first and recommend one billing blueprint."],
+    "privacyPolicyURL": "https://getlago.com/legal/privacy-policy",
+    "termsOfServiceURL": "https://getlago.com/legal",
+    "defaultPrompt": [
+      "Implement the smallest safe Lago integration in this app. Inspect it first and recommend one billing blueprint.",
+      "Show me how Lago would bill this product with an offline example and an exact money calculation.",
+      "Assess this app's billing architecture and identify the smallest safe next improvement."
+    ],
     "brandColor": "#19212E"
   }
 }

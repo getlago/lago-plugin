@@ -14,6 +14,6 @@ Choose new-only, cohort/renewal-date, parallel, or full cutover based on risk. R
 
 Cutover gates: catalog frozen/versioned; customer/subscription counts reconcile; event router has one owner per period; draft Lago money tests match independently calculated expectations; payment, tax, dunning, webhook, scheduled-change, and cancellation ownership are explicit; rollback can restore routing without duplicate billing.
 
-Never cancel, modify, or query production Stripe without explicit approval immediately before the exact action.
+Never cancel, modify, or query production Stripe without explicit approval immediately before the exact action. Cancellation is a post-cutover action: Lago object creation, a dry run, or draft parity is not sufficient. Require proven routing ownership, customer-period reconciliation, a recorded rollback checkpoint, and the exact Stripe subscription selector before seeking cancellation approval.
 
 Sources: [Stripe Billing](https://docs.stripe.com/billing), [usage meters](https://docs.stripe.com/billing/subscriptions/usage-based), [credit grants](https://docs.stripe.com/api/billing/credit-grant), [API versions](https://docs.stripe.com/upgrades).

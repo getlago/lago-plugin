@@ -138,10 +138,11 @@ Python 3.9+ is required only for the deterministic helpers. The skill itself is 
 ```bash
 python3 skills/implementation/scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
+python3 skills/implementation/scripts/release_integrity.py check . --manifest RELEASE-MANIFEST.json
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 54 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 59 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 
@@ -168,6 +169,7 @@ Start a new task after an update. Removing the plugin does not change applicatio
 - **No credentials:** continue with repository implementation, fixtures, calculations, and offline tests. Live runtime behavior remains unverified.
 - **Wrong Lago Cloud endpoint:** confirm the region. Current documented bases are `https://api.getlago.com` for US and `https://api.eu.getlago.com` for EU.
 - **Validation failure:** run the repository validator, then platform validators, and fix the first structural error.
+- **Bundle-integrity failure:** do not run bundled helpers. Reinstall from the verified Lago release or inspect the unexpected file change before regenerating the manifest.
 
 Authoritative sources: [Lago documentation](https://docs.getlago.com), [Lago API reference](https://docs.getlago.com/api-reference/intro), [Lago OpenAPI](https://swagger.getlago.com/openapi.yaml), [Claude Code plugins](https://code.claude.com/docs/en/plugins), and official OpenAI Codex documentation plus the installed `codex plugin --help` for current CLI behavior.
 

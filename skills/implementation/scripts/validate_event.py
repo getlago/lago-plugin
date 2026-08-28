@@ -6,10 +6,17 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 
 DEFAULT_NUMERIC_PROPERTIES = {"amount", "quantity", "tokens", "units", "value"}
+DECIMAL = re.compile(r"^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$")
+
+
+def reject_constant(name: str) -> object:
+    raise ValueError(f"non-finite JSON value {name} is not allowed")
 
 
 def validate(
@@ -22,9 +29,14 @@ def validate(
     allow_negative_properties = allow_negative_properties or set()
     if not isinstance(event, dict):
         return ["event must be an object"]
-    for field in ("transaction_id", "external_subscription_id", "code", "timestamp"):
-        if event.get(field) in (None, ""):
+    for field in ("transaction_id", "external_subscription_id", "code"):
+        value = event.get(field)
+        if value in (None, ""):
             errors.append(f"missing {field}")
+        elif not isinstance(value, str):
+            errors.append(f"{field} must be a string")
+    if event.get("timestamp") in (None, ""):
+        errors.append("missing timestamp")
     transaction_id = event.get("transaction_id")
     if isinstance(transaction_id, str) and transaction_id.lower().startswith(
         ("random-", "uuid-")
@@ -32,23 +44,34 @@ def validate(
         errors.append("transaction_id appears retry-unstable")
     timestamp = event.get("timestamp")
     if timestamp is not None:
-        valid = (
-            isinstance(timestamp, (int, float))
-            and not isinstance(timestamp, bool)
-            and math.isfinite(timestamp)
-        )
-        if not valid and isinstance(timestamp, str):
+        valid = isinstance(timestamp, int) and not isinstance(timestamp, bool)
+        if isinstance(timestamp, str) and DECIMAL.fullmatch(timestamp):
             try:
-                valid = math.isfinite(float(timestamp))
-            except ValueError:
+                valid = Decimal(timestamp).is_finite()
+            except InvalidOperation:
                 valid = False
         if not valid:
-            errors.append("timestamp must be Unix seconds as a number or numeric string")
+            errors.append("timestamp must be Unix seconds as an integer or exact numeric string")
+
+    precise_total = event.get("precise_total_amount_cents")
+    if precise_total is not None:
+        if not isinstance(precise_total, str) or not DECIMAL.fullmatch(precise_total):
+            errors.append("precise_total_amount_cents must be an exact decimal string")
+        elif Decimal(precise_total) < 0:
+            errors.append("precise_total_amount_cents must be non-negative")
     properties = event.get("properties", {})
     if not isinstance(properties, dict):
         errors.append("properties must be an object")
     else:
         for key, value in properties.items():
+            if value is None and key == "target_wallet_code":
+                continue
+            if isinstance(value, bool) or not isinstance(value, (str, int, float)):
+                errors.append(f"properties.{key} must be a string or number")
+                continue
+            if isinstance(value, float) and not math.isfinite(value):
+                errors.append(f"properties.{key} must be finite")
+                continue
             if key in numeric_properties:
                 if isinstance(value, bool) or not isinstance(value, (int, float)):
                     errors.append(f"properties.{key} must be a number")
@@ -60,8 +83,6 @@ def validate(
                     errors.append(
                         f"properties.{key} must be non-negative unless the event contract explicitly allows corrections"
                     )
-            elif isinstance(value, float) and not math.isfinite(value):
-                errors.append(f"properties.{key} must be finite")
     return errors
 
 
@@ -86,7 +107,9 @@ def main() -> int:
         size = args.event.stat().st_size
         if size > args.max_bytes:
             raise ValueError(f"event file is {size} bytes; limit is {args.max_bytes} bytes")
-        payload = json.loads(args.event.read_text(encoding="utf-8"))
+        payload = json.loads(
+            args.event.read_text(encoding="utf-8"), parse_constant=reject_constant
+        )
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
         print(json.dumps({"status": "FAIL", "errors": [str(error)]}, indent=2))
         return 1

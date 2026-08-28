@@ -4,7 +4,9 @@
 
 Inspect, without asking first: root instructions; languages/frameworks/package managers; application boundaries; customer/account/organization/tenant and auth models; billing/subscription/provider code; usage producers and analytics; workers/queues; database/migrations; webhook endpoints; payment and tax integrations; deployment/secrets; tests/CI; logs/metrics/alerts.
 
-Use targeted searches for `billing`, `subscription`, `invoice`, `usage`, `meter`, `stripe`, `chargebee`, `webhook`, `tenant`, `customer`, `wallet`, `credit`, `tax`, and environment URL/key names. Do not print secret values.
+Use targeted searches for `billing`, `subscription`, `invoice`, `usage`, `meter`, `stripe`, `chargebee`, `webhook`, `tenant`, `customer`, `wallet`, `credit`, `tax`, and environment URL/key names.
+
+Inspect credential configuration through filenames, variable names, secret-manager references, or presence-only checks that return a boolean. Never dump the environment, print shell exports, enable shell tracing, open `.env` values into model context, interpolate a secret into a command, or use a credential merely because it exists. If source contains a real credential, stop, do not repeat it, and recommend rotation.
 
 Classify the workspace before choosing work:
 

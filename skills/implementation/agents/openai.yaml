@@ -1,4 +1,4 @@
 interface:
   display_name: "Lago Billing Engineer"
   short_description: "Beginner-friendly billing copilot for your application"
-  default_prompt: "Use $lago-billing:implementation to inspect the app, recommend a billing blueprint, and implement the smallest integration."
+  default_prompt: "Use $lago:implementation to inspect the app, recommend a billing blueprint, and implement the smallest integration."

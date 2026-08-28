@@ -14,6 +14,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Gratification-first guided experience with one-step next actions and an `expert mode` opt-out that preserves safety and billing evidence while removing tutorials and routine narration.
 - Evidence-derived money validation that extracts actuals from preserved Lago payloads and verifies their source hash; hand-written or modified actuals fail.
 - Structured reconciliation failures for missing columns, duplicate keys, invalid amounts, empty inputs, and currency mismatches, plus stricter billable-event value validation.
+- Approved public install identity `lago@getlago`, with `/lago:implementation` for Claude Code and `$lago:implementation` for Codex; validators prevent identity regression.
 
 ## [0.1.0] - 2026-08-26
 

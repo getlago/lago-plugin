@@ -45,15 +45,15 @@ Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution
 
 ```text
 /plugin marketplace add getlago/lago-agent-plugin
-/plugin install lago-billing@lago-plugins
+/plugin install lago@getlago
 ```
 
 Example prompts:
 
 ```text
-/lago-billing:implementation implement the smallest Lago Cloud integration
-/lago-billing:implementation show me the offline per-token demo
-/lago-billing:implementation migrate this Chargebee implementation to Lago
+/lago:implementation implement the smallest Lago Cloud integration
+/lago:implementation show me the offline per-token demo
+/lago:implementation migrate this Chargebee implementation to Lago
 ```
 
 For local plugin development:
@@ -67,15 +67,15 @@ claude --plugin-dir ./lago-agent-plugin
 
 ```bash
 codex plugin marketplace add getlago/lago-agent-plugin
-codex plugin add lago-billing@lago-plugins
+codex plugin add lago@getlago
 ```
 
 Start a new Codex task after installation. Example prompts:
 
 ```text
-$lago-billing:implementation design usage-based billing for this application
-$lago-billing:implementation prepare a self-hosted Kubernetes deployment
-$lago-billing:implementation migrate this Stripe Billing integration to Lago
+$lago:implementation design usage-based billing for this application
+$lago:implementation prepare a self-hosted Kubernetes deployment
+$lago:implementation migrate this Stripe Billing integration to Lago
 ```
 
 Claude and Codex may also select the skill automatically when a request clearly involves implementing or operating Lago billing.
@@ -148,16 +148,16 @@ Live money validation preserves the Lago payload, generates `actual.json` with `
 Claude Code:
 
 ```bash
-claude plugin update lago-billing@lago-plugins
-claude plugin uninstall lago-billing@lago-plugins
+claude plugin update lago@getlago
+claude plugin uninstall lago@getlago
 ```
 
 Codex:
 
 ```bash
-codex plugin marketplace upgrade lago-plugins
-codex plugin add lago-billing@lago-plugins
-codex plugin remove lago-billing@lago-plugins
+codex plugin marketplace upgrade getlago
+codex plugin add lago@getlago
+codex plugin remove lago@getlago
 ```
 
 Start a new task after an update. Removing the plugin does not change application code or a Lago environment.

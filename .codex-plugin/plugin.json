@@ -1,5 +1,5 @@
 {
-  "name": "lago-billing",
+  "name": "lago",
   "version": "0.1.0",
   "description": "A beginner-friendly billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise—or credentials for offline work—is required.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},

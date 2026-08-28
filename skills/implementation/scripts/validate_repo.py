@@ -41,6 +41,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     failures: list[str] = []
     codex = root / ".codex-plugin/plugin.json"
     claude = root / ".claude-plugin/plugin.json"
+    codex_marketplace = root / ".agents/plugins/marketplace.json"
+    claude_marketplace = root / ".claude-plugin/marketplace.json"
     skill = root / "skills/implementation/SKILL.md"
     primitives = root / "skills/implementation/references/primitives.md"
     demo = root / "skills/implementation/references/demo.md"
@@ -55,16 +57,27 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/validate_event.py",
         root / "skills/implementation/scripts/validate_repo.py",
     )
-    for required in (codex, claude, skill, primitives, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
     for label, data in (("Codex", codex_data), ("Claude", claude_data)):
         if isinstance(data, dict):
-            if data.get("name") != "lago-billing":
-                failures.append(f"{label} manifest name must be lago-billing")
+            if data.get("name") != "lago":
+                failures.append(f"{label} manifest name must be lago")
             if data.get("version") != "0.1.0":
                 failures.append(f"{label} manifest version must match release")
+    for label, path in (("Codex", codex_marketplace), ("Claude", claude_marketplace)):
+        marketplace = load_json(path, failures)
+        if not isinstance(marketplace, dict) or marketplace.get("name") != "getlago":
+            failures.append(f"{label} marketplace name must be getlago")
+            continue
+        plugins = marketplace.get("plugins")
+        if not isinstance(plugins, list) or not any(
+            isinstance(plugin, dict) and plugin.get("name") == "lago"
+            for plugin in plugins
+        ):
+            failures.append(f"{label} marketplace must expose lago@getlago")
     if isinstance(codex_data, dict):
         interface = codex_data.get("interface")
         prompts = interface.get("defaultPrompt", []) if isinstance(interface, dict) else []
@@ -99,7 +112,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         for evidence_signal in ("extract_actual.py", "Never hand-write", "--actual-source"):
             if evidence_signal not in text:
                 failures.append(f"missing money-evidence guidance: {evidence_signal}")
-    if openai_yaml.is_file() and "$lago-billing:implementation" not in openai_yaml.read_text(encoding="utf-8"):
+    if openai_yaml.is_file() and "$lago:implementation" not in openai_yaml.read_text(encoding="utf-8"):
         failures.append("Codex default prompt must use the installed namespaced skill invocation")
     denied = []
     if denylist:
@@ -141,7 +154,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parents[2])
+    parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parents[3])
     parser.add_argument("--denylist", type=Path, help="optional private list of names/terms; one per line")
     args = parser.parse_args()
     failures = validate(args.root.resolve(), args.denylist)

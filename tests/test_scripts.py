@@ -362,9 +362,15 @@ class ScriptTests(unittest.TestCase):
     def test_manifest_identity_and_versions_match(self):
         codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
         claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
+        codex_marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text(encoding="utf-8"))
+        claude_marketplace = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text(encoding="utf-8"))
         self.assertEqual(codex["name"], claude["name"])
         self.assertEqual(codex["version"], claude["version"])
-        self.assertEqual(codex["name"], "lago-billing")
+        self.assertEqual(codex["name"], "lago")
+        self.assertEqual(codex_marketplace["name"], "getlago")
+        self.assertEqual(claude_marketplace["name"], "getlago")
+        self.assertEqual(codex_marketplace["plugins"][0]["name"], "lago")
+        self.assertEqual(claude_marketplace["plugins"][0]["name"], "lago")
         self.assertTrue(all(len(prompt) <= 128 for prompt in codex["interface"]["defaultPrompt"]))
 
 

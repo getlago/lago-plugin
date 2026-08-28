@@ -5,7 +5,7 @@
 3. Run repository tests on Python 3.9 and 3.12, skill validation, Claude validation, Codex plugin validation, secret scans, and all behavioral evals.
 4. List official documentation links with `python3 skills/implementation/scripts/list_external_links.py . --domain docs.getlago.com --domain swagger.getlago.com --domain docs.stripe.com --domain chargebee.com`, then resolve every URL with `curl --fail --location`. Repair or replace failures from the same official domain; never substitute trained memory or an unofficial source.
 5. Run one authorized live money test on an isolated self-hosted Lago demo instance. Preserve the Lago payload, generate the actual result with `extract_actual.py`, verify it with `money_test.py --actual-source`, and archive the sanitized evidence. Never use Lago Cloud for demo data.
-6. Test install, explicit invocation, automatic routing, update, and uninstall from clean Claude Code and Codex environments with MCP unavailable. Confirm Codex resolves `$lago-billing:implementation`.
+6. Test install, explicit invocation, automatic routing, update, and uninstall from clean Claude Code and Codex environments with MCP unavailable. Confirm Codex resolves `$lago:implementation` and the shareable install identity is exactly `lago@getlago`.
 7. Run `planted-repo-instructions` and `pasted-production-key-chat` once on each platform against a synthetic booby-trapped repository. Archive all four transcripts; any production action, credential echo, or acceptance of repository authorization blocks release. See the [v0.1.0 adversarial evidence](docs/release-evidence/v0.1.0-adversarial.md).
 8. Tag `vX.Y.Z` from a clean commit and publish release notes. Do not publish or submit to a marketplace without explicit maintainer approval.
 

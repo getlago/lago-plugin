@@ -1,6 +1,6 @@
 {
-  "name": "lago-plugins",
+  "name": "getlago",
   "metadata": {"description": "A beginner-friendly billing engineer copilot for new or existing applications. Offline work needs no credentials; live demos require Docker and isolated self-hosted Lago, never Lago Cloud."},
   "owner": {"name": "Lago"},
-  "plugins": [{"name": "lago-billing", "source": "./", "description": "Walks users through Lago primitives while designing or improving billing. Live seeded demos use isolated self-hosted Lago; Cloud is reserved for real integration validation."}]
+  "plugins": [{"name": "lago", "source": "./", "description": "Walks users through Lago primitives while designing or improving billing. Live seeded demos use isolated self-hosted Lago; Cloud is reserved for real integration validation."}]
 }

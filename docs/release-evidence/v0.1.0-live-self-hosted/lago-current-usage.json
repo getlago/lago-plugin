@@ -1,0 +1,116 @@
+{
+  "customer_usage": {
+    "amount_cents": 37,
+    "charges_usage": [
+      {
+        "amount_cents": 37,
+        "amount_currency": "USD",
+        "billable_metric": {
+          "aggregation_type": "sum_agg",
+          "code": "lago_plugin_demo_ai_tokens",
+          "lago_id": "54c21833-7b35-4544-b1d0-dadbe9f0df86",
+          "name": "Lago plugin demo AI tokens"
+        },
+        "charge": {
+          "charge_model": "standard",
+          "code": "lago_plugin_demo_token_charge",
+          "invoice_display_name": null,
+          "lago_id": "6f7141c3-74f9-4f10-ac4a-cd4c03845e2e"
+        },
+        "events_count": 4,
+        "filters": [
+          {
+            "amount_cents": 12,
+            "events_count": 1,
+            "invoice_display_name": "demo-small input",
+            "presentation_breakdowns": [],
+            "pricing_unit_details": null,
+            "total_aggregated_units": "12000.0",
+            "units": "12000.0",
+            "values": {
+              "model": [
+                "demo-small"
+              ],
+              "token_type": [
+                "input"
+              ]
+            }
+          },
+          {
+            "amount_cents": 9,
+            "events_count": 1,
+            "invoice_display_name": "demo-small output",
+            "presentation_breakdowns": [],
+            "pricing_unit_details": null,
+            "total_aggregated_units": "3000.0",
+            "units": "3000.0",
+            "values": {
+              "model": [
+                "demo-small"
+              ],
+              "token_type": [
+                "output"
+              ]
+            }
+          },
+          {
+            "amount_cents": 10,
+            "events_count": 1,
+            "invoice_display_name": "demo-large input",
+            "presentation_breakdowns": [],
+            "pricing_unit_details": null,
+            "total_aggregated_units": "5000.0",
+            "units": "5000.0",
+            "values": {
+              "model": [
+                "demo-large"
+              ],
+              "token_type": [
+                "input"
+              ]
+            }
+          },
+          {
+            "amount_cents": 6,
+            "events_count": 1,
+            "invoice_display_name": "demo-large output",
+            "presentation_breakdowns": [],
+            "pricing_unit_details": null,
+            "total_aggregated_units": "1000.0",
+            "units": "1000.0",
+            "values": {
+              "model": [
+                "demo-large"
+              ],
+              "token_type": [
+                "output"
+              ]
+            }
+          },
+          {
+            "amount_cents": 0,
+            "events_count": 0,
+            "invoice_display_name": null,
+            "presentation_breakdowns": [],
+            "pricing_unit_details": null,
+            "total_aggregated_units": "0.0",
+            "units": "0.0",
+            "values": null
+          }
+        ],
+        "grouped_usage": [],
+        "presentation_breakdowns": [],
+        "pricing_unit_details": null,
+        "total_aggregated_units": "21000.0",
+        "units": "21000.0"
+      }
+    ],
+    "currency": "USD",
+    "from_datetime": "2026-08-28T19:07:36Z",
+    "issuing_date": "2026-09-27",
+    "lago_invoice_id": null,
+    "taxes_amount_cents": 0,
+    "to_datetime": "2026-09-27T23:59:59Z",
+    "total_amount_cents": 37
+  }
+}

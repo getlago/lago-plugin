@@ -1,0 +1,24 @@
+{
+  "status": "LIVE_SELF_HOSTED_USAGE_RETRIEVED",
+  "lago_version": "v1.52.1",
+  "image_digest": "sha256:e0fa3a9bfdfeea607ac6fb8a24c010188451baf2358df351d18116a773c0a472",
+  "compose_project": "lago-plugin-demo-v1521",
+  "container_name": "lago-plugin-demo-v1521",
+  "target": "http://127.0.0.1:13000/api/v1",
+  "volume": "lago-plugin-demo-v1521_data",
+  "customer_external_id": "lago_plugin_demo_ai_studio",
+  "subscription_external_id": "lago_plugin_demo_ai_studio_per_token",
+  "plan_code": "lago_plugin_demo_per_token",
+  "billable_metric_code": "lago_plugin_demo_ai_tokens",
+  "event_transaction_ids": [
+    "lago-plugin-demo-small-input-in-period",
+    "lago-plugin-demo-small-output-in-period",
+    "lago-plugin-demo-large-input-in-period",
+    "lago-plugin-demo-large-output-in-period"
+  ],
+  "duplicate_retry_http_status": 422,
+  "first_attempt": "accepted events used explicit whole-second timestamps before the subscription sub-second start; excluded from current usage",
+  "payment_collection_enabled": false,
+  "external_tax_enabled": false,
+  "email_delivery_enabled": false
+}

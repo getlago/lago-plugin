@@ -1,0 +1,21 @@
+{
+  "currency": "USD",
+  "quantity": "21000",
+  "unit_price": "0.00001761904761904761904761904762",
+  "subtotal": "0.37",
+  "discounts": "0",
+  "credits": "0",
+  "tax": "0",
+  "total": "0.37",
+  "_basis": {
+    "quantity": "sum of current usage charge units",
+    "unit_price": "effective subtotal divided by quantity",
+    "item_code": "lago_plugin_demo_ai_tokens"
+  },
+  "_evidence": {
+    "generated_by": "extract_actual.py",
+    "source_kind": "customer_usage",
+    "source_id": null,
+    "source_sha256": "63db09be5e9b1df8bb0367231e702f06848743245578566d0d919bb0a09ed0f8"
+  }
+}

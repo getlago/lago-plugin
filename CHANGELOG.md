@@ -16,6 +16,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Structured reconciliation failures for missing columns, duplicate keys, invalid amounts, empty inputs, and currency mismatches, plus stricter billable-event value validation.
 - Approved public install identity `lago@getlago`, with `/lago:implementation` for Claude Code and `$lago:implementation` for Codex; validators prevent identity regression.
 - Release-bundle SHA-256 verification, scheduled official-link checks, deterministic local-demo target validation, safer credential-presence discovery, explicit invoice-credit extraction, and migration cancellation gates.
+- Passing live self-hosted Lago `v1.52.1` per-token money test with hash-linked source evidence and duplicate-event verification.
 
 ## [0.1.0] - 2026-08-26
 

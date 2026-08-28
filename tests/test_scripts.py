@@ -564,6 +564,26 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(claude_marketplace["plugins"][0]["name"], "lago")
         self.assertTrue(all(len(prompt) <= 128 for prompt in codex["interface"]["defaultPrompt"]))
 
+    def test_archived_live_self_hosted_money_evidence(self):
+        evidence = ROOT / "docs/release-evidence/v0.1.0-live-self-hosted"
+        result = run(
+            "money_test.py",
+            evidence / "expected.json",
+            evidence / "actual.json",
+            "--actual-source",
+            evidence / "lago-current-usage.json",
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        metadata = json.loads((evidence / "run-metadata.json").read_text(encoding="utf-8"))
+        self.assertEqual(metadata["status"], "LIVE_SELF_HOSTED_USAGE_RETRIEVED")
+        self.assertEqual(metadata["lago_version"], "v1.52.1")
+        self.assertEqual(metadata["compose_project"], "lago-plugin-demo-v1521")
+        self.assertEqual(metadata["target"], "http://127.0.0.1:13000/api/v1")
+        self.assertEqual(metadata["duplicate_retry_http_status"], 422)
+        self.assertFalse(metadata["payment_collection_enabled"])
+        self.assertFalse(metadata["external_tax_enabled"])
+        self.assertFalse(metadata["email_delivery_enabled"])
+
     def test_migration_ledger_tracks_cutover_and_rollback_boundaries(self):
         path = ROOT / "skills/implementation/templates/migration-ledger.csv"
         with path.open(newline="", encoding="utf-8") as handle:

@@ -12,7 +12,7 @@
 - Confirm Lago legal/brand approval for the plugin name, MIT license, and publisher metadata.
 - Confirm which Lago-owned marketplace/catalog, if any, will list the plugin.
 - Decide the supported minimum Claude Code and Codex versions after clean-machine testing.
-- Run and archive at least one authorized live money test on an isolated self-hosted Lago demo instance; local fixtures prove the calculation harness, not Lago runtime behavior. Never use Lago Cloud for seeded demo data.
+- Completed: the authorized live money test passed on isolated local Lago `v1.52.1`; see [archived evidence](release-evidence/v0.1.0-live-self-hosted/README.md). No Lago Cloud or company environment was used.
 - Review every provider example against the release-date Lago, Stripe, and Chargebee specifications.
 
 ## Version 0.1 safety enforcement decision

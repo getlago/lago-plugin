@@ -30,6 +30,10 @@ def main() -> int:
     parser.add_argument("--amount", default="amount")
     args = parser.parse_args()
     source, lago = rows(args.source, args.key), rows(args.lago, args.key)
+    counts = {"source_rows": len(source), "lago_rows": len(lago)}
+    if not source or not lago:
+        print(json.dumps({"status": "FAIL", "error": "nothing to reconcile: one side has zero rows", "counts": counts}, indent=2))
+        return 1
     discrepancies = []
     for value in sorted(source.keys() | lago.keys()):
         if value not in lago:
@@ -38,7 +42,7 @@ def main() -> int:
             discrepancies.append({"key": value, "class": "missing in source"})
         elif Decimal(source[value][args.amount]) != Decimal(lago[value][args.amount]):
             discrepancies.append({"key": value, "class": "amount mismatch", "source": source[value][args.amount], "lago": lago[value][args.amount]})
-    print(json.dumps({"status": "PASS" if not discrepancies else "DIFFERENCES", "discrepancies": discrepancies}, indent=2))
+    print(json.dumps({"status": "PASS" if not discrepancies else "DIFFERENCES", "counts": counts, "discrepancies": discrepancies}, indent=2))
     return 0 if not discrepancies else 2
 
 

@@ -16,4 +16,4 @@ Cutover gates: catalog frozen/versioned; customer/subscription counts reconcile;
 
 Never cancel, modify, or query production Stripe without explicit approval immediately before the exact action.
 
-Sources: [Stripe Billing](https://docs.stripe.com/billing), [usage meters](https://docs.stripe.com/billing/subscriptions/usage-based/meters), [credit grants](https://docs.stripe.com/api/billing/credit-grant), [API versions](https://docs.stripe.com/upgrades).
+Sources: [Stripe Billing](https://docs.stripe.com/billing), [usage meters](https://docs.stripe.com/billing/subscriptions/usage-based), [credit grants](https://docs.stripe.com/api/billing/credit-grant), [API versions](https://docs.stripe.com/upgrades).

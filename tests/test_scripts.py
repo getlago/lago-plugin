@@ -45,6 +45,36 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["mismatches"][0]["field"], "total")
 
+    def test_money_test_requires_currency(self):
+        payload = {"quantity": "1", "unit_price": "1", "subtotal": "1", "discounts": "0", "credits": "0", "tax": "0", "total": "1"}
+        no_currency = FIXTURES / "money-no-currency.json"
+        no_currency.write_text(json.dumps(payload), encoding="utf-8")
+        try:
+            result = run("money_test.py", no_currency, no_currency)
+            self.assertEqual(result.returncode, 1)
+            self.assertEqual(json.loads(result.stdout)["mismatches"][0]["field"], "currency")
+        finally:
+            no_currency.unlink()
+
+    def test_reconciliation_fails_on_empty_input(self):
+        empty = FIXTURES / "reconcile-empty.csv"
+        empty.write_text("external_id,amount\n", encoding="utf-8")
+        try:
+            result = run("reconcile.py", FIXTURES / "reconcile-source.csv", empty)
+            self.assertEqual(result.returncode, 1)
+            self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
+        finally:
+            empty.unlink()
+
+    def test_event_accepts_numeric_string_timestamp(self):
+        event = FIXTURES / "event-string-timestamp.json"
+        event.write_text(json.dumps({"event": {"transaction_id": "api_request:req_synthetic_002", "external_subscription_id": "sub_synthetic_001", "code": "api_requests", "timestamp": "1787702400", "properties": {"quantity": 1}}}), encoding="utf-8")
+        try:
+            result = run("validate_event.py", event)
+            self.assertEqual(result.returncode, 0, result.stdout)
+        finally:
+            event.unlink()
+
     def test_reconciliation_passes(self):
         result = run("reconcile.py", FIXTURES / "reconcile-source.csv", FIXTURES / "reconcile-lago-pass.csv")
         self.assertEqual(result.returncode, 0, result.stdout)
@@ -73,11 +103,11 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Offline example complete", human.stdout)
         self.assertIn("expert mode", human.stdout)
 
-    def test_eval_suite_has_all_50_unique_cases(self):
+    def test_eval_suite_has_all_52_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 50)
-        self.assertEqual(len({case["id"] for case in cases}), 50)
+        self.assertEqual(len(cases), 52)
+        self.assertEqual(len({case["id"] for case in cases}), 52)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):

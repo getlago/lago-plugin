@@ -141,7 +141,7 @@ python3 -m unittest discover -s tests -v
 claude plugin validate .
 ```
 
-The repository includes 50 synthetic behavioral cases and deterministic tests for event validation, money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+The repository includes 52 synthetic behavioral cases and deterministic tests for event validation, money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

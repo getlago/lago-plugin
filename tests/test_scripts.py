@@ -1,6 +1,7 @@
 import json
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -37,43 +38,227 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("transaction_id appears retry-unstable", errors)
 
     def test_money_test_passes_exact_decimal_equivalence(self):
-        result = run("money_test.py", FIXTURES / "money-expected.json", FIXTURES / "money-actual-pass.json")
+        result = run(
+            "money_test.py",
+            FIXTURES / "money-expected.json",
+            FIXTURES / "money-actual-pass.json",
+            "--actual-source",
+            FIXTURES / "lago-invoice-payload.json",
+        )
         self.assertEqual(result.returncode, 0, result.stdout)
 
     def test_money_test_reports_mismatch(self):
-        result = run("money_test.py", FIXTURES / "money-expected.json", FIXTURES / "money-actual-fail.json")
+        result = run(
+            "money_test.py",
+            FIXTURES / "money-expected-fail.json",
+            FIXTURES / "money-actual-pass.json",
+            "--actual-source",
+            FIXTURES / "lago-invoice-payload.json",
+        )
         self.assertEqual(result.returncode, 1)
-        self.assertEqual(json.loads(result.stdout)["mismatches"][0]["field"], "total")
+        fields = {item["field"] for item in json.loads(result.stdout)["mismatches"]}
+        self.assertIn("total", fields)
+        self.assertIn("expected_formula", fields)
+
+    def test_extract_actual_is_tied_to_lago_payload(self):
+        result = run("extract_actual.py", FIXTURES / "lago-invoice-payload.json")
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertEqual(
+            json.loads(result.stdout),
+            json.loads((FIXTURES / "money-actual-pass.json").read_text(encoding="utf-8")),
+        )
+
+    def test_extract_actual_supports_current_usage_payload(self):
+        result = run("extract_actual.py", FIXTURES / "lago-current-usage-payload.json")
+        self.assertEqual(result.returncode, 0, result.stdout)
+        actual = json.loads(result.stdout)
+        self.assertEqual(actual["_evidence"]["source_kind"], "customer_usage")
+        self.assertEqual(actual["quantity"], "21000")
+        self.assertEqual(actual["total"], "0.37")
+        self.assertEqual(actual["_basis"]["item_code"], "demo_ai_tokens")
+
+    def test_extract_actual_rejects_mixed_quantity_dimensions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            payload = Path(directory) / "mixed.json"
+            payload.write_text(
+                json.dumps(
+                    {
+                        "customer_usage": {
+                            "currency": "USD",
+                            "amount_cents": 200,
+                            "taxes_amount_cents": 0,
+                            "total_amount_cents": 200,
+                            "charges_usage": [
+                                {"units": "1", "billable_metric": {"code": "seats"}},
+                                {"units": "1", "billable_metric": {"code": "tokens"}},
+                            ],
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            result = run("extract_actual.py", payload)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("mixes multiple billable item codes", result.stdout)
+
+    def test_extract_actual_returns_structured_size_failure(self):
+        result = run(
+            "extract_actual.py",
+            FIXTURES / "lago-invoice-payload.json",
+            "--max-bytes",
+            1,
+        )
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
+
+    def test_money_test_rejects_hand_written_actual(self):
+        with tempfile.TemporaryDirectory() as directory:
+            actual = Path(directory) / "actual.json"
+            actual.write_text(
+                (FIXTURES / "money-expected.json").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            result = run(
+                "money_test.py",
+                FIXTURES / "money-expected.json",
+                actual,
+                "--actual-source",
+                FIXTURES / "lago-invoice-payload.json",
+            )
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("not hand-written", result.stdout)
+
+    def test_money_test_rejects_modified_extraction(self):
+        with tempfile.TemporaryDirectory() as directory:
+            actual = Path(directory) / "actual.json"
+            payload = json.loads(
+                (FIXTURES / "money-actual-pass.json").read_text(encoding="utf-8")
+            )
+            payload["total"] = "999"
+            actual.write_text(json.dumps(payload), encoding="utf-8")
+            result = run(
+                "money_test.py",
+                FIXTURES / "money-expected.json",
+                actual,
+                "--actual-source",
+                FIXTURES / "lago-invoice-payload.json",
+            )
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("differs from a fresh extraction", result.stdout)
 
     def test_money_test_requires_currency(self):
         payload = {"quantity": "1", "unit_price": "1", "subtotal": "1", "discounts": "0", "credits": "0", "tax": "0", "total": "1"}
-        no_currency = FIXTURES / "money-no-currency.json"
-        no_currency.write_text(json.dumps(payload), encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as directory:
+            no_currency = Path(directory) / "money-no-currency.json"
+            no_currency.write_text(json.dumps(payload), encoding="utf-8")
             result = run("money_test.py", no_currency, no_currency)
-            self.assertEqual(result.returncode, 1)
-            self.assertEqual(json.loads(result.stdout)["mismatches"][0]["field"], "currency")
-        finally:
-            no_currency.unlink()
+        self.assertEqual(result.returncode, 1)
+        fields = {item["field"] for item in json.loads(result.stdout)["mismatches"]}
+        self.assertIn("currency", fields)
 
     def test_reconciliation_fails_on_empty_input(self):
-        empty = FIXTURES / "reconcile-empty.csv"
-        empty.write_text("external_id,amount\n", encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as directory:
+            empty = Path(directory) / "reconcile-empty.csv"
+            empty.write_text("external_id,amount,currency\n", encoding="utf-8")
             result = run("reconcile.py", FIXTURES / "reconcile-source.csv", empty)
-            self.assertEqual(result.returncode, 1)
-            self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
-        finally:
-            empty.unlink()
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
+
+    def test_reconciliation_classifies_duplicate_keys(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "source.csv"
+            source.write_text(
+                "external_id,amount,currency\nA,1.00,USD\nA,2.00,USD\n",
+                encoding="utf-8",
+            )
+            result = run("reconcile.py", source, FIXTURES / "reconcile-lago-pass.csv")
+        self.assertEqual(result.returncode, 2, result.stdout)
+        duplicates = [
+            item
+            for item in json.loads(result.stdout)["discrepancies"]
+            if item["class"] == "duplicate key"
+        ]
+        self.assertEqual(duplicates[0]["side"], "source")
+
+    def test_reconciliation_reports_missing_amount_column(self):
+        with tempfile.TemporaryDirectory() as directory:
+            invalid = Path(directory) / "invalid.csv"
+            invalid.write_text("external_id,total,currency\nA,1.00,USD\n", encoding="utf-8")
+            result = run("reconcile.py", invalid, FIXTURES / "reconcile-lago-pass.csv")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("missing required column: amount", result.stdout)
+
+    def test_reconciliation_returns_structured_size_failure(self):
+        result = run(
+            "reconcile.py",
+            FIXTURES / "reconcile-source.csv",
+            FIXTURES / "reconcile-lago-pass.csv",
+            "--max-bytes",
+            1,
+        )
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
+
+    def test_reconciliation_detects_currency_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            lago = Path(directory) / "lago.csv"
+            lago.write_text(
+                "external_id,amount,currency\nsynthetic_001,2.00,EUR\nsynthetic_002,5.00,USD\n",
+                encoding="utf-8",
+            )
+            result = run("reconcile.py", FIXTURES / "reconcile-source.csv", lago)
+        self.assertEqual(result.returncode, 2)
+        classes = {item["class"] for item in json.loads(result.stdout)["discrepancies"]}
+        self.assertIn("currency mismatch", classes)
 
     def test_event_accepts_numeric_string_timestamp(self):
-        event = FIXTURES / "event-string-timestamp.json"
-        event.write_text(json.dumps({"event": {"transaction_id": "api_request:req_synthetic_002", "external_subscription_id": "sub_synthetic_001", "code": "api_requests", "timestamp": "1787702400", "properties": {"quantity": 1}}}), encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as directory:
+            event = Path(directory) / "event-string-timestamp.json"
+            event.write_text(json.dumps({"event": {"transaction_id": "api_request:req_synthetic_002", "external_subscription_id": "sub_synthetic_001", "code": "api_requests", "timestamp": "1787702400", "properties": {"quantity": 1}}}), encoding="utf-8")
             result = run("validate_event.py", event)
-            self.assertEqual(result.returncode, 0, result.stdout)
-        finally:
-            event.unlink()
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_event_rejects_negative_and_string_quantities(self):
+        base = {
+            "transaction_id": "api_request:req_synthetic_003",
+            "external_subscription_id": "sub_synthetic_001",
+            "code": "api_requests",
+            "timestamp": 1787702400,
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            negative = Path(directory) / "negative.json"
+            string = Path(directory) / "string.json"
+            negative.write_text(json.dumps({"event": {**base, "properties": {"quantity": -1}}}), encoding="utf-8")
+            string.write_text(json.dumps({"event": {**base, "properties": {"quantity": "12"}}}), encoding="utf-8")
+            negative_result = run("validate_event.py", negative)
+            string_result = run("validate_event.py", string)
+        self.assertEqual(negative_result.returncode, 1)
+        self.assertIn("must be non-negative", negative_result.stdout)
+        self.assertEqual(string_result.returncode, 1)
+        self.assertIn("must be a number", string_result.stdout)
+
+    def test_event_allows_explicit_negative_correction_property(self):
+        with tempfile.TemporaryDirectory() as directory:
+            correction = Path(directory) / "correction.json"
+            correction.write_text(
+                json.dumps({"event": {"transaction_id": "correction:1", "external_subscription_id": "sub_synthetic_001", "code": "api_requests", "timestamp": 1787702400, "properties": {"quantity": -1}}}),
+                encoding="utf-8",
+            )
+            result = run(
+                "validate_event.py",
+                correction,
+                "--allow-negative-property",
+                "quantity",
+            )
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_event_returns_structured_failure_for_bad_json(self):
+        with tempfile.TemporaryDirectory() as directory:
+            invalid = Path(directory) / "invalid.json"
+            invalid.write_text("{", encoding="utf-8")
+            result = run("validate_event.py", invalid)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(json.loads(result.stdout)["status"], "FAIL")
 
     def test_reconciliation_passes(self):
         result = run("reconcile.py", FIXTURES / "reconcile-source.csv", FIXTURES / "reconcile-lago-pass.csv")
@@ -103,11 +288,11 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Offline example complete", human.stdout)
         self.assertIn("expert mode", human.stdout)
 
-    def test_eval_suite_has_all_52_unique_cases(self):
+    def test_eval_suite_has_all_54_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 52)
-        self.assertEqual(len({case["id"] for case in cases}), 52)
+        self.assertEqual(len(cases), 54)
+        self.assertEqual(len({case["id"] for case in cases}), 54)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -130,7 +315,22 @@ class ScriptTests(unittest.TestCase):
             "demo-is-not-production-ready",
             "ambiguous-help-start-no-app",
             "expert-mode-opt-out",
+            "hand-written-actual-evidence",
+            "official-doc-link-moved",
         }.issubset(ids))
+
+    def test_external_link_lister_finds_official_docs(self):
+        result = run(
+            "list_external_links.py",
+            ROOT,
+            "--domain",
+            "docs.getlago.com",
+            "--domain",
+            "swagger.getlago.com",
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("https://docs.getlago.com", result.stdout)
+        self.assertIn("https://swagger.getlago.com/openapi.yaml", result.stdout)
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
         skill = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8")
@@ -165,6 +365,7 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(codex["name"], claude["name"])
         self.assertEqual(codex["version"], claude["version"])
         self.assertEqual(codex["name"], "lago-billing")
+        self.assertTrue(all(len(prompt) <= 128 for prompt in codex["interface"]["defaultPrompt"]))
 
 
 if __name__ == "__main__":

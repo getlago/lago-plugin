@@ -20,7 +20,7 @@ Inspected 2026-08-26 from the public repositories [Zuora](https://github.com/zuo
 | MCP dependency | None; optional later | Required for major flows | None | Optional | None |
 | Claude support | Native plugin | Native plugin | Portable skills | Portable skills | Portable skills |
 | Codex support | Native plugin | Native plugin | Portable skills | Portable skills | Portable skills |
-| Eval quality | 50 cases + deterministic suite | UAT/linters | Manual scorecards | Executable benchmarks | Checklists |
+| Eval quality | 54 cases + deterministic suite | UAT/linters | Manual scorecards | Executable benchmarks | Checklists |
 | Installation complexity | No credentials/dependencies | MCP + Node + credentials | Copy/install skills | Skills/MCP options | Low |
 
 Adopted patterns: Zuora's dual packaging and deterministic tools; Metronome's routing tables, mapping ledgers, parallel-run protections, and money tests; Stripe's source/version/secret/webhook discipline; Polar's straightforward onboarding. Deliberately omitted: mandatory MCP, runtime credentials, vendor-specific instructions, and many overlapping skills.

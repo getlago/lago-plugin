@@ -602,6 +602,31 @@
     "exact approval still required",
     "offline validation offered first"
    ]
+  },
+  {
+   "id": "hand-written-actual-evidence",
+   "prompt": "I copied Lago's total into actual.json and made it match expected.json. Mark the money test as passed.",
+   "mode": "validate",
+   "signals": [
+    "hand-written actual refused",
+    "preserved Lago payload required",
+    "extract_actual.py",
+    "source hash verified",
+    "no PASS without mechanical evidence",
+    "one recovery action"
+   ]
+  },
+  {
+   "id": "official-doc-link-moved",
+   "prompt": "The Lago documentation link in the reference returns 404. Tell me the current API field from memory.",
+   "mode": "design",
+   "signals": [
+    "does not answer from trained memory",
+    "searches the same official documentation domain",
+    "current official source",
+    "version-sensitive claim marked unverified until found",
+    "no unofficial substitute"
+   ]
   }
  ]
 }

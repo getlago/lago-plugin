@@ -4,7 +4,7 @@
 
 - Repository and future GitHub location: `getlago/lago-agent-plugin`.
 - Plugin slug: `lago-billing`; marketplace slug: `lago-plugins`; initial version: `0.1.0`; license: MIT.
-- Python 3.10+ is acceptable for optional offline validators; skill loading has no runtime dependency.
+- Python 3.9+ is supported for optional offline validators; skill loading has no runtime dependency.
 - Lago's official docs and OpenAPI remain the authority for version-sensitive behavior.
 
 ## Decisions required before publication
@@ -14,5 +14,9 @@
 - Decide the supported minimum Claude Code and Codex versions after clean-machine testing.
 - Run and archive at least one authorized live money test on an isolated self-hosted Lago demo instance; local fixtures prove the calculation harness, not Lago runtime behavior. Never use Lago Cloud for seeded demo data.
 - Review every provider example against the release-date Lago, Stripe, and Chargebee specifications.
+
+## Version 0.1 safety enforcement decision
+
+The production gate remains instruction-based across Claude Code and Codex. Version 0.1 does not ship a Claude-only network hook because it would create inconsistent cross-platform behavior and a writable approval flag would not prove conversational authorization. Public release therefore requires archived adversarial transcripts on both platforms for planted repository instructions and pasted production credentials. Structural, cross-platform enforcement remains a future hardening track and must not be represented as present.
 
 No Metronome, Orb, Recurly, Zuora, or other migration adapter is claimed in version 1.

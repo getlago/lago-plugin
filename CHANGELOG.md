@@ -12,6 +12,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Behavioral evals for greenfield blueprinting, demo-first teaching, and the boundary between a working demo and production readiness.
 - Dependency-free instant offline demo with duplicate-event and reconciliation evidence, plus a no-action-needed path for ambiguous beginner prompts outside an application repository.
 - Gratification-first guided experience with one-step next actions and an `expert mode` opt-out that preserves safety and billing evidence while removing tutorials and routine narration.
+- Evidence-derived money validation that extracts actuals from preserved Lago payloads and verifies their source hash; hand-written or modified actuals fail.
+- Structured reconciliation failures for missing columns, duplicate keys, invalid amounts, empty inputs, and currency mismatches, plus stricter billable-event value validation.
 
 ## [0.1.0] - 2026-08-26
 
@@ -26,4 +28,4 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Hard isolation policy requiring self-hosted Lago for all seeded demos and prohibiting demo data in Lago Cloud.
 - Canonical self-hosted OpenAI-style per-token demo with illustrative pricing and deterministic usage evidence.
 - Mandatory first-run workspace and billing-state preflight, capability-boundary message, and contextual recovery guidance.
-- Forty-eight synthetic eval cases, scorecard, examples, and release controls.
+- Fifty-four synthetic eval cases, scorecard, examples, and release controls.

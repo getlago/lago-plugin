@@ -1,0 +1,18 @@
+{
+  "customer_usage": {
+    "lago_invoice_id": null,
+    "currency": "USD",
+    "amount_cents": 37,
+    "taxes_amount_cents": 0,
+    "total_amount_cents": 37,
+    "charges_usage": [
+      {
+        "units": "21000",
+        "amount_cents": 37,
+        "billable_metric": {
+          "code": "demo_ai_tokens"
+        }
+      }
+    ]
+  }
+}

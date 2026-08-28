@@ -9,7 +9,7 @@ The plugin works inside an application repository. It finds the customer and sub
 - **Understands the application:** inspects customer, tenant, subscription, usage, webhook, payment, tax, and existing billing code before proposing changes.
 - **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
 - **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
-- **Proves the money:** compares expected quantity and invoice amounts using exact deterministic calculations. Compilation or a successful API response is not treated as billing correctness.
+- **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
 - **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
 
 No prior Lago or billing expertise is required.
@@ -133,7 +133,7 @@ This writes no files and contacts no external service. Optional live validation 
 
 ## Local development and validation
 
-Python 3.10+ is required only for the deterministic helpers. The skill itself is Markdown.
+Python 3.9+ is required only for the deterministic helpers. The skill itself is Markdown.
 
 ```bash
 python3 skills/implementation/scripts/validate_repo.py .
@@ -141,7 +141,7 @@ python3 -m unittest discover -s tests -v
 claude plugin validate .
 ```
 
-The repository includes 52 synthetic behavioral cases and deterministic tests for event validation, money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 54 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

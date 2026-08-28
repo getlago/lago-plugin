@@ -13,6 +13,8 @@
 
 Validate required keys, types, finite numeric values, allowed dimensions, tenant association, timestamp range, and schema version before enqueue/send. Store delivery status separately from the source usage record.
 
+Run `validate_event.py` with `--numeric-property <name>` for custom aggregation fields. The common fields `amount`, `quantity`, `tokens`, `units`, and `value` are numeric by default. They must be finite numbers and non-negative. Use `--allow-negative-property <name>` only when the reviewed event contract and target event-store correction mechanism explicitly permit negative corrections.
+
 ## Delivery cases
 
 - Duplicate: resend the identical stable key and timestamp; verify no added quantity.

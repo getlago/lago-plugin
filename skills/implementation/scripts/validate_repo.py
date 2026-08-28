@@ -44,7 +44,18 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     skill = root / "skills/implementation/SKILL.md"
     primitives = root / "skills/implementation/references/primitives.md"
     demo = root / "skills/implementation/references/demo.md"
-    for required in (codex, claude, skill, primitives, demo, root / "README.md", root / "LICENSE"):
+    validation = root / "skills/implementation/references/validation.md"
+    openai_yaml = root / "skills/implementation/agents/openai.yaml"
+    required_scripts = (
+        root / "skills/implementation/scripts/extract_actual.py",
+        root / "skills/implementation/scripts/list_external_links.py",
+        root / "skills/implementation/scripts/money_test.py",
+        root / "skills/implementation/scripts/reconcile.py",
+        root / "skills/implementation/scripts/run_demo.py",
+        root / "skills/implementation/scripts/validate_event.py",
+        root / "skills/implementation/scripts/validate_repo.py",
+    )
+    for required in (codex, claude, skill, primitives, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -54,6 +65,13 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
                 failures.append(f"{label} manifest name must be lago-billing")
             if data.get("version") != "0.1.0":
                 failures.append(f"{label} manifest version must match release")
+    if isinstance(codex_data, dict):
+        interface = codex_data.get("interface")
+        prompts = interface.get("defaultPrompt", []) if isinstance(interface, dict) else []
+        if not isinstance(prompts, list) or not prompts or any(
+            not isinstance(prompt, str) or len(prompt) > 128 for prompt in prompts
+        ):
+            failures.append("Codex interface.defaultPrompt entries must be non-empty and at most 128 characters")
     if skill.is_file():
         text = skill.read_text(encoding="utf-8")
         if not re.match(r"^---\nname: implementation\ndescription: .+\n---\n", text):
@@ -64,6 +82,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         for preflight_signal in ("Lago Billing Engineer loaded.", "Mandatory first-run preflight", "credentials are unnecessary for offline work", "Ask only the next question"):
             if preflight_signal not in text:
                 failures.append(f"missing first-run behavior: {preflight_signal}")
+        if "never answer a version-sensitive question from trained memory" not in text:
+            failures.append("missing official-documentation freshness guard")
     if primitives.is_file():
         text = primitives.read_text(encoding="utf-8")
         for teaching_signal in ("Your application → Lago", "Never quiz the user", "Billable metric", "Payment collection is a separate integration decision"):
@@ -74,6 +94,13 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         for demo_signal in ("Lago has no built-in sandbox mode", "Never seed demo customers", "including an account the user calls development, test, or staging", "isolated self-hosted Lago instance"):
             if demo_signal not in text:
                 failures.append(f"missing demo isolation guidance: {demo_signal}")
+    if validation.is_file():
+        text = validation.read_text(encoding="utf-8")
+        for evidence_signal in ("extract_actual.py", "Never hand-write", "--actual-source"):
+            if evidence_signal not in text:
+                failures.append(f"missing money-evidence guidance: {evidence_signal}")
+    if openai_yaml.is_file() and "$lago-billing:implementation" not in openai_yaml.read_text(encoding="utf-8"):
+        failures.append("Codex default prompt must use the installed namespaced skill invocation")
     denied = []
     if denylist:
         denied = [line.strip().lower() for line in denylist.read_text(encoding="utf-8").splitlines() if line.strip() and not line.startswith("#")]

@@ -1,3 +1,3 @@
-external_id,amount
-synthetic_001,2.50
-synthetic_003,5.00
+external_id,amount,currency
+synthetic_001,2.50,USD
+synthetic_003,5.00,USD

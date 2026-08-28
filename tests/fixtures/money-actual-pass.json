@@ -1,1 +1,22 @@
-{"currency":"USD","quantity":"12.0","unit_price":"0.250","subtotal":"3","discounts":"0","credits":"1","tax":"0","total":"2"}
+{
+  "currency": "USD",
+  "quantity": "12",
+  "unit_price": "0.25",
+  "subtotal": "3",
+  "discounts": "0",
+  "credits": "1",
+  "tax": "0",
+  "total": "2",
+  "_basis": {
+    "quantity": "sum of invoice fee units",
+    "unit_price": "effective subtotal divided by quantity",
+    "credits": "residual required to reconcile subtotal, discounts, tax, and total",
+    "item_code": "api_requests"
+  },
+  "_evidence": {
+    "generated_by": "extract_actual.py",
+    "source_kind": "invoice",
+    "source_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+    "source_sha256": "70f75612ea6a67cbd446ce3c8f19dfa84170082de1d7e8ed2f85756f20cc9fd5"
+  }
+}

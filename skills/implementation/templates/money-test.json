@@ -1,0 +1,11 @@
+{
+  "_scope": "Invoice-shaped nonnegative amounts only; standalone credit-note documents are out of scope.",
+  "currency": "USD",
+  "quantity": "12",
+  "unit_price": "0.25",
+  "subtotal": "3.00",
+  "discounts": "0.00",
+  "credits": "1.00",
+  "tax": "0.00",
+  "total": "2.00"
+}

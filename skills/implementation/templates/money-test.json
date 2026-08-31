@@ -1,4 +1,5 @@
 {
+  "_scope": "Invoice-shaped nonnegative amounts only; standalone credit-note documents are out of scope.",
   "currency": "USD",
   "quantity": "12",
   "unit_price": "0.25",

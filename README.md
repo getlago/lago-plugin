@@ -4,6 +4,8 @@ Turn a product’s pricing and usage model into a testable [Lago](https://www.ge
 
 The plugin works inside an application repository. It finds the customer and subscription boundaries, maps product behavior to Lago, implements the smallest coherent billing slice, and verifies the expected amount independently.
 
+This repository is internal while version `0.1.0` is under review. The intended end state is a public, Lago-maintained plugin after human, legal/brand, publisher, marketplace, and minimum-platform decisions are complete. Re-run the public-content audit against the exact release commit immediately before changing repository visibility or submitting it to a public marketplace; the current audit describes only the reviewed internal tree.
+
 ## What it does
 
 - **Understands the application:** inspects customer, tenant, subscription, usage, webhook, payment, tax, and existing billing code before proposing changes.

@@ -474,11 +474,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_78_unique_cases(self):
+    def test_eval_suite_has_all_79_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 78)
-        self.assertEqual(len({case["id"] for case in cases}), 78)
+        self.assertEqual(len(cases), 79)
+        self.assertEqual(len({case["id"] for case in cases}), 79)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):

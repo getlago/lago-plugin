@@ -60,6 +60,19 @@
    ]
   },
   {
+   "id": "pricing-page-rest-aggregation-compatibility",
+   "prompt": "Use this pricing page to create a Lago plan through the REST API. It bills monthly using the highest stored GB and the latest active-seat count.",
+   "mode": "implement",
+   "signals": [
+    "pricing page translated into a billing blueprint before writes",
+    "max_agg uses recurring false",
+    "latest_agg uses recurring false",
+    "metered reset explained separately from subscription cadence",
+    "target environment and explicit approval before REST writes",
+    "API response and resulting configuration verified"
+   ]
+  },
+  {
    "id": "prepaid-credits",
    "prompt": "Design prepaid credits with expiry.",
    "mode": "design",

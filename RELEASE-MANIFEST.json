@@ -11,7 +11,7 @@
     "CHANGELOG.md": "fab143a754ec3ffb0e8599b51f8ed343aa3e95b317fd57365829383e1fc79c84",
     "CONTRIBUTING.md": "3e75c64e2200ce3b61672637c199c35168d15d92ee5d077376cc577891f9294a",
     "LICENSE": "a586c6551ce311a9e882cf34aba6b5f5c3e882d07450a6c49a920851fcce3e5f",
-    "README.md": "71e40fbcee9301ea1e771cef209cce50d634c2b20ca7b2f455d549f4ec2031fa",
+    "README.md": "63fa8205a0d969b6be24b7b802df8f9d666d7442b4bb184446f6e7be94b423bd",
     "RELEASING.md": "4348b894053f689ef6232a83289ff8f3b13a5cfa982c6425767f03178ef20813",
     "SECURITY.md": "a2c8672f945fb623d5958a18af5af7c264baf280cd83fe55cfd8fa59f03dda74",
     "docs/architecture.md": "02753c6da8bae34d304f54d3faa6e3102d9dcb423d413a1ba0d20eebbace0d9a",
@@ -24,8 +24,8 @@
     "docs/release-evidence/v0.1.0-live-self-hosted/expected.json": "1c3b75ed0f99d52b83778b10d05688156c6a6f15166c0b2395c8c71685b173aa",
     "docs/release-evidence/v0.1.0-live-self-hosted/lago-current-usage.json": "63db09be5e9b1df8bb0367231e702f06848743245578566d0d919bb0a09ed0f8",
     "docs/release-evidence/v0.1.0-live-self-hosted/run-metadata.json": "563e956fcb13b0c3071cbc37e34b9eb1f6adf57c2b53ea690f9d884558fc3ca3",
-    "evals/implementation/README.md": "cb5c9bd7761fe7b505282bd2fc5df4e563ee223390dcdc3f4e0011ea33c118d9",
-    "evals/implementation/cases.json": "516fd72fc3059cf03a672276a21b23e39c7181fe7587cf87ac38e7555e1028e4",
+    "evals/implementation/README.md": "6a53c7d3ebf4f1e08f87a692bddf137838cbb45662f2ff61d0c2fd25cb646c0b",
+    "evals/implementation/cases.json": "c4695765b2ad127767e0ee991305970b86273591e9da59ae82c6cf16ac04c6f9",
     "evals/implementation/scorecard.md": "cc7dfe554757ef94918dca7cc177d7fb4ddaf4faf264872599317253270c1ff8",
     "examples/cloud.md": "efe7a256f9f79ed780f4477dccd973b047d724abf733239a2d191c8f45c101ee",
     "examples/migration-chargebee.md": "c9015c4688b016c381c9585db1e70c46e60dec00205085656111e5fc2b1e3a9c",
@@ -44,7 +44,7 @@
     "skills/implementation/references/migration-chargebee.md": "311f2b084bcdf3c0fcc54bc621c9afb93abdb2a482c934901f9753ae6e12e386",
     "skills/implementation/references/migration-stripe.md": "63a3e6d7d1ab6fddbf2d23eb6d0c008242b501740d20b7144fb200dc31e8e51b",
     "skills/implementation/references/migration.md": "b0e888771a0477814872401dfe06527c757d01b3cb72ab181cff055965f21e76",
-    "skills/implementation/references/primitives.md": "5a88575fdf4278466ea8f2195a84894b9679cb37dd6bec385feb014ad5a7b32e",
+    "skills/implementation/references/primitives.md": "9dcf6378089920d6ae38d57600e258f937935e82e32299c32f9cb360c12642e9",
     "skills/implementation/references/reconciliation.md": "3b205dcaea7d86af136369d66709545bb96805fd152520450775ad787ae60745",
     "skills/implementation/references/safety.md": "638a8247c77f31aeafae6e5da204a7e7e212c0deeac7a02daf362dc8882d7b81",
     "skills/implementation/references/self-hosted.md": "1eaa78a001a29098c6df97fc1f433f8cd90df03779cb85a536d5f17376935b25",
@@ -60,7 +60,7 @@
     "skills/implementation/scripts/run_demo.py": "d3ff107603cd44146a52df763f1276dc635afd1f08c1994f1947df7d35f865ac",
     "skills/implementation/scripts/validate_demo_target.py": "427e8c5a3a68b6be2642b227ed5c283bcdd740d048d7ec086e5f931e8cc42310",
     "skills/implementation/scripts/validate_event.py": "9e88e01495c8494757e68010f214e2569f66c77c6e4e1a3b9982317504941c79",
-    "skills/implementation/scripts/validate_repo.py": "fba886c9c9a3d2f7b11ed459f2976a317761785d578b9453c067fef5e71e25b4",
+    "skills/implementation/scripts/validate_repo.py": "04369040cda9294ee0475a13ae52cd5f3e3196b651dd9f54ef210d1ffd42a4bf",
     "skills/implementation/templates/billing-blueprint.md": "5a7918d51bcebb3948ac11d7db6fbb0915f3bae662afb52acfd75b4b8617d2cf",
     "skills/implementation/templates/discovery.md": "64feb868fcee996ba07216af42a57006176f15ab7831860210eb3299336dcd4e",
     "skills/implementation/templates/event-contract.json": "a942935676ae50321e765dff7e8710c86d10d269eaf2c7778187bc3e5c18982c",
@@ -78,7 +78,7 @@
     "tests/fixtures/reconcile-lago-diff.csv": "7e9feb476f4bdee2a3f10030d0a0ceaedbaadd89cdf434592ada2d49e53aa8d5",
     "tests/fixtures/reconcile-lago-pass.csv": "3f014c6b188e923866cd769d35925e43c233a927862b8c6d54e10263d1d3c388",
     "tests/fixtures/reconcile-source.csv": "e923e2ada463394e2cd94dc939b0dba058799a2a90e3f2f32f9b37100125016e",
-    "tests/test_scripts.py": "1ec38bb5ee1fc059562827d0e77b26da312c8e244249a6e6fba116d7346bad73"
+    "tests/test_scripts.py": "b591b17a13da0528671c4a6afec23a011d4bb8c760e12915cdcdd6f3f5791f24"
   },
   "schema": 1
 }

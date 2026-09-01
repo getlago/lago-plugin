@@ -136,9 +136,38 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
             failures.append("missing official-documentation freshness guard")
     if primitives.is_file():
         text = primitives.read_text(encoding="utf-8")
-        for teaching_signal in ("Your application → Lago", "Never quiz the user", "Billable metric", "Payment collection is a separate integration decision"):
+        for teaching_signal in (
+            "Your application → Lago",
+            "Never quiz the user",
+            "Billable metric",
+            "Payment collection is a separate integration decision",
+            "`count_agg`, `max_agg`, and `latest_agg` are metered-only",
+            "set `recurring: false`",
+        ):
             if teaching_signal not in text:
                 failures.append(f"missing beginner primitive guidance: {teaching_signal}")
+    eval_cases = root / "evals/implementation/cases.json"
+    if eval_cases.is_file():
+        data = load_json(eval_cases, failures)
+        cases = data.get("cases", []) if isinstance(data, dict) else []
+        aggregation_case = next(
+            (
+                case
+                for case in cases
+                if isinstance(case, dict)
+                and case.get("id") == "pricing-page-rest-aggregation-compatibility"
+            ),
+            None,
+        )
+        signals = aggregation_case.get("signals", []) if aggregation_case else []
+        for required_signal in (
+            "max_agg uses recurring false",
+            "latest_agg uses recurring false",
+        ):
+            if required_signal not in signals:
+                failures.append(
+                    f"missing aggregation compatibility eval signal: {required_signal}"
+                )
     if demo.is_file():
         text = demo.read_text(encoding="utf-8")
         for demo_signal in ("Lago has no built-in sandbox mode", "Never seed demo customers", "including an account the user calls development, test, or staging", "isolated self-hosted Lago instance"):

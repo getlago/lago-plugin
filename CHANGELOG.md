@@ -17,6 +17,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Approved public install identity `lago@getlago`, with `/lago:implementation` for Claude Code and `$lago:implementation` for Codex; validators prevent identity regression.
 - Release-bundle SHA-256 verification, scheduled official-link checks, deterministic local-demo target validation, safer credential-presence discovery, explicit invoice-credit extraction, and migration cancellation gates.
 - Passing live self-hosted Lago `v1.52.1` per-token money test with hash-linked source evidence and duplicate-event verification.
+- Repository-backed opportunity discovery for AI-native billing, value credits, prepaid wallets, hybrid/provider coexistence, enterprise overrides, pricing backtests, and finance handoffs, with 19 anonymized field-replay evals.
 
 ## [0.1.0] - 2026-08-26
 

@@ -16,7 +16,7 @@ Assume the user does not know Lago or billing terminology. Start from the applic
 
 Introduce optional primitives only when the product requires them:
 
-- **Wallet:** a prepaid credit balance that can offset future charges.
+- **Wallet:** a credit ledger that can offset eligible future charges. Its balance may come from purchased credits, included grants, or promotions; keep those sources explicit.
 - **Coupon:** a configured discount applied under defined conditions.
 - **Minimum commitment:** a minimum billed amount for the relevant period.
 - **Entitlement:** feature access associated with a plan; do not assume Lago is the application's authorization source.
@@ -33,5 +33,6 @@ Authoritative references: [customers](https://docs.getlago.com/api-reference/cus
 6. Confirm the consequence of a decision, not vocabulary recall. Never quiz the user or require them to translate their needs into Lago terminology.
 7. Keep a visible decision trail: application concept, Lago primitive, evidence, decision, and unresolved owner.
 8. Put the proposed mapping into a one-screen billing blueprint before editing a new integration. Include the smallest flow and one illustrative money calculation so the user can judge the outcome without learning the whole Lago model.
+9. When the billing model is unclear, recommend one repository-backed use case and at most two later opportunities. Do not ask the user to select Lago features from a catalog.
 
 For a greenfield usage flow, the teaching order is usually: billing boundary → customer → billable behavior → event → billable metric → price/charge → plan → subscription → expected invoice. Change the order when repository evidence or a fixed-subscription model makes another sequence clearer.

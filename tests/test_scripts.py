@@ -474,11 +474,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_59_unique_cases(self):
+    def test_eval_suite_has_all_78_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 59)
-        self.assertEqual(len({case["id"] for case in cases}), 59)
+        self.assertEqual(len(cases), 78)
+        self.assertEqual(len({case["id"] for case in cases}), 78)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -508,6 +508,31 @@ class ScriptTests(unittest.TestCase):
             "tampered-plugin-bundle",
             "premature-source-cancellation",
             "credential-presence-preflight",
+        }.issubset(ids))
+
+    def test_eval_suite_covers_field_replay_use_cases(self):
+        data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
+        ids = {case["id"] for case in data["cases"]}
+        self.assertTrue({
+            "ai-value-credits",
+            "ai-multimodal-filtered-pricing",
+            "ai-prepaid-trial-and-purchase",
+            "ai-greenfield-opportunity-scan",
+            "ai-wallet-depletion-enforcement",
+            "outcome-priced-agent",
+            "chargebee-wallet-coexistence",
+            "stripe-subscription-lago-metering",
+            "wallet-top-up-modes",
+            "wallet-metric-scope-and-priority",
+            "wallet-tax-accounting-boundary",
+            "fixed-fee-wallet-separation",
+            "enterprise-overrides-multiple-entities",
+            "annual-contract-monthly-usage",
+            "plan-cadence-change",
+            "pricing-backtest",
+            "high-volume-wallet-events",
+            "crm-erp-finance-handoff",
+            "marketplace-payout-boundary",
         }.issubset(ids))
 
     def test_external_link_lister_finds_official_docs(self):
@@ -545,6 +570,15 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Offline example complete", guided)
         self.assertIn("You do not need to do anything", guided)
         self.assertIn("Gratification before intake", guided)
+        use_cases = (ROOT / "skills/implementation/references/use-case-discovery.md").read_text(encoding="utf-8")
+        self.assertIn("Opportunity scan", use_cases)
+        self.assertIn("High-value AI-native patterns", use_cases)
+        self.assertIn("application—not Lago—enforce", use_cases)
+        self.assertIn("Do not assume Lago must replace the full billing stack", use_cases)
+        self.assertIn("deliberate five-pattern check", use_cases)
+        self.assertIn("money test match the recommended first candidate exactly", use_cases)
+        events = (ROOT / "skills/implementation/references/events.md").read_text(encoding="utf-8")
+        self.assertIn("customer identity and subscription identity distinct", events)
         self.assertIn("expert mode", skill)
         self.assertIn("guided mode", skill)
         self.assertIn("scripts/run_demo.py", skill)

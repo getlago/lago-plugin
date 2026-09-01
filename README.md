@@ -10,6 +10,7 @@ This repository is internal while version `0.1.0` is under review. The intended 
 
 - **Understands the application:** inspects customer, tenant, subscription, usage, webhook, payment, tax, and existing billing code before proposing changes.
 - **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
+- **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
 - **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
 - **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
 - **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
@@ -98,6 +99,7 @@ If the current workspace is not an application, the plugin says what it inspecte
 | --- | --- |
 | Deployment | Lago Cloud US/EU and self-hosted Docker or Kubernetes guidance |
 | Pricing | Subscriptions, usage, hybrid pricing, wallets, prepaid credits, and minimum commitments |
+| Use-case discovery | AI tokens and model calls, value credits, prepaid access, outcome pricing, pricing backtests, and enterprise overrides |
 | Application shape | Greenfield, existing billing integrations, and multi-tenant applications |
 | Migrations | Stripe Billing, Chargebee, and custom billing systems |
 | Reliability | Stable event identity, duplicate protection, retries, late events, replay, webhooks, and reconciliation |
@@ -144,7 +146,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 59 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 78 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, use-case discovery, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

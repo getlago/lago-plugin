@@ -32,13 +32,13 @@
     "examples/migration-stripe.md": "27248a343ae4faab45d11a35fe0fe21ba8586e093fee1f5da3e2c9921d1ab4b7",
     "examples/per-token-ai.md": "0c3eae07a21557c01ee3be2a282b70886c5e45686f0a4489f30e062b25d018df",
     "examples/self-hosted.md": "48446fe5410778f3e440365b6314593c3808053ea7eed3cd1366c38549ac6afe",
-    "skills/implementation/SKILL.md": "16b5f80241b7c6d475ec8a2f1fc32c06de7d62ba12b13ee995b56c6fcc1c1a2d",
+    "skills/implementation/SKILL.md": "ca67eaff03d18bde2746d065129f29b175a07339886495cf73d430bce1e4ebb0",
     "skills/implementation/agents/openai.yaml": "487ca79113df65c6d2c2f769ee27911b95c160d1079076fc512847ffc3d2cde6",
     "skills/implementation/references/architecture.md": "e8764770aab46b02fb7c9674951a8bfeefa756fb3373c052c11dcbf637427c78",
     "skills/implementation/references/billing-models.md": "747391ffe28363de5d52c2fafacc1d7c7f2844279c79501cd28ccdbdc154cc2e",
     "skills/implementation/references/cloud.md": "74ffd3038c6ad5915b7a6f1fb0669fb7ee8ad258566e5627e167bc02216449f5",
     "skills/implementation/references/demo.md": "a39fb0935ed9b3b36544214d35d09f0caae8f6281c91d62b62bd53ab9545793f",
-    "skills/implementation/references/discovery.md": "c69579ebfd3e1d9b8212e0696e168c7028b5c2d1a9650e5199f9f4f1b6b379d9",
+    "skills/implementation/references/discovery.md": "7427fe1d4cdf2a40625dffe98166760ccb53039f84af05910f1c9d31f3961c7d",
     "skills/implementation/references/events.md": "dc9e7cb1c5f89ed94ce1cda7bf54e6b48250cf2f00bb0b3eaf9108aebc41d182",
     "skills/implementation/references/guided-experience.md": "9a16c25ee15c409738b65456440693771d158e26b21b59b80b8ac2fe63578b5d",
     "skills/implementation/references/migration-chargebee.md": "311f2b084bcdf3c0fcc54bc621c9afb93abdb2a482c934901f9753ae6e12e386",
@@ -80,7 +80,7 @@
     "tests/fixtures/reconcile-lago-diff.csv": "7e9feb476f4bdee2a3f10030d0a0ceaedbaadd89cdf434592ada2d49e53aa8d5",
     "tests/fixtures/reconcile-lago-pass.csv": "3f014c6b188e923866cd769d35925e43c233a927862b8c6d54e10263d1d3c388",
     "tests/fixtures/reconcile-source.csv": "e923e2ada463394e2cd94dc939b0dba058799a2a90e3f2f32f9b37100125016e",
-    "tests/test_scripts.py": "f91b38f2497aa7922e87523d28ff5c266dda8c8e1a19ea26be71713daa644240"
+    "tests/test_scripts.py": "69b0020ca9e5fbbf795f65aa028762eb1c4290872a21983e155532fd2cca8140"
   },
   "schema": 1
 }

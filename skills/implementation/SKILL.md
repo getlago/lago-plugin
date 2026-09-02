@@ -18,12 +18,11 @@ Do not assume the current folder is the user's product repository. Before asking
 - whether billing already exists, is absent from an otherwise valid application, or cannot yet be determined;
 - available Lago tools or MCP connections without assuming they exist, and whether credentials are configured using names or presence checks only—never by reading values into context.
 
-For discovery, teaching, demo, or an ambiguous first prompt, begin with `Lago Solution Engineer loaded.` and say in plain language:
+For discovery, teaching, demo, or an ambiguous first prompt, the first line of the user-facing response must be exactly `Lago Solution Engineer loaded.` Never omit, paraphrase, or bury this activation confirmation. If progress messages and a final answer are separate, repeat it as the first line of the final answer so it remains visible after progress collapses. Keep activation to three short sentences after that exact line:
 
-1. no application repository, Lago account, credentials, Docker, or MCP connection is needed to discover Lago;
-2. the current folder will not be treated as the user's product unless they ask to apply or implement the result;
-3. the plugin will first identify the merchant, customer, end user, and pricing; reveal the messy usage behind one action; show Lago turning it into an explainable charge and overage; and make the avoided billing work visible before explaining Lago terminology;
-4. after the example, the user can describe their product or share a pricing page; a repository is only needed for code-specific implementation.
+1. no application repository, Lago account, credentials, Docker, or MCP connection is needed, and the current folder will not be treated as the user's product;
+2. the plugin will show Atlas AI turning one Acme action into metered usage, overage, and an invoice before introducing Lago terminology;
+3. after the example, the user can describe their product or share a pricing page; a repository is needed only for code-specific work. Include the guided-mode opt-out in this sentence.
 
 Then run the offline example immediately. Do not lead with the workspace path or ask for product context before delivering it.
 
@@ -63,15 +62,16 @@ Infer the operating mode when omitted, including for prompts as short as `implem
 | `reconcile` | Source-to-Lago discrepancy report | Read-only |
 | `troubleshoot` | Evidence-led diagnosis | None unless asked |
 
-Load only the relevant references:
+Load only the relevant references. Do not preload later-stage guidance:
 
-- Always start with [discovery](references/discovery.md) and [Lago primitives](references/primitives.md). For design or implementation, also read [architecture](references/architecture.md).
-- First-time discovery, product or pricing-page exploration, tailored demos, fit assessment, or proof planning: [solution-engineering flow](references/solution-engineering.md).
+- Generic first run, teaching, or offline demo before product context: read [discovery](references/discovery.md) and [demo environment](references/demo.md) only. Do not load primitives, solution engineering, guided experience, use-case discovery, billing models, architecture, or implementation references until the user supplies product context or requests that work.
+- Product description, pricing-page exploration, tailored demo, fit assessment, or proof planning: [discovery](references/discovery.md), [Lago primitives](references/primitives.md), and [solution-engineering flow](references/solution-engineering.md).
+- Design or implementation: [Lago primitives](references/primitives.md) and [architecture](references/architecture.md), plus the intent-specific references below.
 - Pricing, credits, wallets, or commitments: [billing models](references/billing-models.md).
 - New integration, monetization exploration, or unclear billing model: [use-case discovery](references/use-case-discovery.md).
 - Usage metering: [events](references/events.md).
 - Lago Cloud: [cloud](references/cloud.md). Self-hosting: [self-hosted](references/self-hosted.md).
-- Any example, demo, fake usage, or seeded synthetic data: [demo environment](references/demo.md).
+- Any product-specific example, live demo, fake usage, or seeded synthetic data: [demo environment](references/demo.md).
 - Beginner onboarding, billing blueprints, progress updates, and completion language: [guided experience](references/guided-experience.md).
 - Webhook work: [webhooks](references/webhooks.md).
 - Any migration: [migration](references/migration.md), plus [Stripe](references/migration-stripe.md) or [Chargebee](references/migration-chargebee.md) when applicable.

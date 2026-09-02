@@ -1010,7 +1010,7 @@
     "exact $0.37 gross charge",
     "duplicate retry ignored and zero reconciliation difference",
     "$0.20 included usage consumed and $0.17 overage calculated",
-    "$99.17 invoice total before tax",
+    "expected $99.17 invoice total before tax labeled illustrative until live hybrid validation",
     "what the merchant avoids building",
     "one-line credible path to more complex billing models",
     "late corrected and high-volume streams require integration-specific validation",

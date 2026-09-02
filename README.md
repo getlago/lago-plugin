@@ -28,7 +28,7 @@ After installation, from any task or folder, ask:
 show me what Lago can do
 ```
 
-The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; Lago turns it into a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It then shows what Atlas avoids building, where Lago can go next, and what remains outside Lago. It does not assume the open folder is your application.
+The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates an expected `$0.17` of overage. It then shows what Atlas avoids building, where Lago can go next, and what remains outside Lago. It does not assume the open folder is your application.
 
 To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. When you are ready to implement, open the application repository and ask:
 
@@ -129,7 +129,7 @@ Validation of a user’s real Lago environment is separate from a demo and requi
 
 ## Canonical offline demo
 
-The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. Against Atlas Pro's illustrative `$99` subscription and `$10` included AI allowance, the job consumes Acme's last `$0.20` and produces `$0.17` of overage, for a `$99.17` total before tax. No payment or tax behavior is simulated.
+The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. Against Atlas Pro's illustrative `$99` subscription and charge-restricted recurring `$10` wallet grant, the job consumes Acme's last `$0.20` and produces `$0.17` of overage, for an independently calculated target total of `$99.17` before tax. Archived live evidence covers the `$0.37` metering result; the full hybrid invoice remains explicitly unverified. No payment or tax behavior is simulated.
 
 Run it directly while developing the plugin:
 

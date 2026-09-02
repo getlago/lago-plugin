@@ -390,6 +390,36 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("non-finite JSON value NaN", result.stdout)
 
+    def test_event_rejects_negative_timestamp_and_handles_large_integer(self):
+        base = {
+            "transaction_id": "event:large-number",
+            "external_subscription_id": "subscription:1",
+            "code": "api_requests",
+            "properties": {"quantity": 10**4000},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            negative = Path(directory) / "negative-timestamp.json"
+            negative_string = Path(directory) / "negative-string-timestamp.json"
+            large = Path(directory) / "large-integer.json"
+            negative.write_text(
+                json.dumps({"event": {**base, "timestamp": -1}}), encoding="utf-8"
+            )
+            negative_string.write_text(
+                json.dumps({"event": {**base, "timestamp": "-1"}}), encoding="utf-8"
+            )
+            large.write_text(
+                json.dumps({"event": {**base, "timestamp": 1787702400}}),
+                encoding="utf-8",
+            )
+            negative_result = run("validate_event.py", negative)
+            negative_string_result = run("validate_event.py", negative_string)
+            large_result = run("validate_event.py", large)
+        self.assertEqual(negative_result.returncode, 1, negative_result.stdout)
+        self.assertIn("timestamp must be Unix seconds", negative_result.stdout)
+        self.assertEqual(negative_string_result.returncode, 1, negative_string_result.stdout)
+        self.assertIn("timestamp must be Unix seconds", negative_string_result.stdout)
+        self.assertEqual(large_result.returncode, 0, large_result.stdout)
+
     def test_reconciliation_passes(self):
         result = run("reconcile.py", FIXTURES / "reconcile-source.csv", FIXTURES / "reconcile-lago-pass.csv")
         self.assertEqual(result.returncode, 0, result.stdout)
@@ -417,7 +447,8 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(evidence["included_value_before_job"], "0.20")
         self.assertEqual(evidence["included_credit_applied"], "0.20")
         self.assertEqual(evidence["overage"], "0.17")
-        self.assertEqual(evidence["invoice_total_before_tax"], "99.17")
+        self.assertEqual(evidence["expected_invoice_total_before_tax"], "99.17")
+        self.assertFalse(evidence["hybrid_invoice_live_validated"])
         self.assertEqual(evidence["reconciliation_discrepancy"], "0.00")
         self.assertFalse(evidence["live_lago_contacted"])
         human = run("run_demo.py")
@@ -427,7 +458,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("One click, messy usage", human.stdout)
         self.assertIn("What Atlas avoids building", human.stdout)
         self.assertIn("Overage: $0.17", human.stdout)
-        self.assertIn("$99.00 subscription + $0.17 overage = $99.17", human.stdout)
+        self.assertIn("Expected Acme bill before tax: $99.00 subscription + $0.17 overage = $99.17", human.stdout)
+        self.assertIn("hybrid invoice remains an illustrative target", human.stdout)
         self.assertIn("Late, corrected, or high-volume event streams still require integration-specific validation", human.stdout)
         self.assertIn("Access control, payment, tax, and accounting remain separate", human.stdout)
         self.assertIn("Offline example complete", human.stdout)

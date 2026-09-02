@@ -8,12 +8,13 @@ Run the instant walkthrough with `python3 skills/implementation/scripts/run_demo
 
 | Product concept | Lago primitive | Demo value |
 | --- | --- | --- |
-| AI Studio account | Customer | `demo_ai_studio` |
+| Acme Corp | Customer | `acme_corp` |
 | Tokens consumed | Billable metric | `demo_ai_tokens`, summed from the `tokens` event property |
 | Model and direction | Metric filters | `model`: `demo-small` or `demo-large`; `type`: `input` or `output` |
 | Per-token package prices | Charges | Illustrative price per 1,000 tokens for each filter combination |
-| Pay-as-you-go offer | Plan | `demo_per_token`, monthly, zero base fee |
-| AI Studio on the offer | Subscription | `demo_ai_studio_per_token` |
+| Atlas Pro | Plan | `atlas_pro`, `$99` monthly base fee plus metered usage |
+| Acme on Atlas Pro | Subscription | `acme_atlas_pro` |
+| `$10` included AI allowance | Recurring granted wallet | Restricted to the `demo_ai_tokens` charge; it must not offset the base fee |
 
 ## Illustrative prices
 
@@ -38,9 +39,9 @@ Resend one event with the identical transaction ID and timestamp, then verify th
 
 ## Illustrative subscription, included usage, and overage
 
-Atlas Pro costs `$99` per month and includes `$10` of AI usage. Acme has already consumed `$9.80` this month. The new report-analysis job costs `$0.37`: Acme's remaining `$0.20` of included usage is consumed and `$0.17` becomes overage. The illustrative invoice total before tax is `$99.17`.
+Atlas Pro costs `$99` per month and includes `$10` of AI usage through a recurring granted wallet restricted to the token charge. Acme has already consumed `$9.80` this month. The new report-analysis job costs `$0.37`: Acme's remaining `$0.20` of included usage is consumed and `$0.17` becomes overage. The independently calculated target invoice total before tax is `$99.17`.
 
-The `$10` is an included plan allowance or grant, not purchased prepaid credit, and it offsets only eligible AI usage—not the subscription fee. The example does not simulate payment or tax. The application still owns access enforcement; payment, tax, and accounting remain separate decisions.
+The `$10` is a granted wallet allowance, not purchased prepaid credit, and its charge restriction keeps it from offsetting the subscription fee. The offline script proves the arithmetic, not Lago invoice generation. The application still owns access enforcement; payment, tax, and accounting remain separate decisions.
 
 ## Why the demo matters
 
@@ -52,6 +53,6 @@ This is the simplest shape. Lago also supports tiered and volume pricing, prepai
 
 ## Evidence and stopping point
 
-Retrieve current usage and compare each filtered charge with the independent $0.37 calculation. Retrieve a draft or preview invoice only if the selected self-hosted edition supports it; otherwise stop at current usage and label invoice generation unverified. Do not configure payments, tax providers, email delivery, or external webhooks.
+The archived live self-hosted evidence currently proves the `$0.37` metering result only. To validate the complete hybrid story, configure the `$99` plan and charge-restricted recurring `$10` wallet grant, reproduce the prior `$9.80` eligible usage, retrieve the resulting draft or finalized invoice, and compare it with the independent `$99.17` calculation. Until that payload is preserved and passes `money_test.py`, label `$99.17` as the expected illustrative result—not a Lago-produced invoice. Do not configure payments, tax providers, email delivery, or external webhooks.
 
 Record the self-hosted Lago version, local base URL, created object IDs, event IDs, expected calculation, actual usage, and teardown target. Remove only the dedicated demo containers and volumes, and only after explicit approval.

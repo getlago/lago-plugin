@@ -161,6 +161,9 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         text = solution_engineering.read_text(encoding="utf-8")
         for solution_signal in (
             "ask one open question",
+            "Sound like a great pre-sales engineer",
+            "supported opportunity → why it matters → fit assessment and boundary",
+            "Enthusiasm changes the delivery, never the evidence threshold",
             "**Clear fit:**",
             "**Promising fit — validate one point:**",
             "**Scoped fit:**",

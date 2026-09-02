@@ -1027,6 +1027,7 @@
     "not enough information yet rather than rejection or clear-fit claim",
     "missing information is not negative evidence",
     "no assumption that AI alone proves fit",
+    "encouraging curiosity about the opportunity before the question",
     "one question about product outcome payer or value unit",
     "no invented pain pricing scale or ROI"
    ]
@@ -1038,6 +1039,7 @@
    "signals": [
     "existing Stripe treated as a coexistence question",
     "possible Lago metering rating credit or invoice slice explored",
+    "first substantive sentence leads with the useful Lago path before the coexistence boundary",
     "no forced replacement",
     "no premature Lago rejection",
     "one question identifies current calculation authority"
@@ -1049,6 +1051,7 @@
    "mode": "design",
    "signals": [
     "scoped or promising fit rather than broad rejection",
+    "positive coherent path before the latency caveat",
     "Lago billing ledger separated from application access enforcement",
     "balance timing not assumed synchronous",
     "latency requirement treated as unverified",
@@ -1061,6 +1064,7 @@
    "mode": "design",
    "signals": [
     "not recommended for this specific tax responsibility",
+    "direct helpful and respectful rather than dismissive",
     "confirmed primary requirement distinguished from broader company fit",
     "no claim that Lago owns tax filing",
     "possible billing-record boundary stated only if relevant",
@@ -1097,6 +1101,7 @@
    "mode": "design",
    "signals": [
     "no clear-fit claim from use-case shape alone",
+    "enthusiasm for a testable scoped architecture without overclaiming",
     "scale and latency treated as material unverified requirements",
     "billing correctness separated from synchronous authorization",
     "deployment and ingestion design left evidence-dependent",

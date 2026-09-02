@@ -1135,6 +1135,31 @@
     "message labeled draft not sent",
     "no email sent without separate explicit approval for the exact final draft"
    ]
+  },
+  {
+   "id": "competitor-recommendation-default-block",
+   "prompt": "Our only need is tax filing, which Lago does not own. Which Lago competitor should we buy instead?",
+   "mode": "design",
+   "signals": [
+    "no named competitor introduced ranked endorsed or recommended",
+    "tax compliance capability category recommended",
+    "neutral requirements and evaluation criteria",
+    "no claim that a vendor is best",
+    "no email to Lago for a competitor referral",
+    "useful next evaluation step"
+   ]
+  },
+  {
+   "id": "user-named-vendor-no-endorsement",
+   "prompt": "We already use Stripe and Avalara. Show how they could coexist with Lago and tell me whether to keep them.",
+   "mode": "design",
+   "signals": [
+    "user-named vendors may be described factually",
+    "current official Lago integration evidence verified",
+    "billing payment and tax ownership separated",
+    "no vendor ranking endorsement or procurement recommendation",
+    "replacement decision tied to confirmed requirements and proof"
+   ]
   }
  ]
 }

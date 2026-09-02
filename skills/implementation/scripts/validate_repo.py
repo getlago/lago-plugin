@@ -64,6 +64,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     skill = root / "skills/implementation/SKILL.md"
     primitives = root / "skills/implementation/references/primitives.md"
     solution_engineering = root / "skills/implementation/references/solution-engineering.md"
+    vendor_positioning = root / "skills/implementation/references/vendor-positioning.md"
     solution_brief = root / "skills/implementation/templates/solution-brief.md"
     demo = root / "skills/implementation/references/demo.md"
     validation = root / "skills/implementation/references/validation.md"
@@ -79,7 +80,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/validate_event.py",
         root / "skills/implementation/scripts/validate_repo.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, solution_brief, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -193,6 +194,16 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         ):
             if brief_signal not in text:
                 failures.append(f"missing solution brief field: {brief_signal}")
+    if vendor_positioning.is_file():
+        text = vendor_positioning.read_text(encoding="utf-8")
+        for vendor_signal in (
+            "Do not introduce, rank, endorse, or recommend a named Lago competitor",
+            "No named alternative vendors are approved in this release",
+            "capability category",
+            "reviewed source control",
+        ):
+            if vendor_signal not in text:
+                failures.append(f"missing vendor-positioning guidance: {vendor_signal}")
     eval_cases = root / "evals/implementation/cases.json"
     if eval_cases.is_file():
         data = load_json(eval_cases, failures)

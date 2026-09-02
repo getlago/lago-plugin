@@ -23,7 +23,7 @@
   "interface": {
     "displayName": "Lago Solution Engineer",
     "shortDescription": "Discover and implement the right Lago billing model.",
-    "longDescription": "Discover what Lago can do without opening a codebase or knowing billing. Start anywhere with a concrete offline example, a product description, or a pricing page. The solution engineer explains relevant Lago concepts, recommends a first model—including AI usage, value credits, prepaid wallets, and hybrid pricing—and inspects application code only when implementation is requested. Offline discovery needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
+    "longDescription": "Discover what Lago can do without opening a codebase or knowing billing. Start anywhere with a concrete offline example, a product description, or a pricing page. The solution engineer discovers one question at a time, gives an honest fit verdict, tells a tailored product story, and defines a small proof before implementation. It covers AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence. Offline discovery needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": [
@@ -35,7 +35,7 @@
     "termsOfServiceURL": "https://getlago.com/legal",
     "defaultPrompt": [
       "Show me what Lago can do with a simple offline example. Do not assume this workspace is my application.",
-      "Use my product description or pricing page to recommend one Lago billing model and explain it simply.",
+      "Use my product description or pricing page to assess Lago fit, recommend one model, and define a small proof.",
       "Implement the smallest safe Lago integration in the application repository I have explicitly opened."
     ],
     "brandColor": "#19212E"

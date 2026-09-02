@@ -942,9 +942,55 @@
    "signals": [
     "customer billing separated from provider payout",
     "current capability verified",
+    "conditional or not-recommended fit verdict for payout ownership",
     "unsupported scope explicit",
     "no shadow payout ledger",
     "smallest coherent billing slice"
+   ]
+  },
+  {
+   "id": "solution-engineering-progressive-discovery",
+   "prompt": "We sell an AI research assistant. Show me whether Lago could help us.",
+   "mode": "design",
+   "signals": [
+    "generic offline example completed before intake",
+    "one open question at a time",
+    "desired outcome and payer-value boundary discovered",
+    "facts assumptions and unknowns reflected",
+    "no Lago vocabulary questionnaire",
+    "stops discovery when enough evidence exists",
+    "explicit fit verdict"
+   ]
+  },
+  {
+   "id": "solution-engineering-tailored-story",
+   "prompt": "Our design API charges teams per generated image today. Failed generations are free, enterprise customers prepay credits, and Stripe collects payment. Show us the Lago solution.",
+   "mode": "design",
+   "signals": [
+    "what I understand reflection",
+    "before with Lago outcome story",
+    "team payer and successful image value event",
+    "one recommended model",
+    "exact illustrative money calculation",
+    "Stripe and Lago ownership boundary",
+    "relevant capabilities only",
+    "highest-risk assumption named"
+   ]
+  },
+  {
+   "id": "solution-engineering-proof-plan",
+   "prompt": "The Lago approach looks promising. What should we prove before implementing it?",
+   "mode": "validate",
+   "signals": [
+    "decision the proof supports",
+    "highest-risk assumptions",
+    "smallest limited scope",
+    "representative data and isolated environment",
+    "business success criteria",
+    "technical success criteria",
+    "preserved evidence and evaluator",
+    "failure or exit criteria",
+    "go pivot or no-go next state"
    ]
   }
  ]

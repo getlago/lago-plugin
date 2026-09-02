@@ -63,6 +63,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     claude_marketplace = root / ".claude-plugin/marketplace.json"
     skill = root / "skills/implementation/SKILL.md"
     primitives = root / "skills/implementation/references/primitives.md"
+    solution_engineering = root / "skills/implementation/references/solution-engineering.md"
+    solution_brief = root / "skills/implementation/templates/solution-brief.md"
     demo = root / "skills/implementation/references/demo.md"
     validation = root / "skills/implementation/references/validation.md"
     openai_yaml = root / "skills/implementation/agents/openai.yaml"
@@ -77,7 +79,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/validate_event.py",
         root / "skills/implementation/scripts/validate_repo.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, solution_brief, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -155,6 +157,30 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         ):
             if teaching_signal not in text:
                 failures.append(f"missing beginner primitive guidance: {teaching_signal}")
+    if solution_engineering.is_file():
+        text = solution_engineering.read_text(encoding="utf-8")
+        for solution_signal in (
+            "ask one open question",
+            "**Strong fit:**",
+            "**Conditional fit:**",
+            "**Not recommended for this job:**",
+            "**Before:**",
+            "business success criteria",
+            "failure or exit criteria",
+            "solution brief template",
+        ):
+            if solution_signal not in text:
+                failures.append(f"missing solution-engineering guidance: {solution_signal}")
+    if solution_brief.is_file():
+        text = solution_brief.read_text(encoding="utf-8")
+        for brief_signal in (
+            "## Fit verdict",
+            "## Recommended solution story",
+            "## Smallest proof",
+            "Failure or exit criteria",
+        ):
+            if brief_signal not in text:
+                failures.append(f"missing solution brief field: {brief_signal}")
     eval_cases = root / "evals/implementation/cases.json"
     if eval_cases.is_file():
         data = load_json(eval_cases, failures)

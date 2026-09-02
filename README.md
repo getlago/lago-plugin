@@ -10,6 +10,8 @@ This repository is internal while version `0.1.0` is under review. The intended 
 
 - **Shows Lago before asking for setup:** runs a concrete offline AI-billing example and explains each concept as it becomes useful.
 - **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
+- **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
+- **Turns demos into evidence:** tailors one product story and defines the smallest proof with business, technical, and exit criteria before implementation.
 - **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
 - **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
 - **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
@@ -88,10 +90,10 @@ Claude and Codex may also select the skill automatically when a request involves
 ## What happens after a prompt
 
 1. **Discovery first:** for a first-time or exploratory prompt, completes the offline example without treating the current folder as the user's product.
-2. **Product fit:** uses a short description or pricing page to recommend one useful Lago model and explain the relevant primitives.
-3. **Repository implementation, when requested:** inspects the explicitly scoped application, produces a billing blueprint, and follows its conventions.
-4. **Behavior validation:** exercises a representative customer → subscription → usage → aggregation → invoice → webhook → reconciliation flow with synthetic data.
-5. **Precise handoff:** distinguishes an offline example, product-level recommendation, repository implementation, live self-hosted validation, and actual production readiness.
+2. **Progressive discovery:** asks one useful question at a time, reflects facts and assumptions, and stops as soon as it can assess fit.
+3. **Solution brief:** gives a strong, conditional, or not-recommended verdict; tells one tailored before → with Lago → outcome story; and identifies the riskiest assumption.
+4. **Smallest proof:** agrees on business, technical, evidence, and exit criteria before repository implementation or live validation.
+5. **Implementation and handoff, when requested:** inspects the explicitly scoped application, produces a billing blueprint, validates behavior, and preserves the decision trail.
 
 An unrelated, empty, or documentation-only workspace does not block discovery. A repository becomes necessary only for a concrete code assessment or implementation; if it is missing then, the plugin explains why and gives one recovery action.
 
@@ -148,7 +150,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 80 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, use-case discovery, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 83 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, solution discovery, tailored demonstrations, proof planning, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

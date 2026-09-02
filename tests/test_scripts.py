@@ -476,11 +476,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_80_unique_cases(self):
+    def test_eval_suite_has_all_83_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 80)
-        self.assertEqual(len({case["id"] for case in cases}), 80)
+        self.assertEqual(len(cases), 83)
+        self.assertEqual(len({case["id"] for case in cases}), 83)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -536,6 +536,9 @@ class ScriptTests(unittest.TestCase):
             "high-volume-wallet-events",
             "crm-erp-finance-handoff",
             "marketplace-payout-boundary",
+            "solution-engineering-progressive-discovery",
+            "solution-engineering-tailored-story",
+            "solution-engineering-proof-plan",
         }.issubset(ids))
 
     def test_external_link_lister_finds_official_docs(self):
@@ -557,6 +560,7 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("First-run routing and silent preflight", skill)
         self.assertIn("Do not assume the current folder is the user's product repository", skill)
         self.assertIn("Run the instant offline demo regardless of what folder is open", skill)
+        self.assertIn("[solution-engineering flow](references/solution-engineering.md)", skill)
         self.assertIn("credentials are unnecessary for offline work", skill)
         self.assertIn("Ask only the next question", skill)
         discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")

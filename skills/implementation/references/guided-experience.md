@@ -18,6 +18,12 @@ After the activation message, make every material response answer three things i
 
 Use these as headings only when they improve scanning. Do not repeat unchanged context or show a large checklist in every response.
 
+## From generic example to tailored recommendation
+
+The canonical offline example earns attention; it does not establish fit. After it completes, follow [the solution-engineering flow](solution-engineering.md): ask one open question, reflect facts and assumptions, give an honest fit verdict, and demonstrate one product-specific story. Do not launch a questionnaire or repeat the generic example with renamed nouns.
+
+The first product-specific artifact is a one-screen [solution brief](../templates/solution-brief.md): desired outcome, payer and value boundary, current state, fit verdict, one recommended solution story, the highest-risk assumption, and the smallest proof. A repository is optional at this stage.
+
 ## Guidance control
 
 Start guided and mention the opt-out once during activation: `I’ll guide you one step at a time. Say expert mode at any point for concise execution.`
@@ -31,9 +37,9 @@ Treat `expert mode`, `skip the walkthrough`, `less handholding`, `just do it`, a
 
 Switch back when the user asks for `guided mode`, handholding, or more explanation. Do not repeatedly advertise either mode.
 
-## First useful artifact: the billing blueprint
+## Before implementation: the billing blueprint
 
-Before editing a new integration, present a one-screen blueprint based on repository evidence. Adapt [the blueprint template](../templates/billing-blueprint.md); do not fill it with invented commercial facts.
+After the user accepts the solution direction and explicitly requests implementation, present a one-screen blueprint based on the solution brief and repository evidence. Adapt [the blueprint template](../templates/billing-blueprint.md); do not fill it with invented commercial facts.
 
 The blueprint should let a beginner answer: who gets billed, for what, how activity becomes an amount, what code changes, and what remains undecided. Use product language first and introduce a Lago term beside the product concept only when it becomes actionable.
 

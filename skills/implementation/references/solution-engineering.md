@@ -19,11 +19,13 @@ Do not lead with a disclaimer when a supported outcome can lead instead. Do not 
 
 ## Preserve instant value, then discover progressively
 
-For a first-time or exploratory prompt, complete the canonical offline example before intake. Label it as a generic illustration, not a recommendation for the user's product. Then ask one open question:
+For a first-time or exploratory prompt without useful product context, complete the canonical offline example before intake. Label it as a generic illustration, not a recommendation for the user's product. Then ask one open question:
 
-> What does your product help customers accomplish?
+> What does your product do, and what do customers pay for today?
 
 Accept a product description, public product or pricing page, architecture description, or repository when the user offers one. Ask only the next question whose answer changes fit or the recommended model. Infer everything else safely and reflect it back as fact, inference, or unknown.
+
+If the opening prompt already contains enough context to identify a payer, an offer or current pricing, and a value-bearing behavior or cost driver, start with the tailored opportunity map instead. Do not replay the generic example merely because this is the first invocation.
 
 Choose subsequent questions from these decision areas rather than following a questionnaire:
 
@@ -48,6 +50,8 @@ Before the tailored recommendation, show a compact `What I understand` block:
 - the one unresolved item that could change the recommendation.
 
 Correct misunderstandings without defending a prior recommendation. If evidence conflicts, show the conflict. Never invent a pain, urgency, price, margin, or stakeholder.
+
+Then create a four-part `Product → Lago opportunity map`: who pays, what they buy, what behavior creates value, and the coherent billing job Lago could own. This is the bridge from product language to billing design. Recommend one first model and explain why it wins now. Keep no more than two evidence-backed later opportunities; do not turn discovery into a feature menu.
 
 ## Make a prospect-safe fit assessment
 
@@ -147,5 +151,7 @@ A proof should validate business value and technical feasibility, not merely sho
 After enough discovery, use [the solution brief template](../templates/solution-brief.md). Keep it to one screen unless complexity requires an appendix. Update it as evidence changes so discovery, demonstration, proof, and implementation share one decision trail.
 
 For a concrete implementation, translate the accepted solution brief into [the billing blueprint](../templates/billing-blueprint.md), repository changes, tests, and the existing authorization gates. Preserve the user's language and the reasons behind the chosen boundary so implementation does not restart discovery or quietly broaden scope.
+
+At handoff, tailor the same source-to-money truth to the decision maker: Product gets packaging and customer experience; Engineering gets event contracts, ownership, and reliability; Finance gets calculations, invoice boundaries, controls, and reconciliation. Do not change assumptions or totals between views.
 
 Practice basis: Microsoft's customer-engagement guidance starts by listening for desired outcomes before designing and demonstrating a matching solution; its process-centric discovery guidance recommends an end-to-end story tied to business needs instead of demonstrating every component; AWS and Microsoft proof-of-concept guidance recommends working backward from requirements, testing a limited scope, and agreeing on success criteria before implementation. See [Microsoft customer engagement methodology](https://learn.microsoft.com/en-us/partner-center/referrals/mcem-for-partners), [Microsoft process-centric discovery](https://learn.microsoft.com/en-us/dynamics365/guidance/techtalks/get-started-conduct-process-centric-discovery), [AWS proof-of-concept playbook](https://docs.aws.amazon.com/redshift/latest/dg/proof-of-concept-playbook.html), and [Microsoft proof-of-concept guidance](https://learn.microsoft.com/en-us/power-bi/guidance/powerbi-migration-proof-of-concept).

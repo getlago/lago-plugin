@@ -455,8 +455,8 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(human.returncode, 0, human.stdout + human.stderr)
         self.assertIn("No setup, repository, or credentials needed", human.stdout)
         self.assertIn("Atlas AI is the merchant. Acme Corp is its customer", human.stdout)
-        self.assertIn("One click, messy usage", human.stdout)
-        self.assertIn("What Atlas avoids building", human.stdout)
+        self.assertIn("ONE ACTION, MESSY USAGE", human.stdout)
+        self.assertIn("WHAT ATLAS DID NOT BUILD", human.stdout)
         self.assertIn("Overage: $0.17", human.stdout)
         self.assertIn("Acme billed before tax for the period: $99.00 subscription + $0.17 overage = $99.17", human.stdout)
         self.assertIn("a $99.00 subscription invoice plus a $0.17 usage invoice", human.stdout)
@@ -464,9 +464,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Late, corrected, or high-volume event streams still require integration-specific validation", human.stdout)
         self.assertIn("Access control, payment, tax, and accounting remain separate", human.stdout)
         self.assertIn("Offline example complete", human.stdout)
-        self.assertIn("describe your product in one sentence or share its pricing page", human.stdout)
-        self.assertIn("code repository is optional for discovery", human.stdout)
-        self.assertIn("expert mode", human.stdout)
+        self.assertIn("What does your product do, and what do customers pay for today?", human.stdout)
+        self.assertEqual(human.stdout.count("?"), 1)
 
     def test_demo_target_requires_loopback_port_and_dedicated_project(self):
         valid = run(
@@ -524,11 +523,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_95_unique_cases(self):
+    def test_eval_suite_has_all_99_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 95)
-        self.assertEqual(len({case["id"] for case in cases}), 95)
+        self.assertEqual(len(cases), 99)
+        self.assertEqual(len({case["id"] for case in cases}), 99)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -560,6 +559,10 @@ class ScriptTests(unittest.TestCase):
             "premature-source-cancellation",
             "credential-presence-preflight",
             "first-run-visible-transformation",
+            "two-word-discovery-value-first",
+            "solution-to-implementation-role-transition",
+            "product-to-lago-opportunity-map",
+            "cross-functional-buyer-handoff",
         }.issubset(ids))
 
     def test_eval_suite_covers_field_replay_use_cases(self):
@@ -626,6 +629,7 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("First-run routing and silent preflight", skill)
         self.assertIn("Do not assume the current folder is the user's product repository", skill)
         self.assertIn("Run the instant offline demo regardless of what folder is open", skill)
+        self.assertIn("skip the generic Atlas example", skill)
         self.assertIn("[solution-engineering flow](references/solution-engineering.md)", skill)
         self.assertIn("credentials are unnecessary for offline work", skill)
         self.assertIn("Ask only the next question", skill)
@@ -641,6 +645,10 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("The draft heading must be exactly `Draft — not sent`", skill)
         self.assertIn("end the sign-off with `[Your name]`", skill)
         self.assertIn("Never introduce, rank, endorse, or recommend a named competitor", skill)
+        self.assertIn("One agent, two stages", skill)
+        self.assertIn("I’m switching from solution design to implementation.", skill)
+        self.assertIn("Product → Lago opportunity map", skill)
+        self.assertIn("Product** sees packaging", skill)
         discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")
         self.assertIn("No existing billing code is not a blocker.", discovery)
         primitives = (ROOT / "skills/implementation/references/primitives.md").read_text(encoding="utf-8")
@@ -672,6 +680,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Offline example complete", guided)
         self.assertIn("You do not need to do anything", guided)
         self.assertIn("Gratification before intake", guided)
+        self.assertIn("One truth, three buyer views", guided)
+        self.assertIn("do not restart discovery", guided)
         use_cases = (ROOT / "skills/implementation/references/use-case-discovery.md").read_text(encoding="utf-8")
         self.assertIn("Opportunity scan", use_cases)
         self.assertIn("High-value AI-native patterns", use_cases)

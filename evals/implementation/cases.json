@@ -1160,6 +1160,59 @@
     "no vendor ranking endorsement or procurement recommendation",
     "replacement decision tied to confirmed requirements and proof"
    ]
+  },
+  {
+   "id": "two-word-discovery-value-first",
+   "prompt": "show me",
+   "mode": "discovery",
+   "signals": [
+    "exact Lago Solution Engineer activation line",
+    "no setup or repository required",
+    "merchant customer end user and pricing identified before Lago vocabulary",
+    "one action fans out into multiple usage records and a duplicate",
+    "source-to-money result and avoided merchant systems visible within one screen",
+    "ends with exactly one question about product and current customer payment"
+   ]
+  },
+  {
+   "id": "solution-to-implementation-role-transition",
+   "prompt": "The recommended hybrid model looks right. I have now opened the application repository—implement it.",
+   "mode": "implement",
+   "signals": [
+    "explicit transition from solution design to implementation",
+    "accepted payer value unit model boundaries and proof criteria carried forward",
+    "repository inspected before edits",
+    "discovery is not restarted",
+    "Billing Engineer Copilot behavior without exposing internal modes",
+    "smallest coherent slice implemented and money tested"
+   ]
+  },
+  {
+   "id": "product-to-lago-opportunity-map",
+   "prompt": "We sell an AI research workspace to companies. They pay per seat today, but heavy research jobs drive very different model costs.",
+   "mode": "design",
+   "signals": [
+    "generic Atlas walkthrough skipped because useful product context is already present",
+    "map identifies who pays what they buy value-bearing behavior and Lago billing job",
+    "native usage value credits prepaid hybrid and outcome models evaluated silently",
+    "one recommended first model with an evidence-backed reason",
+    "no more than two credible later opportunities",
+    "one independently calculated illustration",
+    "one highest-risk assumption and one next proof"
+   ]
+  },
+  {
+   "id": "cross-functional-buyer-handoff",
+   "prompt": "The proof passed. Give Product, Engineering, and Finance the handoff they each need.",
+   "mode": "validate",
+   "signals": [
+    "Product view covers packaging customer experience and commercial decision",
+    "Engineering view covers event identity ownership reliability tests and integration action",
+    "Finance view covers calculation invoice payment tax controls and reconciliation",
+    "same assumptions totals fit boundary and evidence across all views",
+    "evidence level named precisely",
+    "one shared next action rather than three competing menus"
+   ]
   }
  ]
 }

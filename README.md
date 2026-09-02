@@ -1,6 +1,6 @@
 # Lago Solution Engineer
 
-Discover how [Lago](https://www.getlago.com) could monetize your product, then turn the right model into a testable integration from Claude Code or Codex.
+Meet a Lago Solution Engineer first, then a Billing Engineer Copilot when you are ready to build. It makes [Lago](https://www.getlago.com) tangible in under a minute, maps the strongest billing opportunity for your product, and carries the accepted design into a testable integration from Claude Code or Codex.
 
 You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
 
@@ -15,6 +15,7 @@ This repository is internal while version `0.1.0` is under review. The intended 
 - **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
 - **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
 - **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
+- **Speaks to every buyer from one source of truth:** translates the same design and money evidence for Product, Engineering, and Finance without changing assumptions between teams.
 - **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
 - **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
 
@@ -28,7 +29,7 @@ After installation, from any task or folder, ask:
 show me what Lago can do
 ```
 
-The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It then shows what Atlas avoids building, where Lago can go next, and what remains outside Lago. It does not assume the open folder is your application.
+The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It shows the complete source-to-money path and what Atlas avoids building, then asks one question: `What does your product do, and what do customers pay for today?` It does not assume the open folder is your application.
 
 To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. When you are ready to implement, open the application repository and ask:
 
@@ -89,11 +90,11 @@ Claude and Codex may also select the skill automatically when a request involves
 
 ## What happens after a prompt
 
-1. **Discovery first:** for a first-time or exploratory prompt, completes the offline example without treating the current folder as the user's product.
+1. **Discovery first:** without product context, completes the offline example without treating the current folder as the user's product; with useful context, goes straight to a tailored result.
 2. **Progressive discovery:** asks one useful question at a time, reflects facts and assumptions, and stops as soon as it can assess fit.
-3. **Solution brief:** gives a strong, conditional, or not-recommended verdict; tells one tailored before → with Lago → outcome story; and identifies the riskiest assumption.
+3. **Opportunity map and solution brief:** maps who pays, what they buy, what behavior creates value, and Lago's billing job; recommends one model; and identifies the riskiest assumption.
 4. **Smallest proof:** agrees on business, technical, evidence, and exit criteria before repository implementation or live validation.
-5. **Implementation and handoff, when requested:** inspects the explicitly scoped application, produces a billing blueprint, validates behavior, and preserves the decision trail.
+5. **Implementation and handoff, when requested:** switches into Billing Engineer Copilot mode, inspects the explicitly scoped application, preserves the decision trail, validates behavior, and translates the result for Product, Engineering, and Finance.
 
 An unrelated, empty, or documentation-only workspace does not block discovery. A repository becomes necessary only for a concrete code assessment or implementation; if it is missing then, the plugin explains why and gives one recovery action.
 
@@ -150,7 +151,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 95 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 99 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, product-to-Lago opportunity mapping, stage transition, buyer-specific handoff, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

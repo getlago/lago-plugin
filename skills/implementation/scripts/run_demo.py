@@ -129,25 +129,23 @@ def run_demo() -> dict[str, object]:
 
 def render(result: dict[str, object]) -> str:
     lines = [
-        "Lago Solution Engineer instant demo (offline)",
+        "Lago in 30 seconds (offline)",
         "",
         "No setup, repository, or credentials needed.",
         "",
-        "See Lago turn messy product usage into explainable revenue.",
-        "",
-        "1. Who sells what",
+        "WHO SELLS WHAT",
         "Atlas AI is the merchant. Acme Corp is its customer; an Acme employee is the end user.",
         "Atlas Pro: $99/month, including $10 of AI usage; additional usage is overage.",
         "",
-        "2. One click, messy usage",
+        "ONE ACTION, MESSY USAGE",
         "An Acme employee clicks Analyze report.",
         "One job -> 2 models -> input + output tokens -> 4 usage records -> 1 retry.",
         "Every record must stay attached to Acme and the correct billing period.",
         "",
-        "3. Lago makes it billable",
+        "LAGO MAKES IT BILLABLE",
         "Attribute to Acme -> ignore retry -> aggregate by model/type -> apply Atlas prices -> consume included usage -> calculate overage.",
         "",
-        "4. The result",
+        "THIS MONTH",
     ]
     for item in result["lines"]:
         lines.append(
@@ -162,7 +160,7 @@ def render(result: dict[str, object]) -> str:
             f"Acme billed before tax for the period: ${result['monthly_subscription']} subscription + ${result['overage']} overage = ${result['period_total_before_tax']}",
             f"Safety checks: duplicate ignored = {str(result['duplicate_retry_ignored']).lower()}; reconciliation difference = ${result['reconciliation_discrepancy']}",
             "",
-            "What Atlas avoids building",
+            "WHAT ATLAS DID NOT BUILD",
             "A tenant-aware usage ledger, retry protection, pricing engine, included-credit tracking, invoice calculation, and reconciliation tooling.",
             "",
             "This is the simplest shape. Lago also supports tiered and volume pricing, prepaid wallets, commitments and overages, customer-specific pricing, multiple billing entities, and plan changes. Late, corrected, or high-volume event streams still require integration-specific validation.",
@@ -174,9 +172,7 @@ def render(result: dict[str, object]) -> str:
             "Offline example complete. Separate live self-hosted evidence validates the full one-period result: a $99.00 subscription invoice plus a $0.17 usage invoice after $10.00 of eligible wallet credit.",
             "Invoice count depends on billing cadence; automated wallet renewal is edition-dependent and was not part of that proof.",
             "No Lago API, Docker, account, or credentials were used in this walkthrough.",
-            "Next, describe your product in one sentence or share its pricing page, and I can show where Lago fits.",
-            "A code repository is optional for discovery and only needed when you want implementation-specific changes.",
-            "Prefer concise execution without the walkthrough? Say: expert mode.",
+            "What does your product do, and what do customers pay for today?",
         ]
     )
     return "\n".join(lines)

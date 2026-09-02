@@ -84,6 +84,29 @@ Do not force a full replacement. Separate Lago's potential ownership of metering
 
 When the primary request is outside Lago's boundary, say so early and narrowly: `I would not use Lago as the primary owner of <specific responsibility>.` Then explain any coherent Lago-owned billing slice and recommend the smallest honest next step, including stopping the evaluation when no such slice exists. When capability remains uncertain, use **Not enough information yet** and recommend verification with current official documentation or a Lago specialist rather than guessing.
 
+### Never leave a rejection as a dead end
+
+After a negative or materially constrained assessment, choose the strongest honest recovery in this order:
+
+1. show a documented Lago configuration or application-owned workaround when it preserves correctness and operational clarity;
+2. narrow the architecture so Lago owns a coherent billing slice and another named system owns the unsupported responsibility;
+3. propose the smallest proof when the answer depends on scale, latency, event quality, lifecycle behavior, edition, or deployment;
+4. recommend the appropriate alternative category and stop when the confirmed need is plainly outside Lago's billing boundary;
+5. when current Lago capability, edition behavior, or a credible custom path remains genuinely uncertain after checking official documentation, provide a concise review-ready email draft to `hello@getlago.com`.
+
+Do not route every poor fit to Lago sales. An email is useful only when a Lago-specific answer could change the architecture or assessment. Draft it in the user's voice with:
+
+- a descriptive subject;
+- one sentence on the product and desired outcome;
+- the confirmed requirement and why it matters;
+- the proposed workaround or ownership split already considered;
+- the exact capability, edition, scale, or implementation question needing confirmation;
+- only information the user supplied or approved, with confidential customer data, credentials, repository details, and sensitive pricing omitted by default.
+
+Use `[Your name]` and other explicit placeholders unless the user supplied the sender identity and relevant company details in the current conversation. Never infer them from an operating-system username, repository, account, environment, or unrelated context. If the sender identity is unknown, the sign-off must end with `[Your name]`; do not omit the signature or leave it blank.
+
+Use the exact heading `Draft — not sent`; do not paraphrase it. Present the message for review; never send, queue, or claim to send it without the user's separate explicit approval for that exact final email. A request to `email`, `contact`, `reply`, or `send this to Lago` means draft first, not authorization to transmit.
+
 ## Demonstrate a customer story, not a feature tour
 
 Tailor the demonstration only after the generic first-run example or when enough product evidence is already present. Use this story:

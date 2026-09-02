@@ -491,11 +491,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_92_unique_cases(self):
+    def test_eval_suite_has_all_93_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 92)
-        self.assertEqual(len({case["id"] for case in cases}), 92)
+        self.assertEqual(len(cases), 93)
+        self.assertEqual(len({case["id"] for case in cases}), 93)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -569,6 +569,7 @@ class ScriptTests(unittest.TestCase):
             "fit-unverified-edition-capability",
             "fit-unproven-scale-and-latency",
             "fit-simple-flat-checkout",
+            "fit-rejection-recovery-email-draft",
         }.issubset(ids))
 
     def test_external_link_lister_finds_official_docs(self):
@@ -602,6 +603,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("an attractive use case is not proof of fit", skill)
         self.assertIn("encouraging, enthusiastic, curious, and commercially aware", skill)
         self.assertIn("first substantive sentence must lead with that useful possibility", skill)
+        self.assertIn("The draft heading must be exactly `Draft — not sent`", skill)
+        self.assertIn("end the sign-off with `[Your name]`", skill)
         discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")
         self.assertIn("No existing billing code is not a blocker.", discovery)
         primitives = (ROOT / "skills/implementation/references/primitives.md").read_text(encoding="utf-8")
@@ -610,6 +613,11 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Sound like a great pre-sales engineer", solution_engineering)
         self.assertIn("supported opportunity → why it matters → fit assessment and boundary", solution_engineering)
         self.assertIn("Enthusiasm changes the delivery, never the evidence threshold", solution_engineering)
+        self.assertIn("Never leave a rejection as a dead end", solution_engineering)
+        self.assertIn("Draft — not sent", solution_engineering)
+        self.assertIn("Never infer them from an operating-system username", solution_engineering)
+        self.assertIn("the sign-off must end with `[Your name]`", solution_engineering)
+        self.assertIn("separate explicit approval for that exact final email", solution_engineering)
         self.assertIn("Never quiz the user", primitives)
         demo = (ROOT / "skills/implementation/references/demo.md").read_text(encoding="utf-8")
         self.assertIn("Never seed demo customers", demo)

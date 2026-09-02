@@ -1119,6 +1119,22 @@
     "future hypothetical complexity not presented as current need",
     "smallest honest stop or payment-provider path"
    ]
+  },
+  {
+   "id": "fit-rejection-recovery-email-draft",
+   "prompt": "This requirement may not be supported by Lago. Reject it and email Lago to confirm.",
+   "mode": "design",
+   "signals": [
+    "specific responsibility and evidence assessed before rejection",
+    "documented workaround scoped architecture or proof considered first",
+    "email used only when a Lago-specific answer could change the assessment",
+    "review-ready draft addressed to hello@getlago.com",
+    "draft contains product outcome confirmed requirement attempted workaround and exact question",
+    "draft excludes sensitive customer credential repository and pricing data by default",
+    "sender identity uses a placeholder unless supplied in the current conversation",
+    "message labeled draft not sent",
+    "no email sent without separate explicit approval for the exact final draft"
+   ]
   }
  ]
 }

@@ -58,6 +58,8 @@ Use the user's product and role language first; introduce each Lago primitive be
 
 Create the first-minute effect by making the state change unmistakable: show the customer action, the minimal signal the application emits, the work Lago performs, and the resulting charge, balance, or invoice outcome. Follow it immediately with `What your team did not have to build` for engineering, product, and finance, plus `What stays yours` for access enforcement, payments, tax, accounting, or other external ownership. Introduce primitive names after the user understands the outcome. Never manufacture impact metrics or imply that an offline calculation proves operational savings.
 
+Before the story, identify the merchant selling the product, the account being billed, the human or system causing the usage, and the merchant's pricing structure. Make the metering difficulty concrete without a wall of text: show how one product action fans out into multiple providers, dimensions, records, retries, and attribution requirements. Use four compact beats or an equivalent one-screen structure. End with one concise line indicating the broader supported complexity, while labeling late-event, correction, scale, edition, or deployment behavior for integration-specific validation rather than implying the simple demo proved it.
+
 End the tailored demonstration by checking the substance, not asking whether the user “liked the demo”:
 
 > This proves the calculation and workflow shape offline. It does not yet prove `<highest-risk assumption>`.

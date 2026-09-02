@@ -1,6 +1,6 @@
 # OpenAI-style per-token demo
 
-This is the canonical Lago Solution Engineer demo, adapted from Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai). Its bundled walkthrough runs entirely offline; optional live validation runs only on a dedicated isolated self-hosted Lago instance. The model names and prices are illustrative, not current OpenAI pricing. The walkthrough starts with a customer asking an AI research assistant to analyze a report, then shows that action becoming an explainable billing result before introducing Lago terminology.
+This is the canonical Lago Solution Engineer demo, adapted from Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai). Its bundled walkthrough runs entirely offline; optional live validation runs only on a dedicated isolated self-hosted Lago instance. The model names and prices are illustrative, not current OpenAI pricing. Atlas AI is the merchant using Lago, Acme Corp is Atlas's customer, and an Acme employee is the end user. The walkthrough shows why one product action creates a non-trivial metering problem before turning it into an explainable billing result.
 
 Run the instant walkthrough with `python3 skills/implementation/scripts/run_demo.py`. The user does not need to configure anything, provide credentials, or modify a workspace.
 
@@ -36,17 +36,19 @@ Send four events with stable transaction IDs and explicit timestamps:
 
 Resend one event with the identical transaction ID and timestamp, then verify that the aggregated quantity and amount do not increase.
 
-## Illustrative prepaid result
+## Illustrative subscription, included usage, and overage
 
-After proving the `$0.37` gross usage charge, show one adjacent use case without changing the underlying usage signal. If Acme has an eligible `$10.00` USD prepaid wallet, no tax applies, and the invoice is finalized, Lago can apply `$0.37` of prepaid credits: the invoiced wallet balance becomes `$9.63` and the amount due becomes `$0.00`.
+Atlas Pro costs `$99` per month and includes `$10` of AI usage. Acme has already consumed `$9.80` this month. The new report-analysis job costs `$0.37`: Acme's remaining `$0.20` of included usage is consumed and `$0.17` becomes overage. The illustrative invoice total before tax is `$99.17`.
 
-This does not simulate purchasing credits or collecting payment. Do not describe `$9.63` as a synchronous authorization balance: Lago applies wallet credits to eligible invoices, and real-time ongoing balance is an edition-dependent estimate. The application still owns access enforcement; payment, tax, and accounting remain separate decisions.
+The `$10` is an included plan allowance or grant, not purchased prepaid credit, and it offsets only eligible AI usage—not the subscription fee. The example does not simulate payment or tax. The application still owns access enforcement; payment, tax, and accounting remain separate decisions.
 
 ## Why the demo matters
 
 - Engineering sends durable usage records instead of rebuilding aggregation, pricing, retry protection, credit application, and invoice calculation in product code.
 - Product can use the same usage signal as a foundation for pay-as-you-go, prepaid, or hybrid packaging.
 - Finance gets a line-by-line calculation that can be independently checked and reconciled.
+
+This is the simplest shape. Lago also supports tiered and volume pricing, prepaid wallets, commitments and overages, customer-specific pricing, multiple billing entities, and plan changes. Late, corrected, and high-volume event streams require integration-specific validation.
 
 ## Evidence and stopping point
 

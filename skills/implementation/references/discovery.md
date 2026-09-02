@@ -47,7 +47,7 @@ Discovery, teaching, demo, or ambiguous first prompt:
 >
 > You do not need an application repository, Lago account, credentials, Docker, or an MCP connection to get started. I will not treat the current folder as your product unless you ask me to apply or implement the result.
 >
-> I’ll first show one AI customer action becoming an explainable charge and prepaid-credit result. You will see what Lago handles, what your application still owns, and why that matters before I introduce the Lago concepts behind it.
+> I’ll first show Atlas AI—the merchant—turning an Acme employee’s product action into metered usage and a `$0.17` overage on Acme’s `$99` subscription. You will see why usage metering is difficult, what Lago handles, and what the merchant still owns before I introduce Lago terminology.
 
 Run the offline example in the same response. Afterward, ask for a one-sentence product description or pricing-page link. Do not ask the user to open a repository as the default next step.
 

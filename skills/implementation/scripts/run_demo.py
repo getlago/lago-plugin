@@ -86,18 +86,24 @@ def run_demo() -> dict[str, object]:
     if total != expected_total:
         raise AssertionError(f"money test failed: expected {expected_total}, got {total}")
 
-    starting_prepaid_value = Decimal("10.00")
-    prepaid_credit_applied = min(starting_prepaid_value, total)
-    ending_prepaid_value = starting_prepaid_value - prepaid_credit_applied
-    amount_due = total - prepaid_credit_applied
+    monthly_subscription = Decimal("99.00")
+    included_usage_value = Decimal("10.00")
+    prior_usage_value = Decimal("9.80")
+    included_value_before_job = included_usage_value - prior_usage_value
+    included_credit_applied = min(included_value_before_job, total)
+    overage = total - included_credit_applied
+    included_value_after_job = included_value_before_job - included_credit_applied
+    invoice_total_before_tax = monthly_subscription + overage
 
     return {
         "mode": "offline_example",
-        "scenario": "Acme asks an AI research assistant to analyze a report",
+        "scenario": "An Acme employee asks Atlas AI to analyze a report",
         "customer_action": "analyze_report",
-        "customer": "demo_ai_studio",
-        "plan": "demo_per_token",
-        "subscription": "demo_ai_studio_per_token",
+        "merchant": "Atlas AI",
+        "customer": "Acme Corp",
+        "end_user_role": "Acme employee",
+        "plan": "atlas_pro",
+        "subscription": "acme_atlas_pro",
         "metric": "sum(tokens), filtered by model and input/output",
         "events_accepted": len(accepted),
         "duplicate_retry_ignored": duplicate_ignored,
@@ -106,11 +112,15 @@ def run_demo() -> dict[str, object]:
         "expected_total": str(expected_total),
         "actual_total": str(total),
         "gross_usage_charge": str(total),
-        "starting_prepaid_value": str(starting_prepaid_value),
-        "prepaid_credit_applied": str(prepaid_credit_applied),
-        "ending_prepaid_value": str(ending_prepaid_value),
-        "amount_due": str(amount_due),
-        "wallet_effect_timing": "when the eligible invoice is finalized",
+        "monthly_subscription": str(monthly_subscription),
+        "included_usage_value": str(included_usage_value),
+        "prior_usage_value": str(prior_usage_value),
+        "included_value_before_job": str(included_value_before_job),
+        "included_credit_applied": str(included_credit_applied),
+        "included_value_after_job": str(included_value_after_job),
+        "overage": str(overage),
+        "invoice_total_before_tax": str(invoice_total_before_tax),
+        "credit_effect_timing": "when the eligible invoice is finalized",
         "reconciliation_discrepancy": "0.00",
         "live_lago_contacted": False,
     }
@@ -120,22 +130,23 @@ def render(result: dict[str, object]) -> str:
     lines = [
         "Lago Solution Engineer instant demo (offline)",
         "",
-        "You do not need to do anything or provide credentials. This walkthrough is running now.",
+        "No setup, repository, or credentials needed.",
         "",
-        "Watch one customer action become an explainable charge in under a minute.",
+        "See Lago turn messy product usage into explainable revenue.",
         "",
-        "Customer moment",
-        "Acme asks an AI research assistant to analyze a report.",
-        "That one job produces 21,000 input and output tokens across two models.",
+        "1. Who sells what",
+        "Atlas AI is the merchant. Acme Corp is its customer; an Acme employee is the end user.",
+        "Atlas Pro: $99/month, including $10 of AI usage; additional usage is overage.",
         "",
-        "What Lago does",
-        "1. Receives four usage records from the app, each with a durable identity.",
-        "2. Groups the tokens by model and input/output type.",
-        "3. Applies the right price to each group.",
-        "4. Ignores a retried record instead of billing it twice.",
-        "5. Produces a traceable usage charge and applies eligible prepaid credits when the invoice is finalized.",
+        "2. One click, messy usage",
+        "An Acme employee clicks Analyze report.",
+        "One job -> 2 models -> input + output tokens -> 4 usage records -> 1 retry.",
+        "Every record must stay attached to Acme and the correct billing period.",
         "",
-        "The money, explained",
+        "3. Lago makes it billable",
+        "Attribute to Acme -> ignore retry -> aggregate by model/type -> apply Atlas prices -> consume included usage -> calculate overage.",
+        "",
+        "4. The result",
     ]
     for item in result["lines"]:
         lines.append(
@@ -144,25 +155,20 @@ def render(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
-            f"Gross usage charge: ${result['gross_usage_charge']} (expected ${result['expected_total']})",
-            f"Illustrative prepaid value: ${result['starting_prepaid_value']} - ${result['prepaid_credit_applied']} = ${result['ending_prepaid_value']}",
-            f"Amount due after credits: ${result['amount_due']}",
+            f"New job: ${result['gross_usage_charge']} (expected ${result['expected_total']})",
+            f"Included usage left: ${result['included_value_before_job']} - ${result['included_credit_applied']} = ${result['included_value_after_job']}",
+            f"Overage: ${result['overage']}",
+            f"Acme's bill before tax: ${result['monthly_subscription']} subscription + ${result['overage']} overage = ${result['invoice_total_before_tax']}",
             f"Safety checks: duplicate ignored = {str(result['duplicate_retry_ignored']).lower()}; reconciliation difference = ${result['reconciliation_discrepancy']}",
-            "The prepaid example assumes an eligible USD wallet, no tax, and invoice finalization. It does not simulate buying credits or collecting payment.",
             "",
-            "What your team did not have to build by hand",
-            "Engineering: aggregation, price selection, retry protection, credit application, and invoice calculation.",
-            "Product: the same durable usage signal can support pay-as-you-go, prepaid, or hybrid packaging.",
-            "Finance: a line-by-line calculation that can be independently checked and reconciled.",
+            "What Atlas avoids building",
+            "A tenant-aware usage ledger, retry protection, pricing engine, included-credit tracking, invoice calculation, and reconciliation tooling.",
             "",
-            "The simple Lago model behind it",
-            "Acme account -> customer (who is billed)",
-            "Per-token offer -> plan and subscription (what Acme bought)",
-            "Token records -> events (what Acme used)",
-            "Token sum and prices -> metric and charges (how usage becomes money)",
-            "Final billing result -> invoice (what is owed before and after credits)",
+            "This is the simplest shape. Lago also supports tiered and volume pricing, prepaid wallets, commitments and overages, customer-specific pricing, multiple billing entities, and plan changes. Late, corrected, or high-volume event streams still require integration-specific validation.",
             "",
-            "Lago does not replace your product's access control, payment provider, tax policy, or accounting decisions.",
+            "Atlas captures what happened. Lago turns it into accurate, explainable billing. Access control, payment, tax, and accounting remain separate.",
+            "",
+            "Under the hood: Acme -> customer; Atlas Pro -> plan/subscription; token records -> events; token sum -> metric; prices -> charges; $99.17 -> invoice.",
             "",
             "Offline example complete. No Lago API, Docker, account, or credentials were used.",
             "Next, describe your product in one sentence or share its pricing page, and I can show where Lago fits.",

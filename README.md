@@ -8,7 +8,7 @@ This repository is internal while version `0.1.0` is under review. The intended 
 
 ## What it does
 
-- **Shows the transformation before the terminology:** one AI customer action becomes metered usage, an explainable charge, a duplicate-safe billing result, and an illustrative prepaid balance—then the plugin reveals what Lago handled and why it matters.
+- **Shows the metering problem before the terminology:** Atlas AI—the merchant—turns one Acme employee action into multi-model usage, a duplicate-safe charge, included-credit consumption, and overage. The plugin shows what the merchant avoids building before revealing Lago's model.
 - **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
 - **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
 - **Turns demos into evidence:** tailors one product story and defines the smallest proof with business, technical, and exit criteria before implementation.
@@ -28,7 +28,7 @@ After installation, from any task or folder, ask:
 show me what Lago can do
 ```
 
-The plugin immediately runs a dependency-free offline example. In under a minute, one AI customer action becomes a duplicate-safe `$0.37` usage charge; an illustrative `$10.00` prepaid wallet becomes `$9.63`, with `$0.00` due. It then shows what Lago handled for engineering, product, and finance, what remains outside Lago, and only then explains the underlying Lago concepts. It does not assume the open folder is your application.
+The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; Lago turns it into a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It then shows what Atlas avoids building, where Lago can go next, and what remains outside Lago. It does not assume the open folder is your application.
 
 To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. When you are ready to implement, open the application repository and ask:
 
@@ -129,7 +129,7 @@ Validation of a user’s real Lago environment is separate from a demo and requi
 
 ## Canonical offline demo
 
-The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. It then illustrates how an eligible `$10.00` prepaid wallet would apply the charge at invoice finalization, leaving `$9.63` and `$0.00` due. No payment or tax behavior is simulated.
+The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. Against Atlas Pro's illustrative `$99` subscription and `$10` included AI allowance, the job consumes Acme's last `$0.20` and produces `$0.17` of overage, for a `$99.17` total before tax. No payment or tax behavior is simulated.
 
 Run it directly while developing the plugin:
 

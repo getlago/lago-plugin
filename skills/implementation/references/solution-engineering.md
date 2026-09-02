@@ -56,6 +56,8 @@ Tailor the demonstration only after the generic first-run example or when enough
 
 Use the user's product and role language first; introduce each Lago primitive beside the concrete concept. Show one recommended model, one exact illustrative money calculation, and only the capabilities required for that story. Mention at most two later opportunities when evidence supports them. Do not present every Lago feature, jump between unrelated screens, or imply that a generic demo proves product fit.
 
+Create the first-minute effect by making the state change unmistakable: show the customer action, the minimal signal the application emits, the work Lago performs, and the resulting charge, balance, or invoice outcome. Follow it immediately with `What your team did not have to build` for engineering, product, and finance, plus `What stays yours` for access enforcement, payments, tax, accounting, or other external ownership. Introduce primitive names after the user understands the outcome. Never manufacture impact metrics or imply that an offline calculation proves operational savings.
+
 End the tailored demonstration by checking the substance, not asking whether the user “liked the demo”:
 
 > This proves the calculation and workflow shape offline. It does not yet prove `<highest-risk assumption>`.

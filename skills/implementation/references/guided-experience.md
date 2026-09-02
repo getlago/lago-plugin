@@ -20,7 +20,7 @@ Use these as headings only when they improve scanning. Do not repeat unchanged c
 
 ## From generic example to tailored recommendation
 
-The canonical offline example earns attention; it does not establish fit. After it completes, follow [the solution-engineering flow](solution-engineering.md): ask one open question, reflect facts and assumptions, give an honest fit verdict, and demonstrate one product-specific story. Do not launch a questionnaire or repeat the generic example with renamed nouns.
+The canonical offline example earns attention; it does not establish fit. Its first minute should feel like a product transformation, not a configuration tour: one customer action becomes usage, money, and an optional prepaid-credit result; only then reveal the Lago model and team benefits. After it completes, follow [the solution-engineering flow](solution-engineering.md): ask one open question, reflect facts and assumptions, give an honest fit verdict, and demonstrate one product-specific story. Do not launch a questionnaire or repeat the generic example with renamed nouns.
 
 The first product-specific artifact is a one-screen [solution brief](../templates/solution-brief.md): desired outcome, payer and value boundary, current state, fit verdict, one recommended solution story, the highest-risk assumption, and the smallest proof. A repository is optional at this stage.
 

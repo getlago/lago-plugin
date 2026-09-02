@@ -8,7 +8,7 @@ This repository is internal while version `0.1.0` is under review. The intended 
 
 ## What it does
 
-- **Shows Lago before asking for setup:** runs a concrete offline AI-billing example and explains each concept as it becomes useful.
+- **Shows the transformation before the terminology:** one AI customer action becomes metered usage, an explainable charge, a duplicate-safe billing result, and an illustrative prepaid balance—then the plugin reveals what Lago handled and why it matters.
 - **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
 - **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
 - **Turns demos into evidence:** tailors one product story and defines the smallest proof with business, technical, and exit criteria before implementation.
@@ -28,7 +28,7 @@ After installation, from any task or folder, ask:
 show me what Lago can do
 ```
 
-The plugin immediately runs a dependency-free offline example showing how an AI product becomes a customer, plan, usage metric, and exact `$0.37` bill. It does not assume the open folder is your application.
+The plugin immediately runs a dependency-free offline example. In under a minute, one AI customer action becomes a duplicate-safe `$0.37` usage charge; an illustrative `$10.00` prepaid wallet becomes `$9.63`, with `$0.00` due. It then shows what Lago handled for engineering, product, and finance, what remains outside Lago, and only then explains the underlying Lago concepts. It does not assume the open folder is your application.
 
 To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. When you are ready to implement, open the application repository and ask:
 
@@ -129,7 +129,7 @@ Validation of a user’s real Lago environment is separate from a demo and requi
 
 ## Canonical offline demo
 
-The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It creates four deterministic token events across model and input/output filters, replays a duplicate, reconciles 21,000 tokens, and verifies an expected total of `$0.37`.
+The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. It then illustrates how an eligible `$10.00` prepaid wallet would apply the charge at invoice finalization, leaving `$9.63` and `$0.00` due. No payment or tax behavior is simulated.
 
 Run it directly while developing the plugin:
 
@@ -150,7 +150,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 83 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, solution discovery, tailored demonstrations, proof planning, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 84 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, visible customer-to-money transformation, solution discovery, tailored demonstrations, proof planning, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

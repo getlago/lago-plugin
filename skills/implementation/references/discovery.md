@@ -47,7 +47,7 @@ Discovery, teaching, demo, or ambiguous first prompt:
 >
 > You do not need an application repository, Lago account, credentials, Docker, or an MCP connection to get started. I will not treat the current folder as your product unless you ask me to apply or implement the result.
 >
-> I’ll first show a small AI product turning usage into a `$0.37` bill, explain each Lago concept as it appears, and then help map the same ideas to your product.
+> I’ll first show one AI customer action becoming an explainable charge and prepaid-credit result. You will see what Lago handles, what your application still owns, and why that matters before I introduce the Lago concepts behind it.
 
 Run the offline example in the same response. Afterward, ask for a one-sentence product description or pricing-page link. Do not ask the user to open a repository as the default next step.
 

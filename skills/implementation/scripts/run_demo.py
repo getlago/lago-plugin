@@ -86,8 +86,15 @@ def run_demo() -> dict[str, object]:
     if total != expected_total:
         raise AssertionError(f"money test failed: expected {expected_total}, got {total}")
 
+    starting_prepaid_value = Decimal("10.00")
+    prepaid_credit_applied = min(starting_prepaid_value, total)
+    ending_prepaid_value = starting_prepaid_value - prepaid_credit_applied
+    amount_due = total - prepaid_credit_applied
+
     return {
         "mode": "offline_example",
+        "scenario": "Acme asks an AI research assistant to analyze a report",
+        "customer_action": "analyze_report",
         "customer": "demo_ai_studio",
         "plan": "demo_per_token",
         "subscription": "demo_ai_studio_per_token",
@@ -98,6 +105,12 @@ def run_demo() -> dict[str, object]:
         "lines": lines,
         "expected_total": str(expected_total),
         "actual_total": str(total),
+        "gross_usage_charge": str(total),
+        "starting_prepaid_value": str(starting_prepaid_value),
+        "prepaid_credit_applied": str(prepaid_credit_applied),
+        "ending_prepaid_value": str(ending_prepaid_value),
+        "amount_due": str(amount_due),
+        "wallet_effect_timing": "when the eligible invoice is finalized",
         "reconciliation_discrepancy": "0.00",
         "live_lago_contacted": False,
     }
@@ -109,13 +122,20 @@ def render(result: dict[str, object]) -> str:
         "",
         "You do not need to do anything or provide credentials. This walkthrough is running now.",
         "",
-        "Your product -> Lago",
-        "AI Studio account -> customer",
-        "Per-token offer -> plan and subscription",
-        "Token records -> usage events",
-        "Sum of tokens by model and input/output -> billable metric and charges",
+        "Watch one customer action become an explainable charge in under a minute.",
         "",
-        "Money test",
+        "Customer moment",
+        "Acme asks an AI research assistant to analyze a report.",
+        "That one job produces 21,000 input and output tokens across two models.",
+        "",
+        "What Lago does",
+        "1. Receives four usage records from the app, each with a durable identity.",
+        "2. Groups the tokens by model and input/output type.",
+        "3. Applies the right price to each group.",
+        "4. Ignores a retried record instead of billing it twice.",
+        "5. Produces a traceable usage charge and applies eligible prepaid credits when the invoice is finalized.",
+        "",
+        "The money, explained",
     ]
     for item in result["lines"]:
         lines.append(
@@ -124,9 +144,25 @@ def render(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
-            f"Total: ${result['actual_total']} (expected ${result['expected_total']})",
-            f"Duplicate retry ignored: {str(result['duplicate_retry_ignored']).lower()}",
-            f"Reconciliation discrepancy: ${result['reconciliation_discrepancy']}",
+            f"Gross usage charge: ${result['gross_usage_charge']} (expected ${result['expected_total']})",
+            f"Illustrative prepaid value: ${result['starting_prepaid_value']} - ${result['prepaid_credit_applied']} = ${result['ending_prepaid_value']}",
+            f"Amount due after credits: ${result['amount_due']}",
+            f"Safety checks: duplicate ignored = {str(result['duplicate_retry_ignored']).lower()}; reconciliation difference = ${result['reconciliation_discrepancy']}",
+            "The prepaid example assumes an eligible USD wallet, no tax, and invoice finalization. It does not simulate buying credits or collecting payment.",
+            "",
+            "What your team did not have to build by hand",
+            "Engineering: aggregation, price selection, retry protection, credit application, and invoice calculation.",
+            "Product: the same durable usage signal can support pay-as-you-go, prepaid, or hybrid packaging.",
+            "Finance: a line-by-line calculation that can be independently checked and reconciled.",
+            "",
+            "The simple Lago model behind it",
+            "Acme account -> customer (who is billed)",
+            "Per-token offer -> plan and subscription (what Acme bought)",
+            "Token records -> events (what Acme used)",
+            "Token sum and prices -> metric and charges (how usage becomes money)",
+            "Final billing result -> invoice (what is owed before and after credits)",
+            "",
+            "Lago does not replace your product's access control, payment provider, tax policy, or accounting decisions.",
             "",
             "Offline example complete. No Lago API, Docker, account, or credentials were used.",
             "Next, describe your product in one sentence or share its pricing page, and I can show where Lago fits.",

@@ -992,6 +992,24 @@
     "failure or exit criteria",
     "go pivot or no-go next state"
    ]
+  },
+  {
+   "id": "first-run-visible-transformation",
+   "prompt": "I just installed the Lago plugin. Show me why Lago matters.",
+   "mode": "design",
+   "signals": [
+    "no setup required",
+    "recognizable customer action before Lago terminology",
+    "customer action to durable usage to money transformation",
+    "exact $0.37 gross charge",
+    "duplicate retry ignored and zero reconciliation difference",
+    "illustrative $10.00 prepaid value becomes $9.63 at invoice finalization",
+    "$0.00 amount due after credits",
+    "engineering product and finance benefits",
+    "access payment tax and accounting boundaries",
+    "offline example not presented as product-fit proof",
+    "one product-outcome question next"
+   ]
   }
  ]
 }

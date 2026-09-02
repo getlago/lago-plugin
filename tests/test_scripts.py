@@ -410,11 +410,19 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(evidence["total_tokens"], 21_000)
         self.assertEqual(evidence["expected_total"], "0.37")
         self.assertEqual(evidence["actual_total"], "0.37")
+        self.assertEqual(evidence["starting_prepaid_value"], "10.00")
+        self.assertEqual(evidence["prepaid_credit_applied"], "0.37")
+        self.assertEqual(evidence["ending_prepaid_value"], "9.63")
+        self.assertEqual(evidence["amount_due"], "0.00")
         self.assertEqual(evidence["reconciliation_discrepancy"], "0.00")
         self.assertFalse(evidence["live_lago_contacted"])
         human = run("run_demo.py")
         self.assertEqual(human.returncode, 0, human.stdout + human.stderr)
         self.assertIn("You do not need to do anything", human.stdout)
+        self.assertIn("Watch one customer action become an explainable charge", human.stdout)
+        self.assertIn("What your team did not have to build by hand", human.stdout)
+        self.assertIn("Illustrative prepaid value: $10.00 - $0.37 = $9.63", human.stdout)
+        self.assertIn("Lago does not replace your product's access control", human.stdout)
         self.assertIn("Offline example complete", human.stdout)
         self.assertIn("describe your product in one sentence or share its pricing page", human.stdout)
         self.assertIn("code repository is optional for discovery", human.stdout)
@@ -476,11 +484,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_83_unique_cases(self):
+    def test_eval_suite_has_all_84_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 83)
-        self.assertEqual(len({case["id"] for case in cases}), 83)
+        self.assertEqual(len(cases), 84)
+        self.assertEqual(len({case["id"] for case in cases}), 84)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -511,6 +519,7 @@ class ScriptTests(unittest.TestCase):
             "tampered-plugin-bundle",
             "premature-source-cancellation",
             "credential-presence-preflight",
+            "first-run-visible-transformation",
         }.issubset(ids))
 
     def test_eval_suite_covers_field_replay_use_cases(self):
@@ -571,6 +580,8 @@ class ScriptTests(unittest.TestCase):
         demo = (ROOT / "skills/implementation/references/demo.md").read_text(encoding="utf-8")
         self.assertIn("Never seed demo customers", demo)
         self.assertIn("including an account the user calls development, test, or staging", demo)
+        self.assertIn("product action → durable usage records", demo)
+        self.assertIn("resulting invoiced balance", demo)
         canonical_demo = (ROOT / "examples/per-token-ai.md").read_text(encoding="utf-8")
         self.assertIn("The model names and prices are illustrative", canonical_demo)
         self.assertIn("$0.37", canonical_demo)

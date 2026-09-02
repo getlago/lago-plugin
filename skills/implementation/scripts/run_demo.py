@@ -86,11 +86,24 @@ def run_demo() -> dict[str, object]:
     if total != expected_total:
         raise AssertionError(f"money test failed: expected {expected_total}, got {total}")
 
+    monthly_subscription = Decimal("99.00")
+    included_usage_value = Decimal("10.00")
+    prior_usage_value = Decimal("9.80")
+    included_value_before_job = included_usage_value - prior_usage_value
+    included_credit_applied = min(included_value_before_job, total)
+    overage = total - included_credit_applied
+    included_value_after_job = included_value_before_job - included_credit_applied
+    invoice_total_before_tax = monthly_subscription + overage
+
     return {
         "mode": "offline_example",
-        "customer": "demo_ai_studio",
-        "plan": "demo_per_token",
-        "subscription": "demo_ai_studio_per_token",
+        "scenario": "An Acme employee asks Atlas AI to analyze a report",
+        "customer_action": "analyze_report",
+        "merchant": "Atlas AI",
+        "customer": "Acme Corp",
+        "end_user_role": "Acme employee",
+        "plan": "atlas_pro",
+        "subscription": "acme_atlas_pro",
         "metric": "sum(tokens), filtered by model and input/output",
         "events_accepted": len(accepted),
         "duplicate_retry_ignored": duplicate_ignored,
@@ -98,6 +111,17 @@ def run_demo() -> dict[str, object]:
         "lines": lines,
         "expected_total": str(expected_total),
         "actual_total": str(total),
+        "gross_usage_charge": str(total),
+        "monthly_subscription": str(monthly_subscription),
+        "included_usage_value": str(included_usage_value),
+        "prior_usage_value": str(prior_usage_value),
+        "included_value_before_job": str(included_value_before_job),
+        "included_credit_applied": str(included_credit_applied),
+        "included_value_after_job": str(included_value_after_job),
+        "overage": str(overage),
+        "period_total_before_tax": str(invoice_total_before_tax),
+        "hybrid_period_money_live_validated": True,
+        "credit_effect_timing": "when the eligible invoice is finalized",
         "reconciliation_discrepancy": "0.00",
         "live_lago_contacted": False,
     }
@@ -105,17 +129,23 @@ def run_demo() -> dict[str, object]:
 
 def render(result: dict[str, object]) -> str:
     lines = [
-        "Lago Billing Engineer instant demo (offline)",
+        "Lago in 30 seconds (offline)",
         "",
-        "You do not need to do anything or provide credentials. This walkthrough is running now.",
+        "No setup, repository, or credentials needed.",
         "",
-        "Your product -> Lago",
-        "AI Studio account -> customer",
-        "Per-token offer -> plan and subscription",
-        "Token records -> usage events",
-        "Sum of tokens by model and input/output -> billable metric and charges",
+        "WHO SELLS WHAT",
+        "Atlas AI is the merchant. Acme Corp is its customer; an Acme employee is the end user.",
+        "Atlas Pro: $99/month, including $10 of AI usage; additional usage is overage.",
         "",
-        "Money test",
+        "ONE ACTION, MESSY USAGE",
+        "An Acme employee clicks Analyze report.",
+        "One job -> 2 models -> input + output tokens -> 4 usage records -> 1 retry.",
+        "Every record must stay attached to Acme and the correct billing period.",
+        "",
+        "LAGO MAKES IT BILLABLE",
+        "Attribute to Acme -> ignore retry -> aggregate by model/type -> apply Atlas prices -> consume included usage -> calculate overage.",
+        "",
+        "THIS MONTH",
     ]
     for item in result["lines"]:
         lines.append(
@@ -124,13 +154,25 @@ def render(result: dict[str, object]) -> str:
         )
     lines.extend(
         [
-            f"Total: ${result['actual_total']} (expected ${result['expected_total']})",
-            f"Duplicate retry ignored: {str(result['duplicate_retry_ignored']).lower()}",
-            f"Reconciliation discrepancy: ${result['reconciliation_discrepancy']}",
+            f"New job: ${result['gross_usage_charge']} (expected ${result['expected_total']})",
+            f"Included usage left: ${result['included_value_before_job']} - ${result['included_credit_applied']} = ${result['included_value_after_job']}",
+            f"Overage: ${result['overage']}",
+            f"Acme billed before tax for the period: ${result['monthly_subscription']} subscription + ${result['overage']} overage = ${result['period_total_before_tax']}",
+            f"Safety checks: duplicate ignored = {str(result['duplicate_retry_ignored']).lower()}; reconciliation difference = ${result['reconciliation_discrepancy']}",
             "",
-            "Offline example complete. No Lago API, Docker, account, or credentials were used.",
-            "When you want this applied to your product, open its repository and say: implement Lago.",
-            "Prefer concise execution without the walkthrough? Say: expert mode.",
+            "WHAT ATLAS DID NOT BUILD",
+            "A tenant-aware usage ledger, retry protection, pricing engine, included-credit tracking, invoice calculation, and reconciliation tooling.",
+            "",
+            "This is the simplest shape. Lago also supports tiered and volume pricing, prepaid wallets, commitments and overages, customer-specific pricing, multiple billing entities, and plan changes. Late, corrected, or high-volume event streams still require integration-specific validation.",
+            "",
+            "Atlas captures what happened. Lago turns it into accurate, explainable billing. Access control, payment, tax, and accounting remain separate.",
+            "",
+            "Under the hood: Acme -> customer; Atlas Pro -> plan/subscription; token records -> events; token sum -> metric; prices -> charges; wallet -> eligible usage credit.",
+            "",
+            "Offline example complete. Separate live self-hosted evidence validates the full one-period result: a $99.00 subscription invoice plus a $0.17 usage invoice after $10.00 of eligible wallet credit.",
+            "Invoice count depends on billing cadence; automated wallet renewal is edition-dependent and was not part of that proof.",
+            "No Lago API, Docker, account, or credentials were used in this walkthrough.",
+            "What does your product do, and what do customers pay for today?",
         ]
     )
     return "\n".join(lines)

@@ -11,7 +11,7 @@
 | value/properties | Numeric type and dimensions required by aggregation/pricing |
 | source/schema version/original ID | Preserve lineage for replay and reconciliation |
 
-Validate required keys, types, finite numeric values, allowed dimensions, tenant association, timestamp range, and schema version before enqueue/send. Store delivery status separately from the source usage record.
+Validate required keys, types, finite numeric values, allowed dimensions, tenant association, non-negative Unix timestamps, and schema version before enqueue/send. Apply a narrower past/future window only when the product's event contract defines one. Store delivery status separately from the source usage record.
 
 Keep the customer identity and subscription identity distinct. If the application has no subscription entity yet, add a durable billing-enrollment or subscription-binding record that links the billable account to its Lago plan/subscription and lifecycle. Do not reuse the customer external ID as the subscription external ID unless the application already has an explicit, documented one-subscription-per-customer identity contract.
 

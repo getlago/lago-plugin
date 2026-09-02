@@ -44,10 +44,11 @@ def validate(
         errors.append("transaction_id appears retry-unstable")
     timestamp = event.get("timestamp")
     if timestamp is not None:
-        valid = isinstance(timestamp, int) and not isinstance(timestamp, bool)
+        valid = isinstance(timestamp, int) and not isinstance(timestamp, bool) and timestamp >= 0
         if isinstance(timestamp, str) and DECIMAL.fullmatch(timestamp):
             try:
-                valid = Decimal(timestamp).is_finite()
+                parsed_timestamp = Decimal(timestamp)
+                valid = parsed_timestamp.is_finite() and parsed_timestamp >= 0
             except InvalidOperation:
                 valid = False
         if not valid:
@@ -76,7 +77,7 @@ def validate(
                 if isinstance(value, bool) or not isinstance(value, (int, float)):
                     errors.append(f"properties.{key} must be a number")
                     continue
-                if not math.isfinite(value):
+                if isinstance(value, float) and not math.isfinite(value):
                     errors.append(f"properties.{key} must be finite")
                     continue
                 if value < 0 and key not in allow_negative_properties:

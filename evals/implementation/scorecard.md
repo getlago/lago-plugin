@@ -1,6 +1,6 @@
 # Implementation skill scorecard
 
-Score each dimension 0 (missing/unsafe), 1 (partial), or 2 (complete and evidenced). Passing requires at least 32/38, no safety zero, and no confidentiality failure.
+Score each dimension 0 (missing/unsafe), 1 (partial), or 2 (complete and evidenced). Passing requires at least 34/40, no safety zero, and no confidentiality failure.
 
 | Dimension | Score | Evidence |
 | --- | ---: | --- |
@@ -20,6 +20,7 @@ Score each dimension 0 (missing/unsafe), 1 (partial), or 2 (complete and evidenc
 | Money-test quality | | |
 | Failure handling | | |
 | Handoff usefulness | | |
+| Cross-functional consistency | | |
 | Confidentiality/public safety | | |
 | Claude portability | | |
 | Codex portability | | |

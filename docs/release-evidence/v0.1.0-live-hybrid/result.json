@@ -1,0 +1,12 @@
+{
+  "base_invoice_total_amount_cents": 9900,
+  "duplicate_retry_http_status": 422,
+  "gross_usage_amount_cents": 1017,
+  "invoice_count": 2,
+  "period_total_before_tax_cents": 9917,
+  "status": "PASS",
+  "taxes_amount_cents": 0,
+  "usage_invoice_prepaid_credit_amount_cents": 1000,
+  "usage_invoice_total_amount_cents": 17,
+  "wallet_grant_cents": 1000
+}

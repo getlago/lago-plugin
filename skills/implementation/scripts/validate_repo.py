@@ -63,6 +63,9 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     claude_marketplace = root / ".claude-plugin/marketplace.json"
     skill = root / "skills/implementation/SKILL.md"
     primitives = root / "skills/implementation/references/primitives.md"
+    solution_engineering = root / "skills/implementation/references/solution-engineering.md"
+    vendor_positioning = root / "skills/implementation/references/vendor-positioning.md"
+    solution_brief = root / "skills/implementation/templates/solution-brief.md"
     demo = root / "skills/implementation/references/demo.md"
     validation = root / "skills/implementation/references/validation.md"
     openai_yaml = root / "skills/implementation/agents/openai.yaml"
@@ -77,7 +80,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/validate_event.py",
         root / "skills/implementation/scripts/validate_repo.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -86,6 +89,13 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         if isinstance(data, dict):
             if data.get("name") != "lago":
                 failures.append(f"{label} manifest name must be lago")
+            display_name = (
+                data.get("interface", {}).get("displayName")
+                if label == "Codex" and isinstance(data.get("interface"), dict)
+                else data.get("displayName")
+            )
+            if display_name != "Lago Solution Engineer":
+                failures.append(f"{label} display name must be Lago Solution Engineer")
             version = data.get("version")
             if not isinstance(version, str) or not SEMVER.fullmatch(version):
                 failures.append(f"{label} manifest version must be valid semantic versioning")
@@ -122,6 +132,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
             not isinstance(prompt, str) or len(prompt) > 128 for prompt in prompts
         ):
             failures.append("Codex interface.defaultPrompt must contain 1-3 entries of at most 128 characters")
+        elif "Do not assume this workspace is my application" not in prompts[0]:
+            failures.append("Codex first default prompt must preserve discovery-first workspace boundary")
     if skill.is_file():
         text = skill.read_text(encoding="utf-8")
         if not re.match(r"^---\nname: implementation\ndescription: .+\n---\n", text):
@@ -129,7 +141,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         for mode in ("assess", "design", "implement", "deploy", "migrate", "validate", "reconcile", "troubleshoot"):
             if f"`{mode}`" not in text:
                 failures.append(f"skill does not route mode: {mode}")
-        for preflight_signal in ("Lago Billing Engineer loaded.", "Mandatory first-run preflight", "credentials are unnecessary for offline work", "Ask only the next question"):
+        for preflight_signal in ("Lago Solution Engineer loaded.", "First-run routing and silent preflight", "credentials are unnecessary for offline work", "Ask only the next question"):
             if preflight_signal not in text:
                 failures.append(f"missing first-run behavior: {preflight_signal}")
         if "never answer a version-sensitive question from trained memory" not in text:
@@ -146,6 +158,52 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         ):
             if teaching_signal not in text:
                 failures.append(f"missing beginner primitive guidance: {teaching_signal}")
+    if solution_engineering.is_file():
+        text = solution_engineering.read_text(encoding="utf-8")
+        for solution_signal in (
+            "ask one open question",
+            "Sound like a great pre-sales engineer",
+            "supported opportunity → why it matters → fit assessment and boundary",
+            "Enthusiasm changes the delivery, never the evidence threshold",
+            "**Clear fit:**",
+            "**Promising fit — validate one point:**",
+            "**Scoped fit:**",
+            "**Not enough information yet:**",
+            "**Not recommended for this specific responsibility:**",
+            "Missing information is not negative evidence",
+            "Before a negative assessment, run a rescue check",
+            "Never leave a rejection as a dead end",
+            "Draft — not sent",
+            "Never infer them from an operating-system username",
+            "the sign-off must end with `[Your name]`",
+            "separate explicit approval for that exact final email",
+            "**Before:**",
+            "business success criteria",
+            "failure or exit criteria",
+            "solution brief template",
+        ):
+            if solution_signal not in text:
+                failures.append(f"missing solution-engineering guidance: {solution_signal}")
+    if solution_brief.is_file():
+        text = solution_brief.read_text(encoding="utf-8")
+        for brief_signal in (
+            "## Fit assessment",
+            "## Recommended solution story",
+            "## Smallest proof",
+            "Failure or exit criteria",
+        ):
+            if brief_signal not in text:
+                failures.append(f"missing solution brief field: {brief_signal}")
+    if vendor_positioning.is_file():
+        text = vendor_positioning.read_text(encoding="utf-8")
+        for vendor_signal in (
+            "Do not introduce, rank, endorse, or recommend a named Lago competitor",
+            "No named alternative vendors are approved in this release",
+            "capability category",
+            "reviewed source control",
+        ):
+            if vendor_signal not in text:
+                failures.append(f"missing vendor-positioning guidance: {vendor_signal}")
     eval_cases = root / "evals/implementation/cases.json"
     if eval_cases.is_file():
         data = load_json(eval_cases, failures)

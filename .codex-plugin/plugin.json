@@ -1,7 +1,7 @@
 {
   "name": "lago",
   "version": "0.1.0",
-  "description": "A beginner-friendly billing engineer copilot that discovers, designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise\u2014or credentials for offline work\u2014is required.",
+  "description": "A Lago solution engineer that makes billing tangible, maps the best opportunity for your product, and becomes a billing engineer copilot when you implement. No setup or billing expertise is required for discovery.",
   "author": {
     "name": "Lago",
     "url": "https://www.getlago.com"
@@ -21,9 +21,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Lago Billing Engineer",
-    "shortDescription": "Find and implement the right billing model for your app.",
-    "longDescription": "No Lago or billing expertise is required. Open an application repository, with or without billing code. The copilot finds the strongest billing opportunities, including AI usage, value credits, prepaid wallets, and hybrid models; maps application concepts to Lago; and explains each decision in plain language. Offline work needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
+    "displayName": "Lago Solution Engineer",
+    "shortDescription": "See, design, and implement billing with Lago.",
+    "longDescription": "Understand Lago in under a minute, see the billing opportunity for your product, and turn it into a testable implementation. Start anywhere: no codebase, Lago account, credentials, or billing expertise is needed. The Lago Solution Engineer shows a concrete source-to-money story, maps who pays and what creates value, recommends one model, and defines a focused proof. When you bring an application repository, it becomes a Billing Engineer Copilot and carries the same commercial intent into event contracts, code, money tests, reconciliation, and Product, Engineering, or Finance handoff. It covers AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence. Live seeded demos use only isolated self-hosted Lago; production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": [
@@ -34,9 +34,9 @@
     "privacyPolicyURL": "https://getlago.com/legal/privacy-policy",
     "termsOfServiceURL": "https://getlago.com/legal",
     "defaultPrompt": [
-      "Implement the smallest safe Lago integration in this app. Inspect it first and recommend one billing blueprint.",
-      "Show me how Lago would bill this product with an offline example and an exact money calculation.",
-      "Find this product's best AI, usage, wallet, or prepaid-credit billing model and show the first proof."
+      "Show me Lago in 30 seconds, then ask about my product and pricing. Do not assume this workspace is my application.",
+      "Map my product to the best first Lago billing model, explain why it wins, and define the smallest credible proof.",
+      "Carry the accepted solution into this app with money tests and a Product, Engineering, and Finance handoff."
     ],
     "brandColor": "#19212E"
   }

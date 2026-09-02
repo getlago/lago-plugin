@@ -1,6 +1,6 @@
 # OpenAI-style per-token demo
 
-This is the canonical Lago Billing Engineer demo, adapted from Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai). Its bundled walkthrough runs entirely offline; optional live validation runs only on a dedicated isolated self-hosted Lago instance. The model names and prices are illustrative, not current OpenAI pricing.
+This is the canonical Lago Solution Engineer demo, adapted from Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai). Its bundled walkthrough runs entirely offline; optional live validation runs only on a dedicated isolated self-hosted Lago instance. The model names and prices are illustrative, not current OpenAI pricing. Atlas AI is the merchant using Lago, Acme Corp is Atlas's customer, and an Acme employee is the end user. The walkthrough shows why one product action creates a non-trivial metering problem before turning it into an explainable billing result.
 
 Run the instant walkthrough with `python3 skills/implementation/scripts/run_demo.py`. The user does not need to configure anything, provide credentials, or modify a workspace.
 
@@ -8,12 +8,13 @@ Run the instant walkthrough with `python3 skills/implementation/scripts/run_demo
 
 | Product concept | Lago primitive | Demo value |
 | --- | --- | --- |
-| AI Studio account | Customer | `demo_ai_studio` |
+| Acme Corp | Customer | `acme_corp` |
 | Tokens consumed | Billable metric | `demo_ai_tokens`, summed from the `tokens` event property |
 | Model and direction | Metric filters | `model`: `demo-small` or `demo-large`; `type`: `input` or `output` |
 | Per-token package prices | Charges | Illustrative price per 1,000 tokens for each filter combination |
-| Pay-as-you-go offer | Plan | `demo_per_token`, monthly, zero base fee |
-| AI Studio on the offer | Subscription | `demo_ai_studio_per_token` |
+| Atlas Pro | Plan | `atlas_pro`, `$99` monthly base fee plus metered usage |
+| Acme on Atlas Pro | Subscription | `acme_atlas_pro` |
+| `$10` included AI allowance | Granted wallet | Restricted to the `demo_ai_tokens` charge; it must not offset the base fee |
 
 ## Illustrative prices
 
@@ -36,8 +37,22 @@ Send four events with stable transaction IDs and explicit timestamps:
 
 Resend one event with the identical transaction ID and timestamp, then verify that the aggregated quantity and amount do not increase.
 
+## Illustrative subscription, included usage, and overage
+
+Atlas Pro costs `$99` per month and includes `$10` of AI usage through a granted wallet restricted to the token charge. Acme has already consumed `$9.80` this month. The new report-analysis job costs `$0.37`: Acme's remaining `$0.20` of included usage is consumed and `$0.17` becomes overage. The period total before tax is `$99.17`.
+
+The `$10` is a granted wallet allowance, not purchased prepaid credit, and its charge restriction keeps it from offsetting the subscription fee. With the subscription billed in advance and usage in arrears, Lago produces a `$99.00` subscription invoice and a `$0.17` usage invoice; other billing cadences may consolidate differently. The application still owns access enforcement; payment, tax, and accounting remain separate decisions.
+
+## Why the demo matters
+
+- Engineering sends durable usage records instead of rebuilding aggregation, pricing, retry protection, credit application, and invoice calculation in product code.
+- Product can use the same usage signal as a foundation for pay-as-you-go, prepaid, or hybrid packaging.
+- Finance gets a line-by-line calculation that can be independently checked and reconciled.
+
+This is the simplest shape. Lago also supports tiered and volume pricing, prepaid wallets, commitments and overages, customer-specific pricing, multiple billing entities, and plan changes. Late, corrected, and high-volume event streams require integration-specific validation.
+
 ## Evidence and stopping point
 
-Retrieve current usage and compare each filtered charge with the independent $0.37 calculation. Retrieve a draft or preview invoice only if the selected self-hosted edition supports it; otherwise stop at current usage and label invoice generation unverified. Do not configure payments, tax providers, email delivery, or external webhooks.
+The archived live self-hosted evidence proves the complete one-period hybrid result: `$10.17` gross usage, `$10.00` of charge-restricted wallet credit, `$0.17` usage overage, and `$99.17` total billed before tax across two invoices. It does not prove automatic renewal of the wallet grant; recurring wallet rules are edition-dependent and must be validated for the selected deployment. Do not configure payments, tax providers, email delivery, or external webhooks.
 
 Record the self-hosted Lago version, local base URL, created object IDs, event IDs, expected calculation, actual usage, and teardown target. Remove only the dedicated demo containers and volumes, and only after explicit approval.

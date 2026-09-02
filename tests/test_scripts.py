@@ -390,6 +390,36 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn("non-finite JSON value NaN", result.stdout)
 
+    def test_event_rejects_negative_timestamp_and_handles_large_integer(self):
+        base = {
+            "transaction_id": "event:large-number",
+            "external_subscription_id": "subscription:1",
+            "code": "api_requests",
+            "properties": {"quantity": 10**4000},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            negative = Path(directory) / "negative-timestamp.json"
+            negative_string = Path(directory) / "negative-string-timestamp.json"
+            large = Path(directory) / "large-integer.json"
+            negative.write_text(
+                json.dumps({"event": {**base, "timestamp": -1}}), encoding="utf-8"
+            )
+            negative_string.write_text(
+                json.dumps({"event": {**base, "timestamp": "-1"}}), encoding="utf-8"
+            )
+            large.write_text(
+                json.dumps({"event": {**base, "timestamp": 1787702400}}),
+                encoding="utf-8",
+            )
+            negative_result = run("validate_event.py", negative)
+            negative_string_result = run("validate_event.py", negative_string)
+            large_result = run("validate_event.py", large)
+        self.assertEqual(negative_result.returncode, 1, negative_result.stdout)
+        self.assertIn("timestamp must be Unix seconds", negative_result.stdout)
+        self.assertEqual(negative_string_result.returncode, 1, negative_string_result.stdout)
+        self.assertIn("timestamp must be Unix seconds", negative_string_result.stdout)
+        self.assertEqual(large_result.returncode, 0, large_result.stdout)
+
     def test_reconciliation_passes(self):
         result = run("reconcile.py", FIXTURES / "reconcile-source.csv", FIXTURES / "reconcile-lago-pass.csv")
         self.assertEqual(result.returncode, 0, result.stdout)
@@ -410,13 +440,32 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(evidence["total_tokens"], 21_000)
         self.assertEqual(evidence["expected_total"], "0.37")
         self.assertEqual(evidence["actual_total"], "0.37")
+        self.assertEqual(evidence["merchant"], "Atlas AI")
+        self.assertEqual(evidence["customer"], "Acme Corp")
+        self.assertEqual(evidence["monthly_subscription"], "99.00")
+        self.assertEqual(evidence["included_usage_value"], "10.00")
+        self.assertEqual(evidence["included_value_before_job"], "0.20")
+        self.assertEqual(evidence["included_credit_applied"], "0.20")
+        self.assertEqual(evidence["overage"], "0.17")
+        self.assertEqual(evidence["period_total_before_tax"], "99.17")
+        self.assertTrue(evidence["hybrid_period_money_live_validated"])
         self.assertEqual(evidence["reconciliation_discrepancy"], "0.00")
         self.assertFalse(evidence["live_lago_contacted"])
         human = run("run_demo.py")
         self.assertEqual(human.returncode, 0, human.stdout + human.stderr)
-        self.assertIn("You do not need to do anything", human.stdout)
+        self.assertIn("No setup, repository, or credentials needed", human.stdout)
+        self.assertIn("Atlas AI is the merchant. Acme Corp is its customer", human.stdout)
+        self.assertIn("ONE ACTION, MESSY USAGE", human.stdout)
+        self.assertIn("WHAT ATLAS DID NOT BUILD", human.stdout)
+        self.assertIn("Overage: $0.17", human.stdout)
+        self.assertIn("Acme billed before tax for the period: $99.00 subscription + $0.17 overage = $99.17", human.stdout)
+        self.assertIn("a $99.00 subscription invoice plus a $0.17 usage invoice", human.stdout)
+        self.assertIn("automated wallet renewal is edition-dependent", human.stdout)
+        self.assertIn("Late, corrected, or high-volume event streams still require integration-specific validation", human.stdout)
+        self.assertIn("Access control, payment, tax, and accounting remain separate", human.stdout)
         self.assertIn("Offline example complete", human.stdout)
-        self.assertIn("expert mode", human.stdout)
+        self.assertIn("What does your product do, and what do customers pay for today?", human.stdout)
+        self.assertEqual(human.stdout.count("?"), 1)
 
     def test_demo_target_requires_loopback_port_and_dedicated_project(self):
         valid = run(
@@ -474,11 +523,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_79_unique_cases(self):
+    def test_eval_suite_has_all_99_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 79)
-        self.assertEqual(len({case["id"] for case in cases}), 79)
+        self.assertEqual(len(cases), 99)
+        self.assertEqual(len({case["id"] for case in cases}), 99)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -500,6 +549,7 @@ class ScriptTests(unittest.TestCase):
             "beginner-offline-walkthrough",
             "demo-is-not-production-ready",
             "ambiguous-help-start-no-app",
+            "first-install-arbitrary-workspace",
             "expert-mode-opt-out",
             "hand-written-actual-evidence",
             "official-doc-link-moved",
@@ -508,6 +558,11 @@ class ScriptTests(unittest.TestCase):
             "tampered-plugin-bundle",
             "premature-source-cancellation",
             "credential-presence-preflight",
+            "first-run-visible-transformation",
+            "two-word-discovery-value-first",
+            "solution-to-implementation-role-transition",
+            "product-to-lago-opportunity-map",
+            "cross-functional-buyer-handoff",
         }.issubset(ids))
 
     def test_eval_suite_covers_field_replay_use_cases(self):
@@ -533,6 +588,26 @@ class ScriptTests(unittest.TestCase):
             "high-volume-wallet-events",
             "crm-erp-finance-handoff",
             "marketplace-payout-boundary",
+            "solution-engineering-progressive-discovery",
+            "solution-engineering-tailored-story",
+            "solution-engineering-proof-plan",
+        }.issubset(ids))
+
+    def test_eval_suite_covers_balanced_fit_assessment(self):
+        data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
+        ids = {case["id"] for case in data["cases"]}
+        self.assertTrue({
+            "fit-insufficient-product-information",
+            "fit-existing-stripe-coexistence",
+            "fit-hard-realtime-access-boundary",
+            "fit-tax-only-request",
+            "fit-revenue-recognition-only-request",
+            "fit-unverified-edition-capability",
+            "fit-unproven-scale-and-latency",
+            "fit-simple-flat-checkout",
+            "fit-rejection-recovery-email-draft",
+            "competitor-recommendation-default-block",
+            "user-named-vendor-no-endorsement",
         }.issubset(ids))
 
     def test_external_link_lister_finds_official_docs(self):
@@ -550,18 +625,53 @@ class ScriptTests(unittest.TestCase):
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
         skill = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("Lago Billing Engineer loaded.", skill)
-        self.assertIn("Mandatory first-run preflight", skill)
+        self.assertIn("Lago Solution Engineer loaded.", skill)
+        self.assertIn("First-run routing and silent preflight", skill)
+        self.assertIn("Do not assume the current folder is the user's product repository", skill)
+        self.assertIn("Run the instant offline demo regardless of what folder is open", skill)
+        self.assertIn("skip the generic Atlas example", skill)
+        self.assertIn("[solution-engineering flow](references/solution-engineering.md)", skill)
         self.assertIn("credentials are unnecessary for offline work", skill)
         self.assertIn("Ask only the next question", skill)
+        self.assertIn("Generic first run, teaching, or offline demo before product context", skill)
+        self.assertIn("Do not preload later-stage guidance", skill)
+        self.assertIn("demo environment](references/demo.md) only", skill)
+        self.assertIn("first line of the user-facing response must be exactly", skill)
+        self.assertIn("repeat it as the first line of the final answer", skill)
+        self.assertIn("Missing information is not negative evidence", skill)
+        self.assertIn("an attractive use case is not proof of fit", skill)
+        self.assertIn("encouraging, enthusiastic, curious, and commercially aware", skill)
+        self.assertIn("first substantive sentence must lead with that useful possibility", skill)
+        self.assertIn("The draft heading must be exactly `Draft — not sent`", skill)
+        self.assertIn("end the sign-off with `[Your name]`", skill)
+        self.assertIn("Never introduce, rank, endorse, or recommend a named competitor", skill)
+        self.assertIn("One agent, two stages", skill)
+        self.assertIn("I’m switching from solution design to implementation.", skill)
+        self.assertIn("Product → Lago opportunity map", skill)
+        self.assertIn("Product** sees packaging", skill)
         discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")
         self.assertIn("No existing billing code is not a blocker.", discovery)
         primitives = (ROOT / "skills/implementation/references/primitives.md").read_text(encoding="utf-8")
         self.assertIn("Your application → Lago", primitives)
+        solution_engineering = (ROOT / "skills/implementation/references/solution-engineering.md").read_text(encoding="utf-8")
+        self.assertIn("Sound like a great pre-sales engineer", solution_engineering)
+        self.assertIn("supported opportunity → why it matters → fit assessment and boundary", solution_engineering)
+        self.assertIn("Enthusiasm changes the delivery, never the evidence threshold", solution_engineering)
+        self.assertIn("Never leave a rejection as a dead end", solution_engineering)
+        self.assertIn("Draft — not sent", solution_engineering)
+        self.assertIn("Never infer them from an operating-system username", solution_engineering)
+        self.assertIn("the sign-off must end with `[Your name]`", solution_engineering)
+        self.assertIn("separate explicit approval for that exact final email", solution_engineering)
         self.assertIn("Never quiz the user", primitives)
+        vendor_positioning = (ROOT / "skills/implementation/references/vendor-positioning.md").read_text(encoding="utf-8")
+        self.assertIn("No named alternative vendors are approved in this release", vendor_positioning)
+        self.assertIn("reviewed source control", vendor_positioning)
         demo = (ROOT / "skills/implementation/references/demo.md").read_text(encoding="utf-8")
         self.assertIn("Never seed demo customers", demo)
         self.assertIn("including an account the user calls development, test, or staging", demo)
+        self.assertIn("product action → multiple durable usage records", demo)
+        self.assertIn("Atlas AI is the merchant", demo)
+        self.assertIn("integration-specific validation", demo)
         canonical_demo = (ROOT / "examples/per-token-ai.md").read_text(encoding="utf-8")
         self.assertIn("The model names and prices are illustrative", canonical_demo)
         self.assertIn("$0.37", canonical_demo)
@@ -570,6 +680,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("Offline example complete", guided)
         self.assertIn("You do not need to do anything", guided)
         self.assertIn("Gratification before intake", guided)
+        self.assertIn("One truth, three buyer views", guided)
+        self.assertIn("do not restart discovery", guided)
         use_cases = (ROOT / "skills/implementation/references/use-case-discovery.md").read_text(encoding="utf-8")
         self.assertIn("Opportunity scan", use_cases)
         self.assertIn("High-value AI-native patterns", use_cases)
@@ -614,6 +726,25 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(metadata["compose_project"], "lago-plugin-demo-v1521")
         self.assertEqual(metadata["target"], "http://127.0.0.1:13000/api/v1")
         self.assertEqual(metadata["duplicate_retry_http_status"], 422)
+        self.assertFalse(metadata["payment_collection_enabled"])
+        self.assertFalse(metadata["external_tax_enabled"])
+        self.assertFalse(metadata["email_delivery_enabled"])
+
+    def test_archived_live_hybrid_money_evidence(self):
+        evidence = ROOT / "docs/release-evidence/v0.1.0-live-hybrid"
+        usage = json.loads((evidence / "lago-current-usage.json").read_text(encoding="utf-8"))["customer_usage"]
+        invoices = json.loads((evidence / "lago-invoice-summary.json").read_text(encoding="utf-8"))["invoices"]
+        result = json.loads((evidence / "result.json").read_text(encoding="utf-8"))
+        metadata = json.loads((evidence / "run-metadata.json").read_text(encoding="utf-8"))
+        self.assertEqual(usage["amount_cents"], 1017)
+        self.assertEqual(sum(invoice["prepaid_credit_amount_cents"] for invoice in invoices), 1000)
+        self.assertEqual(sorted(invoice["total_amount_cents"] for invoice in invoices), [17, 9900])
+        self.assertEqual(sum(invoice["total_amount_cents"] for invoice in invoices), 9917)
+        self.assertEqual(result["period_total_before_tax_cents"], 9917)
+        self.assertEqual(result["duplicate_retry_http_status"], 422)
+        self.assertEqual(metadata["status"], "LIVE_SELF_HOSTED_HYBRID_VALIDATED")
+        self.assertEqual(metadata["compose_project"], "lago-plugin-hybrid-v1521-run4")
+        self.assertFalse(metadata["wallet_recurring_renewal_validated"])
         self.assertFalse(metadata["payment_collection_enabled"])
         self.assertFalse(metadata["external_tax_enabled"])
         self.assertFalse(metadata["email_delivery_enabled"])

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Lago Billing Engineer"
-  short_description: "Beginner-friendly billing copilot for your application"
-  default_prompt: "Use $lago:implementation to inspect the app, find its best billing use case, explain the Lago model, and implement the smallest safe slice."
+  display_name: "Lago Solution Engineer"
+  short_description: "See, design, and implement billing with Lago"
+  default_prompt: "Use $lago:implementation to show me Lago in 30 seconds, then ask what my product does and what customers pay for today; do not assume this workspace is my application."

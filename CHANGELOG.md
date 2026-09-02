@@ -23,6 +23,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Stage-aware experience: Lago Solution Engineer for discovery and proof, then Billing Engineer Copilot for implementation without restarting discovery.
 - One-screen product-to-Lago opportunity map, decisive first-model recommendation, source-to-money trace, and consistent Product, Engineering, and Finance handoffs.
 - Product-aware first-run routing that skips the generic walkthrough when the opening prompt already supports a tailored recommendation, plus four regression cases covering the end-to-end commercial journey.
+- Simpler public display name `Lago`, with the Solution Engineer role explained at runtime and the Billing Engineer Copilot transition reserved for implementation.
 
 ## [0.1.0] - 2026-08-26
 

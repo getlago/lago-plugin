@@ -94,8 +94,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
                 if label == "Codex" and isinstance(data.get("interface"), dict)
                 else data.get("displayName")
             )
-            if display_name != "Lago Solution Engineer":
-                failures.append(f"{label} display name must be Lago Solution Engineer")
+            if display_name != "Lago":
+                failures.append(f"{label} display name must be Lago")
             version = data.get("version")
             if not isinstance(version, str) or not SEMVER.fullmatch(version):
                 failures.append(f"{label} manifest version must be valid semantic versioning")

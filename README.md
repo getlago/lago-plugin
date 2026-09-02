@@ -1,4 +1,4 @@
-# Lago Solution Engineer
+# Lago
 
 Meet a Lago Solution Engineer first, then a Billing Engineer Copilot when you are ready to build. It makes [Lago](https://www.getlago.com) tangible in under a minute, maps the strongest billing opportunity for your product, and carries the accepted design into a testable integration from Claude Code or Codex.
 

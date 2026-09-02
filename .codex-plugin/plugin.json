@@ -21,7 +21,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Lago Solution Engineer",
+    "displayName": "Lago",
     "shortDescription": "See, design, and implement billing with Lago.",
     "longDescription": "Understand Lago in under a minute, see the billing opportunity for your product, and turn it into a testable implementation. Start anywhere: no codebase, Lago account, credentials, or billing expertise is needed. The Lago Solution Engineer shows a concrete source-to-money story, maps who pays and what creates value, recommends one model, and defines a focused proof. When you bring an application repository, it becomes a Billing Engineer Copilot and carries the same commercial intent into event contracts, code, money tests, reconciliation, and Product, Engineering, or Finance handoff. It covers AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence. Live seeded demos use only isolated self-hosted Lago; production actions require separate approval.",
     "developerName": "Lago",

@@ -704,6 +704,8 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(codex["name"], claude["name"])
         self.assertEqual(codex["version"], claude["version"])
         self.assertEqual(codex["name"], "lago")
+        self.assertEqual(codex["interface"]["displayName"], "Lago")
+        self.assertEqual(claude["displayName"], "Lago")
         self.assertEqual(codex_marketplace["name"], "getlago")
         self.assertEqual(claude_marketplace["name"], "getlago")
         self.assertEqual(codex_marketplace["plugins"][0]["name"], "lago")

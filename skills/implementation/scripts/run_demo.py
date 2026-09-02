@@ -105,7 +105,7 @@ def run_demo() -> dict[str, object]:
 
 def render(result: dict[str, object]) -> str:
     lines = [
-        "Lago Billing Engineer instant demo (offline)",
+        "Lago Solution Engineer instant demo (offline)",
         "",
         "You do not need to do anything or provide credentials. This walkthrough is running now.",
         "",
@@ -129,7 +129,8 @@ def render(result: dict[str, object]) -> str:
             f"Reconciliation discrepancy: ${result['reconciliation_discrepancy']}",
             "",
             "Offline example complete. No Lago API, Docker, account, or credentials were used.",
-            "When you want this applied to your product, open its repository and say: implement Lago.",
+            "Next, describe your product in one sentence or share its pricing page, and I can show where Lago fits.",
+            "A code repository is optional for discovery and only needed when you want implementation-specific changes.",
             "Prefer concise execution without the walkthrough? Say: expert mode.",
         ]
     )

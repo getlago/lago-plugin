@@ -10,7 +10,7 @@ Lago Cloud may be used only for explicitly approved validation of the user's rea
 
 ## Canonical demo
 
-Use the [OpenAI-style per-token demo](../../../examples/per-token-ai.md) unless the user asks for another scenario or the open application has a clearer product-specific billable action. The demo is based on Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai), adapted for isolated self-hosted Lago.
+Use the [OpenAI-style per-token demo](../../../examples/per-token-ai.md) unless the user asks for another scenario or explicitly asks to apply the walkthrough to the open application. Never personalize a first-run demo from an incidental workspace. The demo is based on Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai), adapted for isolated self-hosted Lago.
 
 For the instant offline experience, run `python3 scripts/run_demo.py` from the skill directory (or the equivalent resolved path). It uses only Python's standard library, writes no files, needs no credentials, and produces the canonical mapping, duplicate-event check, reconciliation result, and $0.37 money test. Use `--json` when machine-readable evidence is useful.
 

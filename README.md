@@ -1,14 +1,15 @@
-# Lago Billing Engineer
+# Lago Solution Engineer
 
-Turn a product’s pricing and usage model into a testable [Lago](https://www.getlago.com) integration from Claude Code or Codex.
+Discover how [Lago](https://www.getlago.com) could monetize your product, then turn the right model into a testable integration from Claude Code or Codex.
 
-The plugin works inside an application repository. It finds the customer and subscription boundaries, maps product behavior to Lago, implements the smallest coherent billing slice, and verifies the expected amount independently.
+You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
 
 This repository is internal while version `0.1.0` is under review. The intended end state is a public, Lago-maintained plugin after human, legal/brand, publisher, marketplace, and minimum-platform decisions are complete. Re-run the public-content audit against the exact release commit immediately before changing repository visibility or submitting it to a public marketplace; the current audit describes only the reviewed internal tree.
 
 ## What it does
 
-- **Understands the application:** inspects customer, tenant, subscription, usage, webhook, payment, tax, and existing billing code before proposing changes.
+- **Shows Lago before asking for setup:** runs a concrete offline AI-billing example and explains each concept as it becomes useful.
+- **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
 - **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
 - **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
 - **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
@@ -19,22 +20,21 @@ No prior Lago or billing expertise is required.
 
 ## Start here
 
-After installation, open the application repository and ask:
+After installation, from any task or folder, ask:
+
+```text
+show me what Lago can do
+```
+
+The plugin immediately runs a dependency-free offline example showing how an AI product becomes a customer, plan, usage metric, and exact `$0.37` bill. It does not assume the open folder is your application.
+
+To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. When you are ready to implement, open the application repository and ask:
 
 ```text
 implement Lago
 ```
 
-The plugin silently inspects the workspace, gives you the first useful result, recommends one path, and takes the next safe step. It asks only when a decision materially changes money, architecture, lifecycle behavior, or authorization.
-
-Want to understand the flow first? Ask:
-
-```text
-help me start
-show me a billing demo
-```
-
-The plugin immediately runs a dependency-free offline example with a product-to-Lago mapping, deterministic events, duplicate protection, reconciliation, and an exact `$0.37` money test. You do not need a Lago account, credentials, Docker, MCP, or even an application repository for this walkthrough.
+Only then does the plugin inspect the codebase, recommend the smallest coherent billing slice, and ask about decisions that materially change money, architecture, lifecycle behavior, or authorization.
 
 ### Guided or concise
 
@@ -54,8 +54,9 @@ Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution
 Example prompts:
 
 ```text
+/lago:implementation show me what Lago can do
+/lago:implementation use this pricing page to show how Lago would model the product
 /lago:implementation implement the smallest Lago Cloud integration
-/lago:implementation show me the offline per-token demo
 /lago:implementation migrate this Chargebee implementation to Lago
 ```
 
@@ -76,22 +77,23 @@ codex plugin add lago@getlago
 Start a new Codex task after installation. Example prompts:
 
 ```text
+$lago:implementation show me what Lago can do; do not assume this workspace is my application
+$lago:implementation use my product description to recommend one Lago billing model
 $lago:implementation design usage-based billing for this application
 $lago:implementation prepare a self-hosted Kubernetes deployment
-$lago:implementation migrate this Stripe Billing integration to Lago
 ```
 
-Claude and Codex may also select the skill automatically when a request clearly involves implementing or operating Lago billing.
+Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
 
 ## What happens after a prompt
 
-1. **Workspace preflight:** confirms the repository, stack, application boundary, existing billing state, and available tools without printing credentials.
-2. **First useful result:** produces a repository finding, billing blueprint, completed offline demo, code change, or verified test before collecting optional context.
-3. **Smallest coherent implementation:** works through the application’s existing conventions and keeps provider calls behind a billing boundary.
+1. **Discovery first:** for a first-time or exploratory prompt, completes the offline example without treating the current folder as the user's product.
+2. **Product fit:** uses a short description or pricing page to recommend one useful Lago model and explain the relevant primitives.
+3. **Repository implementation, when requested:** inspects the explicitly scoped application, produces a billing blueprint, and follows its conventions.
 4. **Behavior validation:** exercises a representative customer → subscription → usage → aggregation → invoice → webhook → reconciliation flow with synthetic data.
-5. **Precise handoff:** distinguishes an offline example, repository implementation, live self-hosted validation, and actual production readiness.
+5. **Precise handoff:** distinguishes an offline example, product-level recommendation, repository implementation, live self-hosted validation, and actual production readiness.
 
-If the current workspace is not an application, the plugin says what it inspected. A concrete implementation request gets one recovery action. A beginner or demo request gets the offline walkthrough first, so the first interaction is still useful.
+An unrelated, empty, or documentation-only workspace does not block discovery. A repository becomes necessary only for a concrete code assessment or implementation; if it is missing then, the plugin explains why and gives one recovery action.
 
 ## Supported work
 
@@ -109,7 +111,7 @@ Version 1 does not claim migration support for providers other than Stripe Billi
 
 ## Why MCP is optional
 
-Most of the useful work happens in the application repository: understanding the data model, designing the billing flow, implementing the adapter, validating events, and testing the expected invoice amount.
+Discovery, product mapping, billing education, pricing-page analysis, offline examples, and money calculations need no application repository. Repository access becomes useful when implementing the adapter, connecting real product events, and fitting Lago into existing billing architecture.
 
 Making MCP mandatory would put connection setup, authentication, and permissions in front of the first useful result. The plugin therefore works offline across Claude Code and Codex, for Lago Cloud and self-hosted deployments. When compatible Lago tools are already available, MCP may add supported live reads or explicitly approved actions, but it never gates the core experience and this repository does not bundle or duplicate it.
 
@@ -146,7 +148,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 79 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, use-case discovery, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 80 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, use-case discovery, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

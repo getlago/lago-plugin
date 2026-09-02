@@ -370,7 +370,7 @@
    "prompt": "Implement Lago here.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "inspected path",
     "content-only evidence",
     "not an application",
@@ -383,7 +383,7 @@
    "prompt": "Set up Lago.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "resolved path",
     "empty folder",
     "nothing to inspect",
@@ -395,7 +395,7 @@
    "prompt": "Add Lago billing to this project.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "documentation repository",
     "application runtime absent",
     "offline capability boundary",
@@ -407,7 +407,7 @@
    "prompt": "Implement Lago in the app.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "candidate repositories",
     "evidence per candidate",
     "avoid wrong repository",
@@ -419,7 +419,7 @@
    "prompt": "Implement Lago for our product.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "monorepo",
     "application candidates",
     "likely target evidence",
@@ -432,7 +432,7 @@
    "prompt": "Connect to Lago and tell me what customers exist.",
    "mode": "validate",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "actual tool availability",
     "credential status without values",
     "offline versus live",
@@ -445,7 +445,7 @@
    "prompt": "implement",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "repository classification",
     "offline capabilities",
     "inferred intent",
@@ -458,7 +458,7 @@
    "prompt": "Add billing to this application.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "valid application",
     "no existing billing integration",
     "not a blocker",
@@ -521,7 +521,7 @@
    "prompt": "Add Lago billing to this app. I have never built billing before.",
    "mode": "implement",
    "signals": [
-    "Lago Billing Engineer loaded",
+    "Lago Solution Engineer loaded",
     "repository evidence",
     "one-screen billing blueprint",
     "Your application to Lago map",
@@ -564,7 +564,7 @@
    "prompt": "help me start",
    "mode": "validate",
    "signals": [
-    "workspace inspected",
+    "current folder not assumed to be the product",
     "gratification before intake",
     "no action required",
     "runnable offline demo",
@@ -574,8 +574,22 @@
     "zero reconciliation discrepancy",
     "no credentials or Docker",
     "application repository only needed to implement",
-    "one concrete continuation",
+    "asks for one product description or pricing-page link after the demo",
     "expert mode offered once"
+   ]
+  },
+  {
+   "id": "first-install-arbitrary-workspace",
+   "prompt": "I just installed this plugin. What can Lago do?",
+   "mode": "validate",
+   "signals": [
+    "Lago Solution Engineer loaded",
+    "does not treat the open folder as the user's application",
+    "offline example completed before intake",
+    "Lago concepts explained through the example",
+    "no repository account credentials Docker or MCP required",
+    "one product-description or pricing-page question after value",
+    "repository presented as optional until implementation"
    ]
   },
   {

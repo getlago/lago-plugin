@@ -1,10 +1,10 @@
 # Guided billing experience
 
-Make the interaction feel like a billing engineer working alongside the user. Teach through the application being changed, not through a preliminary Lago lesson.
+Make the interaction feel like a solution engineer working alongside the user. For discovery, teach through a concrete product example before asking for setup. When the user explicitly brings a codebase into scope, teach through the application being changed.
 
 ## Gratification before intake
 
-Give the user something useful before asking for optional context. After the silent repository preflight, immediately provide the strongest available result: a workspace finding, product-to-Lago mapping, recommended blueprint, executed offline demo, code change, or test result. Continue with the next safe in-scope action without asking permission for routine work.
+Give the user something useful before asking for optional context. After the silent intent and workspace check, immediately provide the strongest available result. For a first-time or exploratory request, complete the offline demo before asking about the product or workspace. For explicit implementation work, provide a workspace finding, product-to-Lago mapping, recommended blueprint, code change, or test result. Continue with the next safe in-scope action without asking permission for routine work.
 
 Do not tell the user to run a bundled script, reproduce an event, calculate a total, or inspect code when the plugin can do it. Handholding means carrying the work while explaining the decision points—not assigning a tutorial. Ask only when the answer changes money, architecture, lifecycle, or authorization.
 
@@ -49,7 +49,7 @@ Infer the path from intent:
 | --- | --- |
 | `implement`, `add billing`, or a concrete integration request | Inspect, show the blueprint, resolve the first blocker, then implement. The blueprint is the preview; do not require a demo. |
 | `show me`, `teach me`, `how would this work`, or explicit demo language | Tell the user no action is required, run `../scripts/run_demo.py`, and show the offline product-to-Lago walkthrough and deterministic money result immediately. Offer isolated self-hosted validation only after the walkthrough. |
-| Ambiguous beginner request such as `help me start` | In an application, recommend the smallest implementation slice. Outside an application, run the instant offline demo so the user gets value before being asked to change workspaces. |
+| Ambiguous beginner request such as `help me start`, `what can Lago do?`, or a bare invocation | Run the instant offline demo regardless of the open folder. Do not treat that folder as the user's product. Then ask for one product description or pricing-page link; mention that a repository is needed only for implementation. |
 | Wrong workspace with a concrete implementation request | Explain what was inspected, why application code is required, and the exact recovery action. Do not show a generic Lago questionnaire. |
 
 The offline walkthrough requires no Docker, credentials, Lago account, or workspace edits. Lead with `You do not need to do anything; I’m running the example offline now.` Do not ask the user to copy an event, calculate the bill, or choose a next step. A live seeded walkthrough is a separate optional step and must follow [the demo environment policy](demo.md).

@@ -416,6 +416,8 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(human.returncode, 0, human.stdout + human.stderr)
         self.assertIn("You do not need to do anything", human.stdout)
         self.assertIn("Offline example complete", human.stdout)
+        self.assertIn("describe your product in one sentence or share its pricing page", human.stdout)
+        self.assertIn("code repository is optional for discovery", human.stdout)
         self.assertIn("expert mode", human.stdout)
 
     def test_demo_target_requires_loopback_port_and_dedicated_project(self):
@@ -474,11 +476,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_79_unique_cases(self):
+    def test_eval_suite_has_all_80_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 79)
-        self.assertEqual(len({case["id"] for case in cases}), 79)
+        self.assertEqual(len(cases), 80)
+        self.assertEqual(len({case["id"] for case in cases}), 80)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -500,6 +502,7 @@ class ScriptTests(unittest.TestCase):
             "beginner-offline-walkthrough",
             "demo-is-not-production-ready",
             "ambiguous-help-start-no-app",
+            "first-install-arbitrary-workspace",
             "expert-mode-opt-out",
             "hand-written-actual-evidence",
             "official-doc-link-moved",
@@ -550,8 +553,10 @@ class ScriptTests(unittest.TestCase):
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
         skill = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("Lago Billing Engineer loaded.", skill)
-        self.assertIn("Mandatory first-run preflight", skill)
+        self.assertIn("Lago Solution Engineer loaded.", skill)
+        self.assertIn("First-run routing and silent preflight", skill)
+        self.assertIn("Do not assume the current folder is the user's product repository", skill)
+        self.assertIn("Run the instant offline demo regardless of what folder is open", skill)
         self.assertIn("credentials are unnecessary for offline work", skill)
         self.assertIn("Ask only the next question", skill)
         discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")

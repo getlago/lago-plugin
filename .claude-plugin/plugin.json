@@ -1,8 +1,8 @@
 {
   "name": "lago",
-  "displayName": "Lago Billing Engineer",
+  "displayName": "Lago Solution Engineer",
   "version": "0.1.0",
-  "description": "A beginner-friendly billing engineer copilot that discovers, designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise—or credentials for offline work—is required.",
+  "description": "A Lago solution engineer that demonstrates product fit, recommends a billing model, and helps implement it when requested. No codebase, Lago account, billing expertise, or credentials for offline discovery is required.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",

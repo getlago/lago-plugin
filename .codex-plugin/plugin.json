@@ -1,7 +1,7 @@
 {
   "name": "lago",
   "version": "0.1.0",
-  "description": "A beginner-friendly billing engineer copilot that discovers, designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise\u2014or credentials for offline work\u2014is required.",
+  "description": "A Lago solution engineer that demonstrates product fit, recommends a billing model, and helps implement it when requested. No codebase, Lago account, billing expertise, or credentials for offline discovery is required.",
   "author": {
     "name": "Lago",
     "url": "https://www.getlago.com"
@@ -21,9 +21,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Lago Billing Engineer",
-    "shortDescription": "Find and implement the right billing model for your app.",
-    "longDescription": "No Lago or billing expertise is required. Open an application repository, with or without billing code. The copilot finds the strongest billing opportunities, including AI usage, value credits, prepaid wallets, and hybrid models; maps application concepts to Lago; and explains each decision in plain language. Offline work needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
+    "displayName": "Lago Solution Engineer",
+    "shortDescription": "Discover and implement the right Lago billing model.",
+    "longDescription": "Discover what Lago can do without opening a codebase or knowing billing. Start anywhere with a concrete offline example, a product description, or a pricing page. The solution engineer explains relevant Lago concepts, recommends a first model—including AI usage, value credits, prepaid wallets, and hybrid pricing—and inspects application code only when implementation is requested. Offline discovery needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": [
@@ -34,9 +34,9 @@
     "privacyPolicyURL": "https://getlago.com/legal/privacy-policy",
     "termsOfServiceURL": "https://getlago.com/legal",
     "defaultPrompt": [
-      "Implement the smallest safe Lago integration in this app. Inspect it first and recommend one billing blueprint.",
-      "Show me how Lago would bill this product with an offline example and an exact money calculation.",
-      "Find this product's best AI, usage, wallet, or prepaid-credit billing model and show the first proof."
+      "Show me what Lago can do with a simple offline example. Do not assume this workspace is my application.",
+      "Use my product description or pricing page to recommend one Lago billing model and explain it simply.",
+      "Implement the smallest safe Lago integration in the application repository I have explicitly opened."
     ],
     "brandColor": "#19212E"
   }

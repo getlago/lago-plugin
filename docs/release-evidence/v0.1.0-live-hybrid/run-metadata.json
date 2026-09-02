@@ -1,0 +1,21 @@
+{
+  "status": "LIVE_SELF_HOSTED_HYBRID_VALIDATED",
+  "run_date": "2026-09-02",
+  "lago_version": "v1.52.1",
+  "image_digest": "sha256:e0fa3a9bfdfeea607ac6fb8a24c010188451baf2358df351d18116a773c0a472",
+  "compose_project": "lago-plugin-hybrid-v1521-run4",
+  "container_name": "lago-plugin-hybrid-v1521-run4",
+  "target": "http://127.0.0.1:13004/api/v1",
+  "volume": "lago-plugin-hybrid-v1521-run4_data",
+  "customer_external_id": "hybrid_demo_acme",
+  "subscription_external_id": "hybrid_demo_acme_atlas_pro",
+  "plan_code": "hybrid_demo_atlas_pro",
+  "billable_metric_code": "hybrid_demo_ai_tokens",
+  "wallet_code": "hybrid_demo_included_ai",
+  "payment_collection_enabled": false,
+  "external_tax_enabled": false,
+  "email_delivery_enabled": false,
+  "pdf_generation_enabled": false,
+  "external_webhooks_enabled": false,
+  "wallet_recurring_renewal_validated": false
+}

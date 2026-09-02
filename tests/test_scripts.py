@@ -491,11 +491,11 @@ class ScriptTests(unittest.TestCase):
         self.assertEqual(drift.returncode, 1, drift.stdout)
         self.assertEqual(json.loads(drift.stdout)["changed"], ["plugin.txt"])
 
-    def test_eval_suite_has_all_84_unique_cases(self):
+    def test_eval_suite_has_all_92_unique_cases(self):
         data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
         cases = data["cases"]
-        self.assertEqual(len(cases), 84)
-        self.assertEqual(len({case["id"] for case in cases}), 84)
+        self.assertEqual(len(cases), 92)
+        self.assertEqual(len({case["id"] for case in cases}), 92)
         self.assertTrue(all(case["signals"] for case in cases))
 
     def test_eval_suite_covers_first_run_workspace_failures(self):
@@ -557,6 +557,20 @@ class ScriptTests(unittest.TestCase):
             "solution-engineering-proof-plan",
         }.issubset(ids))
 
+    def test_eval_suite_covers_balanced_fit_assessment(self):
+        data = json.loads((ROOT / "evals/implementation/cases.json").read_text(encoding="utf-8"))
+        ids = {case["id"] for case in data["cases"]}
+        self.assertTrue({
+            "fit-insufficient-product-information",
+            "fit-existing-stripe-coexistence",
+            "fit-hard-realtime-access-boundary",
+            "fit-tax-only-request",
+            "fit-revenue-recognition-only-request",
+            "fit-unverified-edition-capability",
+            "fit-unproven-scale-and-latency",
+            "fit-simple-flat-checkout",
+        }.issubset(ids))
+
     def test_external_link_lister_finds_official_docs(self):
         result = run(
             "list_external_links.py",
@@ -584,6 +598,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("demo environment](references/demo.md) only", skill)
         self.assertIn("first line of the user-facing response must be exactly", skill)
         self.assertIn("repeat it as the first line of the final answer", skill)
+        self.assertIn("Missing information is not negative evidence", skill)
+        self.assertIn("an attractive use case is not proof of fit", skill)
         discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")
         self.assertIn("No existing billing code is not a blocker.", discovery)
         primitives = (ROOT / "skills/implementation/references/primitives.md").read_text(encoding="utf-8")

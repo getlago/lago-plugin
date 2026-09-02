@@ -20,9 +20,9 @@ Use these as headings only when they improve scanning. Do not repeat unchanged c
 
 ## From generic example to tailored recommendation
 
-The canonical offline example earns attention; it does not establish fit. Its first minute should feel like a four-beat product transformation, not a configuration tour: identify merchant, customer, end user, and pricing; reveal the messy usage behind one action; show Lago's billing work; then show the result. Name what the merchant avoids building and close with one credible line about more complex models. Only then reveal Lago terminology. After it completes, follow [the solution-engineering flow](solution-engineering.md): ask one open question, reflect facts and assumptions, give an honest fit verdict, and demonstrate one product-specific story. Do not launch a questionnaire or repeat the generic example with renamed nouns.
+The canonical offline example earns attention; it does not establish fit. Its first minute should feel like a four-beat product transformation, not a configuration tour: identify merchant, customer, end user, and pricing; reveal the messy usage behind one action; show Lago's billing work; then show the result. Name what the merchant avoids building and close with one credible line about more complex models. Only then reveal Lago terminology. After it completes, follow [the solution-engineering flow](solution-engineering.md): ask one open question, reflect facts and assumptions, give a prospect-safe fit assessment, and demonstrate one product-specific story. Do not launch a questionnaire or repeat the generic example with renamed nouns.
 
-The first product-specific artifact is a one-screen [solution brief](../templates/solution-brief.md): desired outcome, payer and value boundary, current state, fit verdict, one recommended solution story, the highest-risk assumption, and the smallest proof. A repository is optional at this stage.
+The first product-specific artifact is a one-screen [solution brief](../templates/solution-brief.md): desired outcome, payer and value boundary, current state, fit assessment, one recommended solution story, the highest-risk assumption, and the smallest proof. A repository is optional at this stage.
 
 ## Guidance control
 

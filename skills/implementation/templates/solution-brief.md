@@ -14,13 +14,14 @@ The customer or business result to improve, in the user's language.
 | Main friction or opportunity | | |
 | Material constraint | | |
 
-## Fit verdict
+## Fit assessment
 
-**Strong fit / Conditional fit / Not recommended for this job**
+**Clear fit / Promising fit — validate one point / Scoped fit / Not enough information yet / Not recommended for this specific responsibility**
 
 - Why:
 - Lago would own:
 - Lago would not own:
+- Evidence supporting the assessment:
 - One unresolved item that could change the verdict:
 
 ## Recommended solution story

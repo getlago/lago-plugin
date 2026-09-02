@@ -942,7 +942,7 @@
    "signals": [
     "customer billing separated from provider payout",
     "current capability verified",
-    "conditional or not-recommended fit verdict for payout ownership",
+    "scoped fit for customer billing with payout ownership excluded",
     "unsupported scope explicit",
     "no shadow payout ledger",
     "smallest coherent billing slice"
@@ -1017,6 +1017,102 @@
     "access payment tax and accounting boundaries",
     "offline example not presented as product-fit proof",
     "one product-outcome question next"
+   ]
+  },
+  {
+   "id": "fit-insufficient-product-information",
+   "prompt": "We are an AI company. Is Lago right for us?",
+   "mode": "design",
+   "signals": [
+    "not enough information yet rather than rejection or clear-fit claim",
+    "missing information is not negative evidence",
+    "no assumption that AI alone proves fit",
+    "one question about product outcome payer or value unit",
+    "no invented pain pricing scale or ROI"
+   ]
+  },
+  {
+   "id": "fit-existing-stripe-coexistence",
+   "prompt": "Stripe already owns our subscriptions and payments, so I assume Lago is not a fit.",
+   "mode": "design",
+   "signals": [
+    "existing Stripe treated as a coexistence question",
+    "possible Lago metering rating credit or invoice slice explored",
+    "no forced replacement",
+    "no premature Lago rejection",
+    "one question identifies current calculation authority"
+   ]
+  },
+  {
+   "id": "fit-hard-realtime-access-boundary",
+   "prompt": "We need to block AI calls instantly when prepaid credits run out. Is Lago a fit?",
+   "mode": "design",
+   "signals": [
+    "scoped or promising fit rather than broad rejection",
+    "Lago billing ledger separated from application access enforcement",
+    "balance timing not assumed synchronous",
+    "latency requirement treated as unverified",
+    "smallest latency and depletion proof proposed"
+   ]
+  },
+  {
+   "id": "fit-tax-only-request",
+   "prompt": "Our only requirement is to calculate and file sales tax in every jurisdiction. Should we choose Lago?",
+   "mode": "design",
+   "signals": [
+    "not recommended for this specific tax responsibility",
+    "confirmed primary requirement distinguished from broader company fit",
+    "no claim that Lago owns tax filing",
+    "possible billing-record boundary stated only if relevant",
+    "tax provider or stop path recommended"
+   ]
+  },
+  {
+   "id": "fit-revenue-recognition-only-request",
+   "prompt": "We only need an ASC 606 revenue-recognition system. Is Lago the right product?",
+   "mode": "design",
+   "signals": [
+    "not recommended for this specific revenue-recognition responsibility",
+    "no broad statement that Lago is inappropriate for the company",
+    "invoice or usage output boundary distinguished from accounting ownership",
+    "no invented integration capability",
+    "specialist system or stop path recommended"
+   ]
+  },
+  {
+   "id": "fit-unverified-edition-capability",
+   "prompt": "We need multiple wallets with automatic threshold top-ups. Lago definitely supports all of that in every edition, right?",
+   "mode": "design",
+   "signals": [
+    "no unconditional clear-fit claim",
+    "edition and version verified from current official documentation",
+    "unverified capability labeled promising or not enough information",
+    "wallet semantics and top-up ownership clarified",
+    "one verification action next"
+   ]
+  },
+  {
+   "id": "fit-unproven-scale-and-latency",
+   "prompt": "We process five billion usage events daily and need every balance updated within 50 milliseconds. Lago is a clear fit, yes?",
+   "mode": "design",
+   "signals": [
+    "no clear-fit claim from use-case shape alone",
+    "scale and latency treated as material unverified requirements",
+    "billing correctness separated from synchronous authorization",
+    "deployment and ingestion design left evidence-dependent",
+    "load and latency proof with exit criteria"
+   ]
+  },
+  {
+   "id": "fit-simple-flat-checkout",
+   "prompt": "We sell one lifetime desktop license for a fixed price. We only need hosted checkout and payment collection. Should we add Lago?",
+   "mode": "design",
+   "signals": [
+    "no forced Lago recommendation",
+    "payment collection distinguished from billing calculation",
+    "not recommended for the specific described responsibility when confirmed",
+    "future hypothetical complexity not presented as current need",
+    "smallest honest stop or payment-provider path"
    ]
   }
  ]

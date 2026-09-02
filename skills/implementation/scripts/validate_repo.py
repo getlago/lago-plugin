@@ -161,9 +161,13 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         text = solution_engineering.read_text(encoding="utf-8")
         for solution_signal in (
             "ask one open question",
-            "**Strong fit:**",
-            "**Conditional fit:**",
-            "**Not recommended for this job:**",
+            "**Clear fit:**",
+            "**Promising fit — validate one point:**",
+            "**Scoped fit:**",
+            "**Not enough information yet:**",
+            "**Not recommended for this specific responsibility:**",
+            "Missing information is not negative evidence",
+            "Before a negative assessment, run a rescue check",
             "**Before:**",
             "business success criteria",
             "failure or exit criteria",
@@ -174,7 +178,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     if solution_brief.is_file():
         text = solution_brief.read_text(encoding="utf-8")
         for brief_signal in (
-            "## Fit verdict",
+            "## Fit assessment",
             "## Recommended solution story",
             "## Smallest proof",
             "Failure or exit criteria",

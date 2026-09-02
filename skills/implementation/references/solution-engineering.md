@@ -34,17 +34,40 @@ Before the tailored recommendation, show a compact `What I understand` block:
 
 Correct misunderstandings without defending a prior recommendation. If evidence conflicts, show the conflict. Never invent a pain, urgency, price, margin, or stakeholder.
 
-## Give an honest fit verdict
+## Make a prospect-safe fit assessment
 
-Use one verdict and explain it in plain language:
+Assess the specific billing responsibility, not whether Lago is appropriate for the company as a whole. Never say that Lago is broadly `inappropriate`, `not a fit`, or `unnecessary`. Use one assessment and explain it in plain language:
 
-- **Strong fit:** Lago natively owns the important billing job and the proof has no known blocking gap.
-- **Conditional fit:** Lago can own a coherent part of the workflow, but another system, edition, customization, or unresolved requirement remains material.
-- **Not recommended for this job:** the primary need is outside Lago's supported billing boundary or the proposed architecture would create competing financial ownership.
+- **Clear fit:** the important billing responsibilities and ownership boundaries are known; current Lago capabilities have been verified; Lago owns a coherent job; and no material blocker is known.
+- **Promising fit — validate one point:** the core use case maps to Lago, but one material commercial, technical, edition, scale, latency, or lifecycle assumption still needs evidence.
+- **Scoped fit:** Lago can own a coherent part of the workflow while another named system owns the rest.
+- **Not enough information yet:** the available description does not support a responsible fit conclusion. Ask the one question most likely to change the assessment.
+- **Not recommended for this specific responsibility:** a confirmed, central requirement is outside Lago's verified boundary and no coherent Lago-owned slice solves that responsibility.
 
-Do not force a full replacement. Separate Lago's potential ownership of metering, pricing, subscriptions, wallets, invoices, and related billing records from payment processing, tax, accounting, revenue recognition, entitlements, access enforcement, and provider payouts. Verify version-sensitive capability claims from current official Lago documentation.
+Missing information is not negative evidence. Conversely, the presence of AI, usage, credits, subscriptions, invoices, or an API is not proof of fit. A generic demo, successful API call, repository pattern, or theoretically configurable model does not establish production suitability.
 
-When Lago is not the right owner, say so early, explain what Lago could still own if anything, and recommend the smallest honest next step—including stopping the evaluation.
+Before using **Clear fit**, verify enough evidence to support all of these claims:
+
+1. who pays, what they buy, and the billing responsibility Lago would own;
+2. the required calculation, lifecycle, and system-of-record boundaries;
+3. the application can produce an objective, durable, attributable signal when usage or outcomes affect money;
+4. no competing system owns the same customer-period charge;
+5. material edition, version, deployment, scale, latency, correction, and operational requirements are verified or explicitly outside the assessed scope;
+6. the recommendation distinguishes an offline calculation from repository, live, and production evidence.
+
+If any item is materially unresolved, use **Promising fit**, **Scoped fit**, or **Not enough information yet**. Do not soften uncertainty with confident sales language or invent ROI, savings, compatibility, scale, or roadmap support.
+
+Before a negative assessment, run a rescue check across metering, pricing, subscriptions, commitments, credits, wallets, invoices, and reconciliation. Use **Not recommended for this specific responsibility** only when every condition below holds:
+
+1. the user confirmed the requirement; it was not inferred from sparse language;
+2. the requirement is central to the responsibility being assessed;
+3. current capability and relevant edition or deployment constraints were verified from official sources;
+4. configuration, narrower scope, coexistence, or application-owned behavior cannot produce a coherent solution;
+5. the response states what Lago could still own, if anything, and gives one recovery, escalation, or stop path.
+
+Do not force a full replacement. Separate Lago's potential ownership of metering, pricing, subscriptions, wallets, invoices, and related billing records from payment processing, tax, accounting, revenue recognition, entitlements, access enforcement, and provider payouts. Existing Stripe, Chargebee, tax, ERP, or payment infrastructure is a coexistence question before it is a fit objection. A request for real-time credit enforcement may be a scoped fit—Lago for the billing ledger and the application for access—until latency requirements are proven otherwise.
+
+When the primary request is outside Lago's boundary, say so early and narrowly: `I would not use Lago as the primary owner of <specific responsibility>.` Then explain any coherent Lago-owned billing slice and recommend the smallest honest next step, including stopping the evaluation when no such slice exists. When capability remains uncertain, use **Not enough information yet** and recommend verification with current official documentation or a Lago specialist rather than guessing.
 
 ## Demonstrate a customer story, not a feature tour
 

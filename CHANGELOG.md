@@ -16,7 +16,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Gratification-first guided experience with one-step next actions and an `expert mode` opt-out that preserves safety and billing evidence while removing tutorials and routine narration.
 - Evidence-derived money validation that extracts actuals from preserved Lago payloads and verifies their source hash; hand-written or modified actuals fail.
 - Structured reconciliation failures for missing columns, duplicate keys, invalid amounts, empty inputs, and currency mismatches, plus stricter billable-event value validation.
-- Approved public install identity `lago@getlago`, with `/lago:implementation` for Claude Code and `$lago:implementation` for Codex; validators prevent identity regression.
+- Public install identity `lago@lago-plugins`, with `/lago:implementation` for Claude Code and `$lago:implementation` for Codex; validators prevent identity regression while preserving the separate company-only namespace.
 - Release-bundle SHA-256 verification, scheduled official-link checks, deterministic local-demo target validation, safer credential-presence discovery, explicit invoice-credit extraction, and migration cancellation gates.
 - Passing live self-hosted Lago `v1.52.1` per-token money test with hash-linked source evidence and duplicate-event verification.
 - Repository-backed opportunity discovery for AI-native billing, value credits, prepaid wallets, hybrid/provider coexistence, enterprise overrides, pricing backtests, and finance handoffs, with 19 anonymized field-replay evals.

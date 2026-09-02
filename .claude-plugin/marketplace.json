@@ -1,5 +1,5 @@
 {
-  "name": "getlago",
+  "name": "lago-plugins",
   "metadata": {"description": "Discover what Lago can do from anywhere, then implement the right billing model when ready. No codebase, credentials, or billing expertise is needed to start; live demos require isolated self-hosted Lago, never Lago Cloud."},
   "owner": {"name": "Lago"},
   "plugins": [{"name": "lago", "source": "./", "description": "Shows how Lago works, assesses product fit honestly, tells one tailored billing story, defines a small proof, and implements it only when a codebase is explicitly in scope."}]

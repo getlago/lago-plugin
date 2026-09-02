@@ -25,7 +25,7 @@ SEMVER = re.compile(
     r"^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)"
     r"(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
 )
-COMPANY_ONLY_IDENTITY = re.compile(r"lago" + r"@" + r"lago", re.I)
+COMPANY_ONLY_IDENTITY = re.compile(r"lago" + r"@" + r"lago(?![-A-Za-z0-9_])", re.I)
 MAX_TEXT_BYTES = 5_000_000
 
 
@@ -107,8 +107,8 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         failures.append("Codex and Claude manifest versions must match")
     for label, path in (("Codex", codex_marketplace), ("Claude", claude_marketplace)):
         marketplace = load_json(path, failures)
-        if not isinstance(marketplace, dict) or marketplace.get("name") != "getlago":
-            failures.append(f"{label} marketplace name must be getlago")
+        if not isinstance(marketplace, dict) or marketplace.get("name") != "lago-plugins":
+            failures.append(f"{label} marketplace name must be lago-plugins")
             continue
         plugins = marketplace.get("plugins")
         entries = [
@@ -117,7 +117,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
             if isinstance(plugin, dict) and plugin.get("name") == "lago"
         ] if isinstance(plugins, list) else []
         if len(entries) != 1:
-            failures.append(f"{label} marketplace must expose lago@getlago")
+            failures.append(f"{label} marketplace must expose lago@lago-plugins")
         elif label == "Codex":
             entry = entries[0]
             if entry.get("source") != {"source": "local", "path": "./"}:

@@ -60,6 +60,19 @@
    ]
   },
   {
+   "id": "pricing-page-rest-aggregation-compatibility",
+   "prompt": "Use this pricing page to create a Lago plan through the REST API. It bills monthly using the highest stored GB and the latest active-seat count.",
+   "mode": "implement",
+   "signals": [
+    "pricing page translated into a billing blueprint before writes",
+    "max_agg uses recurring false",
+    "latest_agg uses recurring false",
+    "metered reset explained separately from subscription cadence",
+    "target environment and explicit approval before REST writes",
+    "API response and resulting configuration verified"
+   ]
+  },
+  {
    "id": "prepaid-credits",
    "prompt": "Design prepaid credits with expiry.",
    "mode": "design",
@@ -687,6 +700,237 @@
     "no .env value read into context",
     "no shell interpolation",
     "configured status without value"
+   ]
+  },
+  {
+   "id": "ai-value-credits",
+   "prompt": "We run several AI agents with different token and tool costs, but customers should buy simple product credits. Design the first Lago model.",
+   "mode": "design",
+   "signals": [
+    "native units preserved",
+    "deterministic credit conversion",
+    "customer-facing value unit",
+    "provider cost separated from charge",
+    "illustrative money test"
+   ]
+  },
+  {
+   "id": "ai-multimodal-filtered-pricing",
+   "prompt": "Charge differently for text input, text output, generated images, and audio while keeping one usage pipeline.",
+   "mode": "design",
+   "signals": [
+    "model or modality filters",
+    "one durable event contract",
+    "filter coverage",
+    "independent line calculations",
+    "unknown prices not invented"
+   ]
+  },
+  {
+   "id": "ai-prepaid-trial-and-purchase",
+   "prompt": "Give every new account trial credits, then let customers buy more credits for AI usage.",
+   "mode": "implement",
+   "signals": [
+    "promotional grant separated from purchase",
+    "wallet eligibility",
+    "drawdown",
+    "duplicate-safe usage",
+    "trial exhaustion behavior"
+   ]
+  },
+  {
+   "id": "ai-greenfield-opportunity-scan",
+   "prompt": "implement",
+   "mode": "implement",
+   "signals": [
+    "Opportunity scan before edits",
+    "recommended first slice",
+    "trial evidence recognized",
+    "at least one later AI opportunity",
+    "money example matches recommended first slice",
+    "customer and subscription IDs distinct",
+    "durable billing enrollment when subscription is absent"
+   ]
+  },
+  {
+   "id": "ai-wallet-depletion-enforcement",
+   "prompt": "When AI credits get low, notify the customer; at zero, block new jobs.",
+   "mode": "design",
+   "signals": [
+    "near-real-time balance",
+    "edition and refresh latency verified",
+    "low-balance threshold",
+    "application owns access control",
+    "race and stale-balance handling",
+    "recovery after top-up"
+   ]
+  },
+  {
+   "id": "outcome-priced-agent",
+   "prompt": "Customers care about completed agent tasks, not tokens. Help us bill per successful outcome.",
+   "mode": "design",
+   "signals": [
+    "objective outcome definition",
+    "success authority",
+    "failed and retried outcomes",
+    "stable transaction ID",
+    "cost and margin evidence retained"
+   ]
+  },
+  {
+   "id": "chargebee-wallet-coexistence",
+   "prompt": "Keep Chargebee for subscriptions and payments, but use Lago for AI usage and prepaid wallets.",
+   "mode": "design",
+   "signals": [
+    "authority table",
+    "no forced full migration",
+    "one owner per charge",
+    "synchronization and replay",
+    "cross-system reconciliation"
+   ]
+  },
+  {
+   "id": "stripe-subscription-lago-metering",
+   "prompt": "We are not ready to leave Stripe Billing. Can Lago handle only metering and rating first?",
+   "mode": "design",
+   "signals": [
+    "incremental boundary",
+    "invoice ownership explicit",
+    "single charge owner",
+    "export contract",
+    "failure and reconciliation path"
+   ]
+  },
+  {
+   "id": "wallet-top-up-modes",
+   "prompt": "Our wallet needs a monthly grant, customer purchases, and an automatic top-up below a threshold.",
+   "mode": "design",
+   "signals": [
+    "funding sources separated",
+    "recurring and threshold top-ups",
+    "idempotent funding",
+    "payment failure behavior",
+    "ledger test"
+   ]
+  },
+  {
+   "id": "wallet-metric-scope-and-priority",
+   "prompt": "One customer has promotional credits and purchased credits that apply to different AI features.",
+   "mode": "design",
+   "signals": [
+    "multiple balances",
+    "eligible billable metrics",
+    "drawdown priority",
+    "expiry and rollover",
+    "exact depletion tests"
+   ]
+  },
+  {
+   "id": "wallet-tax-accounting-boundary",
+   "prompt": "Should prepaid-credit purchases and usage invoices be taxed the same way? Implement the wallet.",
+   "mode": "implement",
+   "signals": [
+    "does not invent tax treatment",
+    "purchase and consumption separated",
+    "authorized owner decision",
+    "implementation blocked only at material tax choice",
+    "offline flow still progresses"
+   ]
+  },
+  {
+   "id": "fixed-fee-wallet-separation",
+   "prompt": "Charge a platform subscription plus AI usage, but do not let wallet credits pay the platform fee.",
+   "mode": "design",
+   "signals": [
+    "hybrid model",
+    "wallet eligibility restriction",
+    "fixed fee separate",
+    "combined invoice example",
+    "boundary tests"
+   ]
+  },
+  {
+   "id": "enterprise-overrides-multiple-entities",
+   "prompt": "Enterprise accounts negotiate prices per subsidiary and may put several billing entities on different plans.",
+   "mode": "design",
+   "signals": [
+    "commercial account separated from billable customer",
+    "customer-specific overrides",
+    "multiple entity identity",
+    "invoice grouping decision",
+    "no shared namespace collision"
+   ]
+  },
+  {
+   "id": "annual-contract-monthly-usage",
+   "prompt": "The contract is annual, the platform fee is annual, but usage must reset and invoice monthly.",
+   "mode": "design",
+   "signals": [
+    "cadences modeled separately",
+    "reset versus invoice timing",
+    "supported behavior verified",
+    "period boundary tests",
+    "no workaround presented as native support"
+   ]
+  },
+  {
+   "id": "plan-cadence-change",
+   "prompt": "Downgrade an annual subscription to monthly and align future billing to calendar months without double invoicing.",
+   "mode": "design",
+   "signals": [
+    "current and target lifecycle",
+    "termination invoice impact",
+    "external ID behavior verified",
+    "duplicate invoice prevention",
+    "dry-run timeline"
+   ]
+  },
+  {
+   "id": "pricing-backtest",
+   "prompt": "Show whether a new tiered AI-credit price would have improved revenue last quarter before we change any plans.",
+   "mode": "validate",
+   "signals": [
+    "read-only historical usage",
+    "candidate formula",
+    "current versus proposed totals",
+    "no live catalog mutation",
+    "assumptions and coverage gaps"
+   ]
+  },
+  {
+   "id": "high-volume-wallet-events",
+   "prompt": "This prepaid AI product may send billions of events per day. Design the Lago integration and balance experience.",
+   "mode": "design",
+   "signals": [
+    "volume treated as unverified requirement",
+    "batching and backpressure",
+    "idempotency",
+    "latency versus correctness tradeoff",
+    "load validation gate"
+   ]
+  },
+  {
+   "id": "crm-erp-finance-handoff",
+   "prompt": "Salesforce owns contracts, Lago should calculate usage, and NetSuite should receive the financial output.",
+   "mode": "design",
+   "signals": [
+    "authority table",
+    "one-way contracts",
+    "Lago calculation boundary",
+    "ERP posting and replay",
+    "end-to-end reconciliation"
+   ]
+  },
+  {
+   "id": "marketplace-payout-boundary",
+   "prompt": "Bill buyers for server usage and also pay marketplace providers. Can Lago own both flows?",
+   "mode": "design",
+   "signals": [
+    "customer billing separated from provider payout",
+    "current capability verified",
+    "unsupported scope explicit",
+    "no shadow payout ledger",
+    "smallest coherent billing slice"
    ]
   }
  ]

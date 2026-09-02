@@ -2,11 +2,11 @@
   "name": "lago",
   "displayName": "Lago Billing Engineer",
   "version": "0.1.0",
-  "description": "A beginner-friendly billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise—or credentials for offline work—is required.",
+  "description": "A beginner-friendly billing engineer copilot that discovers, designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise—or credentials for offline work—is required.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
   "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
   "repository": "https://github.com/getlago/lago-agent-plugin",
   "license": "MIT",
-  "keywords": ["lago", "billing", "metering", "subscriptions", "migration"],
+  "keywords": ["lago", "billing", "metering", "subscriptions", "credits", "wallets", "ai"],
   "skills": "./skills/"
 }

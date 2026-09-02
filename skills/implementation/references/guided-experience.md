@@ -37,6 +37,8 @@ Before editing a new integration, present a one-screen blueprint based on reposi
 
 The blueprint should let a beginner answer: who gets billed, for what, how activity becomes an amount, what code changes, and what remains undecided. Use product language first and introduce a Lago term beside the product concept only when it becomes actionable.
 
+For a new or unclear billing model, include a short opportunity scan from [use-case discovery](use-case-discovery.md) immediately after the product-to-Lago map. Recommend one first model based on repository evidence and show no more than two later opportunities. Explain why the first model wins, then continue with it; do not ask the user to choose from a feature catalog. Calculate the illustrative money example for that recommended model only.
+
 Give one recommended default when evidence supports it. Mention an alternative only when choosing it now would materially change architecture, money, or lifecycle behavior. If a commercial fact such as price is unknown, use a clearly labeled illustrative calculation and keep it out of production configuration.
 
 ## Choose the path without a mode picker

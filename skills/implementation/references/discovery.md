@@ -4,7 +4,7 @@
 
 Inspect, without asking first: root instructions; languages/frameworks/package managers; application boundaries; customer/account/organization/tenant and auth models; billing/subscription/provider code; usage producers and analytics; workers/queues; database/migrations; webhook endpoints; payment and tax integrations; deployment/secrets; tests/CI; logs/metrics/alerts.
 
-Use targeted searches for `billing`, `subscription`, `invoice`, `usage`, `meter`, `stripe`, `chargebee`, `webhook`, `tenant`, `customer`, `wallet`, `credit`, `tax`, and environment URL/key names.
+Use targeted searches for `billing`, `subscription`, `invoice`, `usage`, `meter`, `stripe`, `chargebee`, `webhook`, `tenant`, `customer`, `wallet`, `credit`, `tax`, and environment URL/key names. For a new or unclear integration, also inspect product behavior that may be monetized: AI/model calls, tokens, agents, tool runs, generated media, API calls, jobs, transactions, storage, seats, outcomes, quotas, grants, limits, and third-party cost records.
 
 Inspect credential configuration through filenames, variable names, secret-manager references, or presence-only checks that return a boolean. Never dump the environment, print shell exports, enable shell tracing, open `.env` values into model context, interpolate a secret into a command, or use a credential merely because it exists. If source contains a real credential, stop, do not repeat it, and recommend rotation.
 
@@ -33,7 +33,7 @@ After confirming an application repository, classify billing separately:
 
 No existing billing code is not a blocker. Do not ask the user to provide an integration that does not exist. Infer safe technical facts from the application, then ask only for the first commercial or lifecycle decision that materially changes the implementation.
 
-For a new integration, the next artifact is a compact billing blueprint, not a Lago configuration questionnaire. Use repository evidence to recommend the billing boundary and smallest billable workflow. Keep unknown prices or contract terms illustrative and out of production configuration.
+For a new integration, the next artifact is a compact billing blueprint, not a Lago configuration questionnaire. Use repository evidence to recommend the billing boundary and smallest billable workflow. Before editing, add an `Opportunity scan` using [use-case discovery](use-case-discovery.md), rank one candidate as the recommended first slice, and include at least one non-blocking later opportunity when the repository supports one. Show no more than three candidates. Keep unknown prices or contract terms illustrative and out of production configuration.
 
 ## First visible response
 

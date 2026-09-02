@@ -1,7 +1,7 @@
 {
   "name": "lago",
   "version": "0.1.0",
-  "description": "A beginner-friendly billing engineer copilot that designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise\u2014or credentials for offline work\u2014is required.",
+  "description": "A beginner-friendly billing engineer copilot that discovers, designs, implements, validates, migrates, and troubleshoots Lago billing. No Lago or billing expertise\u2014or credentials for offline work\u2014is required.",
   "author": {
     "name": "Lago",
     "url": "https://www.getlago.com"
@@ -14,13 +14,16 @@
     "billing",
     "metering",
     "subscriptions",
-    "migration"
+    "migration",
+    "credits",
+    "wallets",
+    "ai"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Lago Billing Engineer",
-    "shortDescription": "Beginner-friendly billing copilot for your application.",
-    "longDescription": "No Lago or billing expertise is required. Open an application repository, with or without billing code. The copilot maps application concepts to Lago primitives and explains each decision in plain language. Offline work needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
+    "shortDescription": "Find and implement the right billing model for your app.",
+    "longDescription": "No Lago or billing expertise is required. Open an application repository, with or without billing code. The copilot finds the strongest billing opportunities, including AI usage, value credits, prepaid wallets, and hybrid models; maps application concepts to Lago; and explains each decision in plain language. Offline work needs no credentials or MCP connection. Live seeded demos require Docker and use isolated self-hosted Lago; Lago Cloud never receives demo data. Real-environment validation and production actions require separate approval.",
     "developerName": "Lago",
     "category": "Developer Tools",
     "capabilities": [
@@ -33,7 +36,7 @@
     "defaultPrompt": [
       "Implement the smallest safe Lago integration in this app. Inspect it first and recommend one billing blueprint.",
       "Show me how Lago would bill this product with an offline example and an exact money calculation.",
-      "Assess this app's billing architecture and identify the smallest safe next improvement."
+      "Find this product's best AI, usage, wallet, or prepaid-credit billing model and show the first proof."
     ],
     "brandColor": "#19212E"
   }

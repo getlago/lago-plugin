@@ -50,7 +50,7 @@ Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution
 ### Claude Code
 
 ```text
-/plugin marketplace add getlago/lago-agent-plugin
+/plugin marketplace add getlago/lago-plugin
 /plugin install lago@getlago
 ```
 
@@ -66,14 +66,14 @@ Example prompts:
 For local plugin development:
 
 ```bash
-git clone https://github.com/getlago/lago-agent-plugin.git
-claude --plugin-dir ./lago-agent-plugin
+git clone https://github.com/getlago/lago-plugin.git
+claude --plugin-dir ./lago-plugin
 ```
 
 ### Codex
 
 ```bash
-codex plugin marketplace add getlago/lago-agent-plugin
+codex plugin marketplace add getlago/lago-plugin
 codex plugin add lago@getlago
 ```
 

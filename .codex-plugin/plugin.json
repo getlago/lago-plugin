@@ -6,8 +6,8 @@
     "name": "Lago",
     "url": "https://www.getlago.com"
   },
-  "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
-  "repository": "https://github.com/getlago/lago-agent-plugin",
+  "homepage": "https://github.com/getlago/lago-plugin#readme",
+  "repository": "https://github.com/getlago/lago-plugin",
   "license": "MIT",
   "keywords": [
     "lago",

@@ -1,4 +1,4 @@
 interface:
-  display_name: "Lago Solution Engineer"
-  short_description: "See, design, and implement billing with Lago"
+  display_name: "Lago"
+  short_description: "Your AI solution engineer for billing"
   default_prompt: "Use $lago:implementation to show me Lago in 30 seconds, then ask what my product does and what customers pay for today; do not assume this workspace is my application."

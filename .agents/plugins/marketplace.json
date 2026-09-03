@@ -1,5 +1,5 @@
 {
-  "name": "getlago",
+  "name": "lago-plugins",
   "interface": {"displayName": "Lago"},
   "plugins": [
     {

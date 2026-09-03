@@ -50,8 +50,8 @@ Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution
 ### Claude Code
 
 ```text
-/plugin marketplace add getlago/lago-agent-plugin
-/plugin install lago@getlago
+/plugin marketplace add getlago/lago-plugin
+/plugin install lago@lago-plugins
 ```
 
 Example prompts:
@@ -66,15 +66,15 @@ Example prompts:
 For local plugin development:
 
 ```bash
-git clone https://github.com/getlago/lago-agent-plugin.git
-claude --plugin-dir ./lago-agent-plugin
+git clone https://github.com/getlago/lago-plugin.git
+claude --plugin-dir ./lago-plugin
 ```
 
 ### Codex
 
 ```bash
-codex plugin marketplace add getlago/lago-agent-plugin
-codex plugin add lago@getlago
+codex plugin marketplace add getlago/lago-plugin
+codex plugin add lago@lago-plugins
 ```
 
 Start a new Codex task after installation. Example prompts:
@@ -158,16 +158,16 @@ Live money validation preserves the Lago payload, generates `actual.json` with `
 Claude Code:
 
 ```bash
-claude plugin update lago@getlago
-claude plugin uninstall lago@getlago
+claude plugin update lago@lago-plugins
+claude plugin uninstall lago@lago-plugins
 ```
 
 Codex:
 
 ```bash
-codex plugin marketplace upgrade getlago
-codex plugin add lago@getlago
-codex plugin remove lago@getlago
+codex plugin marketplace upgrade lago-plugins
+codex plugin add lago@lago-plugins
+codex plugin remove lago@lago-plugins
 ```
 
 Start a new task after an update. Removing the plugin does not change application code or a Lago environment.

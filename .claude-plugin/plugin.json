@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "description": "A Lago solution engineer that makes billing tangible, maps the best opportunity for your product, and becomes a billing engineer copilot when you implement. No setup or billing expertise is required for discovery.",
   "author": {"name": "Lago", "url": "https://www.getlago.com"},
-  "homepage": "https://github.com/getlago/lago-agent-plugin#readme",
-  "repository": "https://github.com/getlago/lago-agent-plugin",
+  "homepage": "https://github.com/getlago/lago-plugin#readme",
+  "repository": "https://github.com/getlago/lago-plugin",
   "license": "MIT",
   "keywords": ["lago", "billing", "metering", "subscriptions", "credits", "wallets", "ai"],
   "skills": "./skills/"

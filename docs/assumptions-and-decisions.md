@@ -2,8 +2,8 @@
 
 ## Assumptions
 
-- Repository and future GitHub location: `getlago/lago-agent-plugin`.
-- Shareable plugin slug: `lago`; marketplace slug: `getlago`; initial version: `0.1.0`; license: MIT. This intentionally produces `lago@getlago` and keeps the company-only marketplace identity out of the shareable plugin.
+- Repository and future GitHub location: `getlago/lago-plugin`.
+- Shareable plugin slug: `lago`; marketplace slug: `lago-plugins`; initial version: `0.1.0`; license: MIT. This intentionally produces `lago@lago-plugins` and keeps the company-only marketplace identity out of the shareable plugin.
 - Python 3.9+ is supported for optional offline validators; skill loading has no runtime dependency.
 - Lago's official docs and OpenAPI remain the authority for version-sensitive behavior.
 

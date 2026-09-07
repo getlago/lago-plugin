@@ -68,6 +68,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     solution_brief = root / "skills/implementation/templates/solution-brief.md"
     demo = root / "skills/implementation/references/demo.md"
     validation = root / "skills/implementation/references/validation.md"
+    cli = root / "skills/implementation/references/cli.md"
     openai_yaml = root / "skills/implementation/agents/openai.yaml"
     required_scripts = (
         root / "skills/implementation/scripts/extract_actual.py",
@@ -80,7 +81,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/validate_event.py",
         root / "skills/implementation/scripts/validate_repo.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -146,6 +147,25 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
                 failures.append(f"missing first-run behavior: {preflight_signal}")
         if "never answer a version-sensitive question from trained memory" not in text:
             failures.append("missing official-documentation freshness guard")
+        for cli_signal in (
+            "Lago CLI",
+            "Never make the application shell out to the Lago CLI",
+            "Keep MCP optional",
+        ):
+            if cli_signal not in text:
+                failures.append(f"missing CLI routing guidance: {cli_signal}")
+    if cli.is_file():
+        text = cli.read_text(encoding="utf-8")
+        for cli_signal in (
+            "Do not install or update it without the user's approval",
+            "lago whoami --output json",
+            "lago doctor --output json",
+            "not substitutes for conversational approval",
+            "Never include a credential literal",
+            "Application runtime integration",
+        ):
+            if cli_signal not in text:
+                failures.append(f"missing CLI safety guidance: {cli_signal}")
     if primitives.is_file():
         text = primitives.read_text(encoding="utf-8")
         for teaching_signal in (

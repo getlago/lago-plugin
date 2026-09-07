@@ -18,6 +18,7 @@ This repository is internal while version `0.1.0` is under review. The intended 
 - **Speaks to every buyer from one source of truth:** translates the same design and money evidence for Product, Engineering, and Finance without changing assumptions between teams.
 - **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
 - **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
+- **Uses the official Lago CLI when it helps:** an already-installed CLI can power agent-led inspection, diagnostics, configuration, validation, and repeatable operator workflows without becoming a plugin dependency or an application runtime integration.
 
 No prior Lago or billing expertise is required.
 
@@ -118,9 +119,15 @@ Discovery, product mapping, billing education, pricing-page analysis, offline ex
 
 Making MCP mandatory would put connection setup, authentication, and permissions in front of the first useful result. The plugin therefore works offline across Claude Code and Codex, for Lago Cloud and self-hosted deployments. When compatible Lago tools are already available, MCP may add supported live reads or explicitly approved actions, but it never gates the core experience and this repository does not bundle or duplicate it.
 
+## How the Lago CLI fits
+
+The official [`lago` CLI](https://getlago.com/docs/guide/lago-cli/overview) is also optional. When it is already installed and configured, the plugin may use it for agent-led inspection, diagnostics, catalog operations, validation, reconciliation, and scripts that benefit from JSON output and reproducible commands. The plugin checks the installed command's help before using version-sensitive syntax, verifies the resolved target before approved live work, and applies the same production approval gates used for MCP or direct API access.
+
+Application code still uses an official Lago SDK or the REST API; it never shells out to the CLI. The plugin does not install or update the CLI without approval, does not require it for offline work, and falls back to connected tools or SDK/REST implementation when it is unavailable.
+
 ## Credentials, environments, and safety
 
-No API key, MCP server, Docker runtime, package install, or custom telemetry is required to load the plugin or perform repository inspection, architecture work, code changes, fixtures, calculations, and offline tests.
+No API key, Lago CLI, MCP server, Docker runtime, package install, or custom telemetry is required to load the plugin or perform repository inspection, architecture work, code changes, fixtures, calculations, and offline tests.
 
 Production contact or mutation always requires separate approval for the exact environment, action, affected objects, billing impact, infrastructure impact, and recovery plan. Reconciliation is read-only by default and never repairs discrepancies automatically.
 
@@ -151,7 +158,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 99 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, product-to-Lago opportunity mapping, stage transition, buyer-specific handoff, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 100 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, product-to-Lago opportunity mapping, stage transition, buyer-specific handoff, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, optional CLI execution, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
 
 ## Update or uninstall
 

@@ -6,6 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- Optional official Lago CLI execution layer for agent-led inspection, diagnostics, configuration, validation, reconciliation, and repeatable operator workflows, with target verification, structured evidence, safe fallbacks, and production approval gates.
 - Discovery-first Lago Solution Engineer positioning: the first walkthrough starts from anywhere, demonstrates Lago before intake, accepts a product description or pricing page, and treats a codebase as optional until implementation.
 - Progressive solution engineering with reflected discovery, explicit fit verdicts, story-led tailored demos, measurable proof and exit criteria, and a solution brief that carries decisions into implementation.
 - Untrusted-workspace boundary: repository content is evidence, never instructions or approval; approvals are valid only from the user in conversation, with matching adversarial eval cases.

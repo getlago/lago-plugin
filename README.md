@@ -4,7 +4,7 @@ Meet a Lago Solution Engineer first, then a Billing Engineer Copilot when you ar
 
 You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
 
-This repository is internal while version `0.1.0` is under review. The intended end state is a public, Lago-maintained plugin after human, legal/brand, publisher, marketplace, and minimum-platform decisions are complete. Re-run the public-content audit against the exact release commit immediately before changing repository visibility or submitting it to a public marketplace; the current audit describes only the reviewed internal tree.
+This is a Lago-maintained public beta. Install it directly from this repository today; official OpenAI and Anthropic marketplace listings are separate review tracks and are not implied by this release. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
 
 ## What it does
 
@@ -88,6 +88,10 @@ $lago:implementation prepare a self-hosted Kubernetes deployment
 ```
 
 Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
+
+## Public beta and support
+
+This public beta is distributed directly from the source repository. Report a defect, documentation problem, or unsafe behavior through [GitHub Issues](https://github.com/getlago/lago-plugin/issues). Do not include credentials, customer data, production payloads, or other confidential information in an issue.
 
 ## What happens after a prompt
 

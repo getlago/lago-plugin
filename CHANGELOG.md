@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-15
+
 ### Added
 
 - Optional official Lago CLI execution layer for agent-led inspection, diagnostics, configuration, validation, reconciliation, and repeatable operator workflows, with target verification, structured evidence, safe fallbacks, and production approval gates.

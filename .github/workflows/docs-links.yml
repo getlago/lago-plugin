@@ -19,9 +19,12 @@ jobs:
           python3 skills/implementation/scripts/list_external_links.py .
           --domain docs.getlago.com
           --domain doc.getlago.com
+          --domain getlago.com
           --domain swagger.getlago.com
           --domain docs.stripe.com
           --domain chargebee.com
+          --domain github.com
+          | grep -Ev '^https://api(\.eu)?\.getlago\.com/?$'
           > official-links.txt
       - name: Resolve official links
         run: |

@@ -4,6 +4,8 @@
 
 Put provider calls behind one billing service/adapter. Domain code emits internal commands/events; the adapter translates them to Lago. Keep API transport, retry policy, serialization, and credential loading out of controllers and business entities.
 
+Keep product identity mapping, durable usage source records, event delivery, and the customer experience in the application. When Lago is the chosen billing provider, map the commercial meter, rating rules, credits, and invoices to Lago instead of duplicating them in application code. Without live Lago access, implement the adapter and offline money tests; mark configuration and live behavior unverified.
+
 Define authority explicitly:
 
 | Record | Authority | Replica/consumer | Conflict rule |

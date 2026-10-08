@@ -150,7 +150,7 @@ A proof should validate business value and technical feasibility, not merely sho
 
 After enough discovery, use [the solution brief template](../templates/solution-brief.md). Keep it to one screen unless complexity requires an appendix. Update it as evidence changes so discovery, demonstration, proof, and implementation share one decision trail.
 
-For a concrete implementation, translate the accepted solution brief into [the billing blueprint](../templates/billing-blueprint.md), repository changes, tests, and the existing authorization gates. Preserve the user's language and the reasons behind the chosen boundary so implementation does not restart discovery or quietly broaden scope.
+For a concrete implementation, carry any accepted solution brief into [the billing blueprint](../templates/billing-blueprint.md), repository changes, tests, and the existing authorization gates. If implementation is the first request, derive a provisional blueprint from the application and the user's intent. Preserve the user's language and the reasons behind the chosen boundary so implementation does not restart discovery or quietly broaden scope.
 
 At handoff, tailor the same source-to-money truth to the decision maker: Product gets packaging and customer experience; Engineering gets event contracts, ownership, and reliability; Finance gets calculations, invoice boundaries, controls, and reconciliation. Do not change assumptions or totals between views.
 

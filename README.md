@@ -1,17 +1,17 @@
 # Lago
 
-Meet a Lago Solution Engineer first, then a Billing Engineer Copilot when you are ready to build. It makes [Lago](https://www.getlago.com) tangible in under a minute, maps the strongest billing opportunity for your product, and carries the accepted design into a testable integration from Claude Code or Codex.
+Meet a Lago Solution Engineer to explore billing, or ask it to build directly in your application repository. It makes [Lago](https://www.getlago.com) tangible in under a minute, maps the strongest billing opportunity for your product, and builds a testable integration from Claude Code or Codex.
 
 You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
 
-This is a Lago-maintained public beta. Install it directly from this repository today; official OpenAI and Anthropic marketplace listings are separate review tracks and are not implied by this release. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
+This Lago-maintained repository is currently internal. The installation commands below are for people with repository access; a public release and official OpenAI or Anthropic marketplace listings require separate review. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
 
 ## What it does
 
 - **Shows the metering problem before the terminology:** Atlas AI—the merchant—turns one Acme employee action into multi-model usage, a duplicate-safe charge, included-credit consumption, and overage. The plugin shows what the merchant avoids building before revealing Lago's model.
 - **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
 - **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
-- **Turns demos into evidence:** tailors one product story and defines the smallest proof with business, technical, and exit criteria before implementation.
+- **Turns demos into evidence:** tailors one product story and defines a focused proof with business, technical, and exit criteria when live validation is needed.
 - **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
 - **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
 - **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
@@ -32,13 +32,13 @@ show me what Lago can do
 
 The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It shows the complete source-to-money path and what Atlas avoids building, then asks one question: `What does your product do, and what do customers pay for today?` It does not assume the open folder is your application.
 
-To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. When you are ready to implement, open the application repository and ask:
+To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. You can also start with an implementation request. Open your application repository and ask:
 
 ```text
-implement Lago
+Build billing on Lago in this app. Inspect the code, implement the smallest useful slice, and test the money offline.
 ```
 
-Only then does the plugin inspect the codebase, recommend the smallest coherent billing slice, and ask about decisions that materially change money, architecture, lifecycle behavior, or authorization.
+The plugin inspects the codebase, shows a short billing blueprint, and builds the smallest coherent slice without requiring an earlier demo or solution brief. It asks about decisions that materially change money, architecture, lifecycle behavior, or authorization. The application keeps product events and customer experience; Lago handles the selected billing functions.
 
 ### Guided or concise
 
@@ -89,17 +89,17 @@ $lago:implementation prepare a self-hosted Kubernetes deployment
 
 Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
 
-## Public beta and support
+## Access and support
 
-This public beta is distributed directly from the source repository. Report a defect, documentation problem, or unsafe behavior through [GitHub Issues](https://github.com/getlago/lago-plugin/issues). Do not include credentials, customer data, production payloads, or other confidential information in an issue.
+People with repository access can report a defect, documentation problem, or unsafe behavior through [GitHub Issues](https://github.com/getlago/lago-plugin/issues). Do not include credentials, customer data, production payloads, or other confidential information in an issue.
 
 ## What happens after a prompt
 
 1. **Discovery first:** without product context, completes the offline example without treating the current folder as the user's product; with useful context, goes straight to a tailored result.
 2. **Progressive discovery:** asks one useful question at a time, reflects facts and assumptions, and stops as soon as it can assess fit.
 3. **Opportunity map and solution brief:** maps who pays, what they buy, what behavior creates value, and Lago's billing job; recommends one model; and identifies the riskiest assumption.
-4. **Smallest proof:** agrees on business, technical, evidence, and exit criteria before repository implementation or live validation.
-5. **Implementation and handoff, when requested:** switches into Billing Engineer Copilot mode, inspects the explicitly scoped application, preserves the decision trail, validates behavior, and translates the result for Product, Engineering, and Finance.
+4. **Smallest proof:** defines business, technical, evidence, and exit criteria for a live validation. A direct repository implementation can start from a provisional blueprint.
+5. **Implementation and handoff, when requested:** switches into Billing Engineer Copilot mode, inspects the explicitly scoped application, reuses any existing decision trail, validates behavior, and translates the result for Product, Engineering, and Finance.
 
 An unrelated, empty, or documentation-only workspace does not block discovery. A repository becomes necessary only for a concrete code assessment or implementation; if it is missing then, the plugin explains why and gives one recovery action.
 

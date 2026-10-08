@@ -36,7 +36,7 @@
     "defaultPrompt": [
       "Show me Lago in 30 seconds, then ask about my product and pricing. Do not assume this workspace is my application.",
       "Map my product to the best first Lago billing model, explain why it wins, and define the smallest credible proof.",
-      "Carry the accepted solution into this app with money tests and a Product, Engineering, and Finance handoff."
+      "Build billing on Lago in this app. Inspect code, implement a small slice, and verify money offline before live access."
     ],
     "brandColor": "#19212E"
   }

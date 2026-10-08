@@ -4,6 +4,11 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+### Changed
+
+- Direct application implementation requests can start on the first turn without a prior demo or accepted solution brief; the blueprint remains a preview and money-changing decisions remain explicit.
+- Clarified that the application owns product events while Lago owns the selected billing functions, and corrected installation language while the repository is internal.
+
 ## [0.2.0] - 2026-09-15
 
 ### Added

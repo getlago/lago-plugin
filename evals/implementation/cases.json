@@ -3,14 +3,17 @@
  "cases": [
   {
    "id": "cloud-node-greenfield",
-   "prompt": "Implement the smallest Lago Cloud flow in this new Node.js app.",
+   "prompt": "Build billing on Lago in this new Node.js app. This is my first request; inspect the app and implement the smallest useful slice.",
    "mode": "implement",
    "signals": [
     "repository discovery",
+    "no prior demo or solution brief required",
+    "blueprint previews reversible edits without a separate approval gate",
     "region decision",
     "no built-in sandbox",
     "offline fixtures",
     "adapter",
+    "Lago owns commercial rating rather than a parallel application engine",
     "tests",
     "money test"
    ]

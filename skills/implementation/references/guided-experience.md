@@ -47,7 +47,7 @@ Switch back when the user asks for `guided mode`, handholding, or more explanati
 
 ## Before implementation: the billing blueprint
 
-After the user accepts the solution direction and explicitly requests implementation, present a one-screen blueprint based on the solution brief and repository evidence. Adapt [the blueprint template](../templates/billing-blueprint.md); do not fill it with invented commercial facts.
+When the user requests implementation, including as the first prompt, present a one-screen blueprint based on repository evidence and any accepted solution brief. If there is no prior brief, derive a provisional blueprint from the application and mark unknown commercial terms. Adapt [the blueprint template](../templates/billing-blueprint.md); do not fill it with invented commercial facts. The blueprint previews reversible code work and does not require a separate acceptance step.
 
 Mark the transition once, in ordinary language: `I’m switching from solution design to implementation.` From this point, operate as a Billing Engineer Copilot. Carry forward the payer, value unit, recommended model, boundaries, assumptions, and proof criteria; do not restart discovery or make the user restate them.
 
@@ -63,7 +63,7 @@ Infer the path from intent:
 
 | User intent | Default experience |
 | --- | --- |
-| `implement`, `add billing`, or a concrete integration request | Inspect, show the blueprint, resolve the first blocker, then implement. The blueprint is the preview; do not require a demo. |
+| `implement`, `add billing`, `build billing on Lago`, or a concrete integration request | Inspect, show the blueprint, resolve material blockers, then implement the smallest coherent slice. No earlier demo or solution brief is required. |
 | `show me`, `teach me`, `how would this work`, or explicit demo language | Tell the user no action is required, run `../scripts/run_demo.py`, and show the offline product-to-Lago walkthrough and deterministic money result immediately. Offer isolated self-hosted validation only after the walkthrough. |
 | Ambiguous beginner request such as `help me start`, `what can Lago do?`, or a bare invocation | Run the instant offline demo regardless of the open folder. Do not treat that folder as the user's product. Then ask for one product description or pricing-page link; mention that a repository is needed only for implementation. |
 | Wrong workspace with a concrete implementation request | Explain what was inspected, why application code is required, and the exact recovery action. Do not show a generic Lago questionnaire. |

@@ -14,7 +14,7 @@ Assume the user does not know Lago or billing terminology. Start from the applic
 | How does measured usage become money? | Charge | The pricing rule attached to a plan for a billable metric or fixed fee. |
 | What amount does the customer owe for the period? | Invoice | Lago's billing output containing subscription, usage, taxes, credits, and other applicable lines. Payment collection is a separate integration decision. |
 
-Before creating a billable metric, check that its aggregation and carry-over behavior are compatible. `count_agg`, `max_agg`, and `latest_agg` are metered-only: set `recurring: false`. Their measured units reset at the end of each billing period, and Lago rejects these aggregation types with `recurring: true`. Do not confuse a recurring customer subscription with a recurring billable metric; they describe different behavior.
+Before creating a billable metric, check that its aggregation and carry-over behavior are compatible. `count_agg`, `max_agg`, and `latest_agg` are metered-only: set `recurring: false`. Their measured units reset at the end of each billing period, and Lago rejects these aggregation types with `recurring: true`. For seats that must carry across periods, use `unique_count_agg` with `recurring: true`; this is different from per-period `count_agg`. Do not confuse a recurring customer subscription with a recurring billable metric; they describe different behavior. See [recurring vs metered](https://docs.getlago.com/guide/billable-metrics/recurring-vs-metered).
 
 Introduce optional primitives only when the product requires them:
 

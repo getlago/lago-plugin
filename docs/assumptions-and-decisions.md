@@ -10,7 +10,7 @@
 ## Decisions required before official marketplace submission
 
 - Confirm Lago legal/brand approval for the plugin name, MIT license, and publisher metadata.
-- Confirm the OpenAI and Anthropic publisher accounts and listing metadata. The repository is currently internal; publication and marketplace approval remain separate decisions.
+- Confirm the OpenAI and Anthropic publisher accounts and listing metadata. Publishing the GitHub source and securing marketplace approval are separate decisions.
 - Decide the supported minimum Claude Code and Codex versions after clean-machine testing.
 - Completed: the authorized usage-only and full one-period hybrid money tests passed on isolated local Lago `v1.52.1`; see the [usage evidence](release-evidence/v0.1.0-live-self-hosted/README.md) and [hybrid evidence](release-evidence/v0.1.0-live-hybrid/README.md). No Lago Cloud or company environment was used.
 - Review every provider example against the release-date Lago, Stripe, and Chargebee specifications.

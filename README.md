@@ -4,7 +4,7 @@ Meet a Lago Solution Engineer to explore billing, or ask it to build directly in
 
 You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
 
-This Lago-maintained repository is currently internal. The installation commands below are for people with repository access; a public release and official OpenAI or Anthropic marketplace listings require separate review. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
+Install this Lago-maintained plugin directly from this repository. Official OpenAI or Anthropic marketplace listings are separate from making the source public. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
 
 ## What it does
 
@@ -91,7 +91,7 @@ Claude and Codex may also select the skill automatically when a request involves
 
 ## Access and support
 
-People with repository access can report a defect, documentation problem, or unsafe behavior through [GitHub Issues](https://github.com/getlago/lago-plugin/issues). Do not include credentials, customer data, production payloads, or other confidential information in an issue.
+Report a defect, documentation problem, or unsafe behavior through [GitHub Issues](https://github.com/getlago/lago-plugin/issues). Do not include credentials, customer data, production payloads, or other confidential information in an issue.
 
 ## What happens after a prompt
 
@@ -162,7 +162,7 @@ python3 skills/implementation/scripts/release_integrity.py check . --manifest RE
 claude plugin validate .
 ```
 
-Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 100 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, product-to-Lago opportunity mapping, stage transition, buyer-specific handoff, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, optional CLI execution, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md), and [benchmark](docs/benchmark.md).
+Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 100 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, product-to-Lago opportunity mapping, stage transition, buyer-specific handoff, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, optional CLI execution, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md).
 
 ## Update or uninstall
 

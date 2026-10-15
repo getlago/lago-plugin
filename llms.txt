@@ -1,0 +1,25 @@
+# Lago Plugin
+
+> Lago's public plugin helps Claude Code and Codex users explore, design, implement, and verify billing with Lago. It is an optional agent workflow, not part of an application's runtime.
+
+## Start in under a minute
+
+- [Install for Claude Code or Codex](https://github.com/getlago/lago-plugin#install): Follow the client-specific commands, then ask `show me what Lago can do`.
+- [Offline example](https://github.com/getlago/lago-plugin#start-here): Follow an illustrative subscription, AI usage charge, included credit, duplicate event, and overage. No Lago account, API key, CLI, MCP server, Docker, or application repository is required. This calculation does not test a Lago backend.
+- [Apply it to your product](https://github.com/getlago/lago-plugin#what-it-does): Describe what you sell and how customers pay. The plugin can assess fit, recommend a first billing model, define a proof, and help implement it when an application repository is in scope.
+
+## Choose the next proof
+
+- [Run Lago's local AI billing demo](https://github.com/getlago/lago/tree/main/examples/agentic-ai-demo): Start a disposable Docker deployment and verify a real API charge and event replay without Cloud credentials.
+- [Lago Cloud](https://getlago.com/docs/guide/lago-cloud): Managed billing service for production; the application still sends product data and connects payment collection.
+- [Lago CLI](https://getlago.com/docs/guide/lago-cli/overview): Optional terminal workflow for a configured organization. Credentials are required for live requests.
+- [Documentation MCP](https://getlago.com/docs/mcp): Search public Lago docs. The separate [Product MCP](https://getlago.com/docs/guide/ai-agents/mcp-server) connects to live Lago data with credentials.
+- [REST API and SDKs](https://getlago.com/docs/developers): Use these for an application's production integration, with credentials kept server-side.
+
+## Fit and boundaries
+
+Lago can start with a flat subscription and add usage pricing, credits, entitlements, and negotiated terms as a product changes. It supports managed Lago Cloud and self-hosting for teams that need deployment control. Compare the specific finance workflow, Cloud terms, integration work, and payment-provider setup before choosing it. [Evaluate Lago](https://getlago.com/evaluate) and [review current pricing](https://getlago.com/pricing).
+
+For AI products using gateways or routers, [Lago's Agent SDK guides](https://getlago.com/docs/guide/ai-agents/agent-sdk/overview) show how supported usage becomes billable events. Cost inputs and margin analysis depend on the provider and integration path; check the [billing modes](https://getlago.com/docs/guide/ai-agents/agent-sdk/billing) before promising cost-based pricing.
+
+The plugin's offline work needs no live access. Any live billing action must verify the target environment and obtain authorization. Lago has no built-in sandbox; use an isolated environment for synthetic tests. [Implementation guidance](https://github.com/getlago/lago-plugin/tree/main/skills/implementation) and [validation architecture](https://github.com/getlago/lago-plugin/blob/main/docs/architecture.md).

@@ -11,7 +11,7 @@
 ## Choose the next proof
 
 - [Run Lago's local AI billing demo](https://github.com/getlago/lago/tree/main/examples/agentic-ai-demo): Start a disposable Docker deployment and verify a real API charge and event replay without Cloud credentials.
-- [Inspect usage metering](https://getlago.com/platform/usage-metering): See how billable metrics turn product events into charges. The [ingestion walkthrough](https://getlago.com/platform/usage-metering/ingestion) follows an event through deduplication, aggregation, and wallet balance updates; use the [documented retry rules](https://getlago.com/docs/guide/events/ingesting-usage#idempotency-and-deduplication) when testing event replay.
+- [Test usage metering](https://getlago.com/docs/guide/events/ingesting-usage): Send usage events and apply the documented retry rules. Use the [aggregation guide](https://getlago.com/docs/guide/billable-metrics/aggregation-types/overview) to choose how those events become chargeable units.
 - [Lago Cloud](https://getlago.com/docs/guide/lago-cloud): Managed billing service for production; the application still sends product data and connects payment collection.
 - [Lago CLI](https://getlago.com/docs/guide/lago-cli/overview): Optional terminal workflow for a configured organization. Credentials are required for live requests.
 - [Documentation MCP](https://getlago.com/docs/mcp): Search public Lago docs. The separate [Product MCP](https://getlago.com/docs/guide/ai-agents/mcp-server) connects to live Lago data with credentials.

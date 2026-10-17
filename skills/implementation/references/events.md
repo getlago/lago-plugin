@@ -32,4 +32,10 @@ An ingestion 2xx means the event was accepted, not necessarily rated. Reconcile 
 
 When checking an apparent duplicate, use subscription- and period-filtered event results with pagination and compare the full source identity. Do not rely on an unqualified transaction-ID lookup where the same ID can exist on different subscriptions. If the stored event cannot be matched unambiguously, leave the delivery unresolved for investigation rather than silently dropping or rebilling it.
 
+## Reconcile a metered invoice
+
+For a finalized invoice, page through `GET /events` with `external_subscription_id`, the billable metric `code`, and the fee period's `timestamp_from`/`timestamp_to`. Compare distinct transaction IDs and original properties with the plan's aggregation and charge filters. Rebuild each filter bucket and the unmatched default-price bucket; stop for investigation if an event matches overlapping filters or cannot be assigned confidently. Compare each bucket's units, event count, and independently calculated amount with `current_usage` before finalization and the invoice's charge fees afterward. Reconcile credits, discounts, and tax separately from the usage fee.
+
+This is a reconstruction from event and pricing data, not a native list of transaction IDs attached to each fee. In one isolated self-hosted v1.55.0 `count_agg` test, 17 stored events reconstructed three finalized fee lines: 10 `search/us` calls at 2¢, four `generate/eu` calls at 4¢, and three default-price calls at 1¢, for 39¢ total. The default-price line combined two different event-property combinations, so the invoice alone could not identify them. The check covers one synthetic period; do not generalize it to production throughput, late corrections, or a native per-event audit export.
+
 Sources: [ingesting usage](https://docs.getlago.com/guide/events/ingesting-usage), [event API](https://docs.getlago.com/api-reference/events/event-object), [OpenAPI](https://swagger.getlago.com/openapi.yaml).

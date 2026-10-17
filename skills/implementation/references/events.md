@@ -11,7 +11,7 @@
 | value/properties | Numeric type and dimensions required by aggregation/pricing |
 | source/schema version/original ID | Preserve lineage for replay and reconciliation |
 
-Validate required keys, types, finite numeric values, allowed dimensions, tenant association, non-negative Unix timestamps, and schema version before enqueue/send. Apply a narrower past/future window only when the product's event contract defines one. Store delivery status separately from the source usage record.
+Validate required keys, types, finite numeric values, allowed dimensions, tenant association, non-negative Unix timestamps, and schema version before enqueue/send. Apply a narrower past/future window only when the product's event contract defines one. Check that the event's original occurrence time belongs to the intended subscription period. For new signup flows, activate billing before recording billable work; if the contract legitimately starts earlier, configure the effective start deliberately. Do not change an old event's timestamp merely to force it into a period. Store delivery status separately from the source usage record.
 
 Keep the customer identity and subscription identity distinct. If the application has no subscription entity yet, add a durable billing-enrollment or subscription-binding record that links the billable account to its Lago plan/subscription and lifecycle. Do not reuse the customer external ID as the subscription external ID unless the application already has an explicit, documented one-subscription-per-customer identity contract.
 
@@ -19,7 +19,7 @@ Run `validate_event.py` with `--numeric-property <name>` for custom aggregation 
 
 ## Delivery cases
 
-- Duplicate: resend the identical stable key and timestamp; verify no added quantity.
+- Duplicate: resend the identical stable key and timestamp; verify no added quantity. A duplicate validation error is not a generic success response. Reconcile it against the original durable source record and the stored event's subscription, metric, timestamp, and properties before marking delivery complete. Do not treat every HTTP 422 as an accepted duplicate.
 - Retry: classify timeout/429/transient 5xx; bounded exponential backoff with jitter.
 - Late/out-of-order: define billing-period and finalized-invoice consequences.
 - Correction: preserve the original record and use the documented event-store-specific mechanism. Postgres and ClickHouse behavior differs.
@@ -27,5 +27,9 @@ Run `validate_event.py` with `--numeric-property <name>` for custom aggregation 
 - Batch: record item-level results; never mark the whole batch delivered after partial failure.
 
 For Lago's ClickHouse pipeline, uniqueness uses `transaction_id` plus `timestamp`; a retry with an omitted or changed timestamp can bill twice. Verify the target pipeline before asserting correction behavior.
+
+An ingestion 2xx means the event was accepted, not necessarily rated. Reconcile filtered event pages, current usage, and invoice fee units and amounts before claiming that a customer's usage was billed. In an isolated self-hosted v1.55.0 check, events timestamped to the whole second just before a newly created subscription's fractional start time were stored but absent from current usage. A separate check sent 7 and 5 analyzed pages after subscription activation; a plan with 10 included pages and 2¢ per overage page produced 12 usage units and a finalized 4¢ charge. Replaying the same event returned HTTP 422 with `transaction_id: value_already_exist` and added no unit. These are bounded local results, not a throughput, cloud, or late-correction guarantee.
+
+When checking an apparent duplicate, use subscription- and period-filtered event results with pagination and compare the full source identity. Do not rely on an unqualified transaction-ID lookup where the same ID can exist on different subscriptions. If the stored event cannot be matched unambiguously, leave the delivery unresolved for investigation rather than silently dropping or rebilling it.
 
 Sources: [ingesting usage](https://docs.getlago.com/guide/events/ingesting-usage), [event API](https://docs.getlago.com/api-reference/events/event-object), [OpenAPI](https://swagger.getlago.com/openapi.yaml).

@@ -6,46 +6,6 @@ You can start anywhere. No application repository, Lago account, credentials, Do
 
 Install this Lago-maintained plugin directly from this repository. Official OpenAI or Anthropic marketplace listings are separate from making the source public. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
 
-## What it does
-
-- **Shows the metering problem before the terminology:** Atlas AI—the merchant—turns one Acme employee action into multi-model usage, a duplicate-safe charge, included-credit consumption, and overage. The plugin shows what the merchant avoids building before revealing Lago's model.
-- **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
-- **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
-- **Turns demos into evidence:** tailors one product story and defines a focused proof with business, technical, and exit criteria when live validation is needed.
-- **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
-- **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
-- **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
-- **Speaks to every buyer from one source of truth:** translates the same design and money evidence for Product, Engineering, and Finance without changing assumptions between teams.
-- **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
-- **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
-- **Uses the official Lago CLI when it helps:** an already-installed CLI can power agent-led inspection, diagnostics, configuration, validation, and repeatable operator workflows without becoming a plugin dependency or an application runtime integration.
-
-No prior Lago or billing expertise is required.
-
-## Start here
-
-After installation, from any task or folder, ask:
-
-```text
-show me what Lago can do
-```
-
-The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It shows the complete source-to-money path and what Atlas avoids building, then asks one question: `What does your product do, and what do customers pay for today?` It does not assume the open folder is your application.
-
-To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. You can also start with an implementation request. Open your application repository and ask:
-
-```text
-Build billing on Lago in this app. Inspect the code, implement the smallest useful slice, and test the money offline.
-```
-
-The plugin inspects the codebase, shows a short billing blueprint, and builds the smallest coherent slice without requiring an earlier demo or solution brief. It asks about decisions that materially change money, architecture, lifecycle behavior, or authorization. The application keeps product events and customer experience; Lago handles the selected billing functions.
-
-### Guided or concise
-
-The default experience is hands-on and guided. Lago concepts are explained only when they become relevant, and every response ends with one clear next step.
-
-Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution. The plugin will omit primers and routine narration while preserving material decisions, diffs, tests, risks, approvals, and money evidence. Say `guided mode` to restore explanations.
-
 ## Install
 
 ### Claude Code
@@ -88,6 +48,46 @@ $lago:implementation prepare a self-hosted Kubernetes deployment
 ```
 
 Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
+
+## Start here
+
+After installation, from any task or folder, ask:
+
+```text
+show me what Lago can do
+```
+
+The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It shows the complete source-to-money path and what Atlas avoids building, then asks one question: `What does your product do, and what do customers pay for today?` It does not assume the open folder is your application.
+
+To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. You can also start with an implementation request. Open your application repository and ask:
+
+```text
+Build billing on Lago in this app. Inspect the code, implement the smallest useful slice, and test the money offline.
+```
+
+The plugin inspects the codebase, shows a short billing blueprint, and builds the smallest coherent slice without requiring an earlier demo or solution brief. It asks about decisions that materially change money, architecture, lifecycle behavior, or authorization. The application keeps product events and customer experience; Lago handles the selected billing functions.
+
+### Guided or concise
+
+The default experience is hands-on and guided. Lago concepts are explained only when they become relevant, and every response ends with one clear next step.
+
+Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution. The plugin will omit primers and routine narration while preserving material decisions, diffs, tests, risks, approvals, and money evidence. Say `guided mode` to restore explanations.
+
+## What it does
+
+- **Shows the metering problem before the terminology:** Atlas AI—the merchant—turns one Acme employee action into multi-model usage, a duplicate-safe charge, included-credit consumption, and overage. The plugin shows what the merchant avoids building before revealing Lago's model.
+- **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
+- **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
+- **Turns demos into evidence:** tailors one product story and defines a focused proof with business, technical, and exit criteria when live validation is needed.
+- **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
+- **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
+- **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
+- **Speaks to every buyer from one source of truth:** translates the same design and money evidence for Product, Engineering, and Finance without changing assumptions between teams.
+- **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
+- **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
+- **Uses the official Lago CLI when it helps:** an already-installed CLI can power agent-led inspection, diagnostics, configuration, validation, and repeatable operator workflows without becoming a plugin dependency or an application runtime integration.
+
+No prior Lago or billing expertise is required.
 
 ## Access and support
 

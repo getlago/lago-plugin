@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: nextjs-start-here
+description: Fresh agent with no Lago knowledge gets one URL and a Next.js app with a billable LLM action.
+runs: 2
+execution:
+  max_turns: 80
+  timeout_seconds: 1500
+context:
+  scaffold_script: scaffold.sh

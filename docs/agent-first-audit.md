@@ -90,7 +90,24 @@ Tooling that already exists outside the repository:
    - (b) Lago provides a real disposable sandbox or trial org, and the invariant is amended through an architecture decision.
    - (c) Seed on the user's own Cloud account. This needs a policy change and loosens a release-gated rule.
 
-   Recommendation: (a) now, (b) as a request to the Lago team.
+   **Decision (2026-10-19):** the live step asks the user which target they want. Users who already have a Lago Cloud API key can use it. Users who want a fresh start get an isolated self-hosted OSS instance. Offline remains the default, and neither path runs without an explicit choice.
+
+   The Cloud path amends the invariant. It does not remove it. The WS4 PR must:
+   - record the change in `docs/architecture.md`;
+   - update `SKILL.md`, `references/demo.md`, `references/cloud.md`, `references/safety.md`, the `validate_repo.py` demo signals, the unit tests and the `cloud-staging-demo-refusal` eval case together, so they keep agreeing.
+
+   Guardrails for the Cloud path:
+   - Show the resolved host, region and organization before any write. Say plainly that Lago has no sandbox, so the objects land in that account.
+   - Get an approval for each write, as today.
+   - Prefix every object (`lago_plugin_demo_`) so the user can find and remove it.
+   - Never enable payment collection, tax, emails or webhooks.
+   - Bill in arrears so that subscribing creates no immediate invoice.
+   - Use `POST /invoices/preview` for the result. A preview doesn't persist an invoice, so the Cloud path links to the customer page in the Lago UI rather than to an invoice.
+   - Offer an approved teardown.
+
+   Open question: should the plugin refuse the Cloud path when the organization has a payment provider connected?
+
+   The self-hosted path keeps the current `validate_demo_target.py` checks unchanged.
 2. **Architecture-change rule.** CONTRIBUTING.md: "Do not add MCP, telemetry, runtime credentials, production actions, internal Lago material, or a new skill without an accepted architecture change." WS1 sub-skills and WS4 (MCP path, API key) each need an entry in `docs/architecture.md` in their PR.
 3. **Vendor rule.** `references/vendor-positioning.md`: "No named alternative vendors are approved in this release." Trigger wording and `llms.txt` can name Stripe Billing and Chargebee only as migration sources, which are already supported. They can't be comparisons.
 4. **"The 100 evals must still pass."** They have never been recorded as run. Options: score a sampled subset by hand on each branch, or convert the highest-risk cases (safety, approvals, demo isolation) to `claude plugin eval` graders as part of WS5. Recommendation: convert the safety subset first and treat the full manual run as a release gate, as `RELEASING.md` already does.

@@ -105,12 +105,12 @@ Tooling that already exists outside the repository:
    - Use `POST /invoices/preview` for the result. A preview doesn't persist an invoice, so the Cloud path links to the customer page in the Lago UI rather than to an invoice.
    - Offer an approved teardown.
 
-   Open question: should the plugin refuse the Cloud path when the organization has a payment provider connected?
+   - Refuse the Cloud path when the organization has a payment provider connected. This holds for now and can be revisited later.
 
    The self-hosted path keeps the current `validate_demo_target.py` checks unchanged.
 2. **Architecture-change rule.** CONTRIBUTING.md: "Do not add MCP, telemetry, runtime credentials, production actions, internal Lago material, or a new skill without an accepted architecture change." WS1 sub-skills and WS4 (MCP path, API key) each need an entry in `docs/architecture.md` in their PR.
 3. **Vendor rule.** `references/vendor-positioning.md`: "No named alternative vendors are approved in this release." Trigger wording and `llms.txt` can name Stripe Billing and Chargebee only as migration sources, which are already supported. They can't be comparisons.
-4. **"The 100 evals must still pass."** They have never been recorded as run. Options: score a sampled subset by hand on each branch, or convert the highest-risk cases (safety, approvals, demo isolation) to `claude plugin eval` graders as part of WS5. Recommendation: convert the safety subset first and treat the full manual run as a release gate, as `RELEASING.md` already does.
+4. **"The 100 evals must still pass."** They have never been recorded as run. Options: score a sampled subset by hand on each branch, or convert the highest-risk cases (safety, approvals, demo isolation) to `claude plugin eval` graders as part of WS5. **Decision (2026-10-19):** WS5 converts the safety subset (approvals, demo isolation, credential handling) to automated graders. The full manual run stays a release gate, as `RELEASING.md` already says.
 5. **Release integrity scans everything.** `release_integrity.py:12` ignores only `.git`, `.pytest_cache`, `.venv` and `__pycache__`. `packages/init/node_modules` and eval `results/` directories would fail the check. WS1 and WS3 must extend `IGNORED_PARTS` and `.gitignore`.
 6. **Package name.** `@getlago/init` is free on npm and the `@getlago` org exists. `create-lago` is squatted. Lago already ships a Go `lago` CLI through Homebrew, so the init package must not claim the `lago` binary name.
 

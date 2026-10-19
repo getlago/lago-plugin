@@ -61,7 +61,7 @@ The "100 evals" are behavioral cases scored by hand. `evals/implementation/cases
 | 8 | b | Customer external ID reused as subscription external ID | Wrong billing code | `references/events.md` | WS3 |
 | 9 | b | Treating every HTTP 422 on event ingestion as a duplicate success | Wrong billing code | `references/events.md` | WS3 |
 | 10 | a, b | US vs EU base URL guessed | Guess | `references/cloud.md:3` | WS3 (`LAGO_API_URL` required, no default region) |
-| 11 | a, b | To see a real invoice, the agent asks for a Cloud API key, then is told never to seed demo data there | Needs human, policy conflict | `SKILL.md:126`, `references/demo.md:3` | WS4 (see section 5) |
+| 11 | a, b | No scripted path from the offline demo to a persisted, reconciled invoice; current guidance requires approved isolated self-hosting | Automation gap | `references/demo.md` documents manual agent steps | WS4 (see section 5) |
 | 12 | b | `llms.txt` is not task-phrased | Discovery | `llms.txt` | WS3 |
 | 13 | c | Nothing reaches an agent without a URL | Discovery | n/a | WS6 |
 | 14 | all | CI red on `main` | Release blocker | section 1 | Fix PR |
@@ -73,7 +73,7 @@ The "100 evals" are behavioral cases scored by hand. `evals/implementation/cases
 | 1. Trigger on real prompts | Skill and description | Description covers credits, wallets, migrations | Developer wording; trigger evals; before/after hit rate |
 | 2. Every major agent | Claude Code and Codex manifests; marketplace files | `skills/implementation/agents/openai.yaml` | `AGENTS.md`; generated per-agent files; drift check in CI |
 | 3. No-install entry point | `llms.txt`; offline demo script | `examples/` explain the model, but there is no integration code | `START_HERE.md`; Node/TS and Python code; `packages/init` |
-| 4. Live sandbox step | Offline demo; archived live self-hosted evidence (`docs/release-evidence/`); `validate_demo_target.py`; `extract_actual.py`; `money_test.py` | Self-hosted live flow is documented in `references/demo.md` as agent steps, not a script | Script that creates the objects, sends events and previews the invoice |
+| 4. Live sandbox step | Offline demo; archived live self-hosted evidence (`docs/release-evidence/`); `validate_demo_target.py`; `extract_actual.py`; `money_test.py` | Self-hosted live flow is documented in `references/demo.md` as agent steps, not a script | Script that creates isolated objects, verifies event replay, and retrieves and reconciles persisted finalized invoices |
 | 5. Public proof point | 100 behavioral cases; scorecard template | Cases describe signals but have no automated graders | With/without harness; `docs/benchmark.md` |
 | 6. Distribution | GitHub description and topics (`usage-based-billing`, `claude-code-plugin`, `codex-plugin`…) | | Marketplace and directory submissions; docs and SDK callouts; starter templates |
 
@@ -85,29 +85,24 @@ Tooling that already exists outside the repository:
 
 ## 5. Conflicts that need a decision
 
-1. **WS4 against the demo invariant.** `SKILL.md:126`, `references/demo.md`, `references/cloud.md` and `references/safety.md` say Lago has no built-in sandbox and demo data must never go into Lago Cloud, "including a development, test, or staging account". `validate_repo.py` and the unit tests enforce those strings. The brief's WS4 seeds Atlas AI objects with "an API key", which breaks the rule on Cloud. Options:
-   - (a) Self-hosted only: the script refuses any target that fails `validate_demo_target.py`. This is compliant today.
-   - (b) Lago provides a real disposable sandbox or trial org, and the invariant is amended through an architecture decision.
-   - (c) Seed on the user's own Cloud account. This needs a policy change and loosens a release-gated rule.
+1. **WS4 preserves the demo invariant.** `SKILL.md`, `references/demo.md`, `references/cloud.md` and `references/safety.md` require isolated self-hosted Lago for synthetic demos. `validate_repo.py`, the unit tests and the `cloud-staging-demo-refusal` eval enforce that boundary.
 
-   **Decision (2026-10-19):** the live step asks the user which target they want. Users who already have a Lago Cloud API key can use it. Users who want a fresh start get an isolated self-hosted OSS instance. Offline remains the default, and neither path runs without an explicit choice.
+   **Decision (2026-10-19, revised after CTO review):** offline remains the default. The optional live step uses a fresh, dedicated self-hosted OSS instance only. An existing Cloud API key does not authorize or qualify a demo target. If the user declines local containers or Docker is unavailable, continue offline and report live billing as unverified.
 
-   The Cloud path amends the invariant. It does not remove it. The WS4 PR must:
-   - record the change in `docs/architecture.md`;
-   - update `SKILL.md`, `references/demo.md`, `references/cloud.md`, `references/safety.md`, the `validate_repo.py` demo signals, the unit tests and the `cloud-staging-demo-refusal` eval case together, so they keep agreeing.
+   WS4 must preserve these controls:
+   - Obtain explicit approval immediately before infrastructure changes and each live mutation, showing the exact target, affected objects, billing impact and recovery.
+   - Keep `validate_demo_target.py` unchanged: require an explicit loopback port and dedicated `lago-plugin-demo-<suffix>` Compose project, then independently trace the target to that project's container and published port. Reject reused, remote, proxy-only and untraceable deployments.
+   - Verify the fresh instance has no external payment, tax, email or webhook destinations before seeding. Merely declining to enable new integrations is insufficient: existing webhooks can trigger downstream workflows. Refuse the target if isolation cannot be established; never disable integrations in an existing account to make it qualify.
+   - Prefix synthetic objects, record their IDs and the dedicated local resources, and offer teardown requiring approval for the exact project and volumes.
+   - Leave the Cloud demo prohibition, validator signals, tests and refusal eval intact. Any future Cloud demo proposal needs a separately reviewed architecture and isolation design before implementation; this audit does not approve that expansion.
 
-   Guardrails for the Cloud path:
-   - Show the resolved host, region and organization before any write. Say plainly that Lago has no sandbox, so the objects land in that account.
-   - Get an approval for each write, as today.
-   - Prefix every object (`lago_plugin_demo_`) so the user can find and remove it.
-   - Never enable payment collection, tax, emails or webhooks.
-   - Bill in arrears so that subscribing creates no immediate invoice.
-   - Use `POST /invoices/preview` for the result. A preview doesn't persist an invoice, so the Cloud path links to the customer page in the Lago UI rather than to an invoice.
-   - Offer an approved teardown.
+   **Required completion evidence for WS4:**
+   - Independently calculate expected quantities, prices, credits and totals before sending events. Use exact decimal strings or integer minor units, explicit currency and precision, and deliberate subscription start/end times and billing cadence.
+   - Send usage after subscription activation with durable `transaction_id` values and explicit occurrence timestamps. Replay identical payloads while the period is still open and verify current usage and rated charges do not increase; preserve both observations and replay responses. A duplicate HTTP response alone is not proof.
+   - Generate and retrieve a persisted, finalized invoice through the supported lifecycle of the pinned self-hosted release. Preserve sanitized Lago API payloads, invoice IDs, line quantities, credits, currency and totals. Account for every invoice produced by the selected cadence; do not promise one consolidated invoice.
+   - Derive actuals from each preserved invoice payload with `extract_actual.py`, then run `money_test.py expected.json actual.json --actual-source invoice.json`. Reconcile the complete period against the independent expectation and show that replay added neither usage nor charges.
+   - Archive the commands, pinned version, source evidence and comparison results against the tested commit. Any missing invoice, mismatch or unresolved replay leaves the live proof incomplete. A preview or customer-page link is supplementary and cannot satisfy the real-invoice completion gate.
 
-   - Refuse the Cloud path when the organization has a payment provider connected. This holds for now and can be revisited later.
-
-   The self-hosted path keeps the current `validate_demo_target.py` checks unchanged.
 2. **Architecture-change rule.** CONTRIBUTING.md: "Do not add MCP, telemetry, runtime credentials, production actions, internal Lago material, or a new skill without an accepted architecture change." WS1 sub-skills and WS4 (MCP path, API key) each need an entry in `docs/architecture.md` in their PR. **Decision (2026-10-19):** an entry is accepted when it is approved in the PR that implements it, and CONTRIBUTING.md now says so. WS4 needs one. WS3 `packages/init` gets one because it runs code outside the plugin. WS1 needs one only if it adds a sub-skill. WS2 doesn't need one, since its files are generated from the existing skill.
 3. **Vendor rule.** `references/vendor-positioning.md`: "No named alternative vendors are approved in this release." Trigger wording and `llms.txt` can name Stripe Billing and Chargebee only as migration sources, which are already supported. They can't be comparisons.
 4. **"The 100 evals must still pass."** They have never been recorded as run. Options: score a sampled subset by hand on each branch, or convert the highest-risk cases (safety, approvals, demo isolation) to `claude plugin eval` graders as part of WS5. **Decision (2026-10-19):** WS5 converts the safety subset (approvals, demo isolation, credential handling) to automated graders. The full manual run stays a release gate, as `RELEASING.md` already says.

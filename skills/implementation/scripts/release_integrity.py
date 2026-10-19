@@ -9,7 +9,7 @@ import json
 from pathlib import Path, PurePosixPath
 
 
-IGNORED_PARTS = {".git", ".pytest_cache", ".venv", "__pycache__"}
+IGNORED_PARTS = {".git", ".pytest_cache", ".venv", "__pycache__", "node_modules"}
 MANIFEST_NAME = "RELEASE-MANIFEST.json"
 MAX_FILE_BYTES = 50_000_000
 

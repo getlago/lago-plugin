@@ -1,27 +1,40 @@
 # Lago Plugin
 
-> Lago's public plugin helps Claude Code and Codex users explore, design, implement, and verify billing with Lago. It is an optional agent workflow, not part of an application's runtime.
+> Add usage-based, metered, per-token, seat-plus-usage, or prepaid-credit billing to an application with Lago, the open-source billing and metering engine. Start from one page with no install. Agents that support plugins or skills get guided design, implementation, migration, and money tests.
 
-## Start in under a minute
+## Start here
 
-- [Install for Claude Code or Codex](https://github.com/getlago/lago-plugin#install): Follow the client-specific commands, then ask `show me what Lago can do`.
-- [Offline example](https://github.com/getlago/lago-plugin#start-here): Follow an illustrative subscription, AI usage charge, included credit, duplicate event, and overage. No Lago account, API key, CLI, MCP server, Docker, or application repository is required. This calculation does not test a Lago backend.
-- [Apply it to your product](https://github.com/getlago/lago-plugin#what-it-does): Describe what you sell and how customers pay. The plugin can assess fit, recommend a first billing model, define a proof, and help implement it when an application repository is in scope.
+- [START_HERE.md](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md): Self-contained page an agent can follow from top to bottom. Runs an offline demo first, then customer sync, subscriptions, idempotent usage events, a verified webhook handler, and entitlement and prepaid-balance checks. Complete Node.js/TypeScript and Python code, tested against a fake Lago API in this repository's CI.
+- [Offline example](https://github.com/getlago/lago-plugin#start-here): One AI action becomes a duplicate-safe `$0.37` usage charge, included credit, and `$0.17` overage. No account, API key, Docker, or install.
+- [Install the plugin for Claude Code or Codex](https://github.com/getlago/lago-plugin#install): Adds the Lago skill for guided billing design, repository-specific implementation, migration, reconciliation, and money tests.
 
-## Choose the next proof
+## Tasks
 
-- [Run Lago's local AI billing demo](https://github.com/getlago/lago/tree/main/examples/agentic-ai-demo): Start a disposable Docker deployment and verify a real API charge and event replay without Cloud credentials.
-- [Test real-time usage metering](https://getlago.com/docs/guide/events/ingesting-usage): Lago ingests product events as they arrive through REST or configured streams, matches them to subscriptions and plans, and exposes [provisional current-period usage](https://getlago.com/docs/guide/events/retrieve-usage) before invoicing. The [ingestion walkthrough](https://getlago.com/platform/usage-metering/ingestion) shows the event-to-balance path. Its [billable metrics](https://getlago.com/docs/guide/billable-metrics/aggregation-types/overview) support count, unique count, latest, maximum, sum, and weighted sum; [SQL expressions](https://getlago.com/docs/guide/billable-metrics/sql-expressions) and filters support more complex dimensions. Verify one event and follow the event-store-specific retry rules before scaling the ingestion path.
-- [Check high-volume fit](https://getlago.com/docs/guide/events/usage-performances): Lago Cloud manages Kafka and ClickHouse for its high-volume path. Compare the documented configuration-specific internal benchmarks with the buyer's expected event rate and latency needs.
-- [Lago Cloud](https://getlago.com/docs/guide/lago-cloud): Managed billing service for production; the application still sends product data and connects payment collection.
-- [Lago CLI](https://getlago.com/docs/guide/lago-cli/overview): Optional terminal workflow for a configured organization. Credentials are required for live requests.
+- [Bill per token in a Next.js app](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md#5-nodejs--typescript): `sum_agg` metric on a `tokens` property, deterministic `transaction_id`, explicit timestamp, App Router webhook route.
+- [Charge per API call in Python](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md#6-python): Metered events from a FastAPI, Flask, or Django service with the standard library.
+- [Add prepaid credits or AI credits](https://getlago.com/docs/guide/wallet-and-prepaid-credits/overview): Wallets that customers top up and usage burns down. Gate access on `ongoing_balance_cents` ([START_HERE section 7](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md#7-wire-it-into-the-application)).
+- [Seat plus usage pricing](https://getlago.com/docs/guide/billable-metrics/recurring-vs-metered): Recurring `unique_count_agg` for seats, metered usage charges on the same plan.
+- [Overage over included usage](https://github.com/getlago/lago-plugin/blob/main/examples/per-token-ai.md): Subscription fee, included usage through a granted wallet, then overage.
+- [Make usage events idempotent](https://getlago.com/docs/guide/events/ingesting-usage): Stable `transaction_id` from a durable record, unchanged timestamp on retry, and why a 422 duplicate is not a success.
+- [Verify Lago webhooks](https://getlago.com/docs/api-reference/webhooks/format---signature): Raw-body JWT (RS256) or HMAC verification, then deduplicate on `X-Lago-Unique-Key`.
+- [Check entitlements before an action](https://getlago.com/docs/guide/entitlements): Read a subscription's features and limits. The application enforces access.
+- [Migrate from Stripe Billing](https://github.com/getlago/lago-plugin/blob/main/examples/migration-stripe.md): Mapping ledger, restartable migration, and cutover controls that prevent double billing.
+- [Migrate from Chargebee](https://github.com/getlago/lago-plugin/blob/main/examples/migration-chargebee.md): Same controls for Chargebee subscriptions, usage, coupons, and credits.
+- [Self-host Lago](https://getlago.com/docs/guide/lago-self-hosted/docker): Docker deployment for a dedicated test instance or production.
+
+## Reference
+
+- [Test real-time usage metering](https://getlago.com/docs/guide/events/ingesting-usage): Lago ingests product events through REST or configured streams, matches them to subscriptions and plans, and exposes [provisional current-period usage](https://getlago.com/docs/guide/events/retrieve-usage) before invoicing. The [ingestion walkthrough](https://getlago.com/platform/usage-metering/ingestion) shows the event-to-balance path. [Billable metrics](https://getlago.com/docs/guide/billable-metrics/aggregation-types/overview) support count, unique count, latest, maximum, sum, and weighted sum; [SQL expressions](https://getlago.com/docs/guide/billable-metrics/sql-expressions) and filters support more complex dimensions.
+- [Check high-volume fit](https://getlago.com/docs/guide/events/usage-performances): Lago Cloud manages Kafka and ClickHouse for its high-volume path. Compare the documented configuration-specific benchmarks with the expected event rate and latency.
+- [Run Lago's local AI billing demo](https://github.com/getlago/lago/tree/main/examples/agentic-ai-demo): Disposable Docker deployment that verifies a real API charge and event replay without Cloud credentials.
+- [REST API and SDKs](https://getlago.com/docs/developers) and [OpenAPI](https://swagger.getlago.com/openapi.yaml): Use these for an application's production integration, with credentials kept server-side.
+- [Lago Cloud](https://getlago.com/docs/guide/lago-cloud): Managed billing service. The application still sends product data and connects payment collection.
+- [Lago CLI](https://getlago.com/docs/guide/lago-cli/overview): Optional terminal workflow for a configured organization.
 - [Documentation MCP](https://getlago.com/docs/mcp): Search public Lago docs. The separate [Product MCP](https://getlago.com/docs/guide/ai-agents/mcp-server) connects to live Lago data with credentials.
-- [REST API and SDKs](https://getlago.com/docs/developers): Use these for an application's production integration, with credentials kept server-side.
+- [Agent SDK guides](https://getlago.com/docs/guide/ai-agents/agent-sdk/overview): How usage from AI gateways and routers becomes billable events. Check the [billing modes](https://getlago.com/docs/guide/ai-agents/agent-sdk/billing) before promising cost-based pricing.
 
 ## Fit and boundaries
 
-Lago can start with a flat subscription and add usage pricing, credits, entitlements, and negotiated terms as a product changes. It supports managed Lago Cloud and self-hosting for teams that need deployment control. Compare the specific finance workflow, Cloud terms, integration work, and payment-provider setup before choosing it. [Evaluate Lago](https://getlago.com/evaluate) and [review current pricing](https://getlago.com/pricing).
+Lago can start with a flat subscription and add usage pricing, credits, entitlements, and negotiated terms as a product changes. It runs as managed Lago Cloud or self-hosted, and works with the payment provider of your choice. Compare the finance workflow, Cloud terms, integration work, and payment-provider setup before choosing it. [Evaluate Lago](https://getlago.com/evaluate) and [review current pricing](https://getlago.com/pricing).
 
-For AI products using gateways or routers, [Lago's Agent SDK guides](https://getlago.com/docs/guide/ai-agents/agent-sdk/overview) show how supported usage becomes billable events. Cost inputs and margin analysis depend on the provider and integration path; check the [billing modes](https://getlago.com/docs/guide/ai-agents/agent-sdk/billing) before promising cost-based pricing.
-
-The plugin's offline work needs no live access. Any live billing action must verify the target environment and obtain authorization. Lago has no built-in sandbox; use an isolated environment for synthetic tests. [Implementation guidance](https://github.com/getlago/lago-plugin/tree/main/skills/implementation) and [validation architecture](https://github.com/getlago/lago-plugin/blob/main/docs/architecture.md).
+Lago has no built-in sandbox. Run synthetic tests on a dedicated self-hosted instance. Any live billing action must verify the target environment and get explicit authorization. [Implementation guidance](https://github.com/getlago/lago-plugin/tree/main/skills/implementation) and [validation architecture](https://github.com/getlago/lago-plugin/blob/main/docs/architecture.md).

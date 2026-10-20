@@ -97,6 +97,10 @@ Format and installation references: [Copilot CLI](https://docs.github.com/en/cop
 
 ## Start here
 
+### In an application repository
+
+Install the plugin for your agent above, open your application repository, and ask it to **map billing and build the first Lago-backed billable flow**. The agent runs the bundled read-only preflight, checks customer, subscription, usage, and existing billing code, then shows the proposed metric, plan, identifiers, and example bill before a live write. If you are using the source checkout directly, run `python3 lago-plugin/skills/implementation/scripts/preflight.py /path/to/your/app` to see the same inventory. It never contacts Lago or verifies an organization. After you choose a real target and authorize a read, use `lago whoami` and `lago doctor` to verify its host and organization.
+
 After installation, from any task or folder, ask:
 
 ```text

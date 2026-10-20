@@ -29,6 +29,8 @@ Do not assume the current folder is the user's product repository. Before asking
 - whether billing already exists, is absent from an otherwise valid application, or cannot yet be determined;
 - the optional Lago CLI and connected Lago tools or MCP connections without assuming they exist, and whether credentials are configured using names or presence checks only—never by reading values into context.
 
+When the bundled helper is available, run `python3 skills/implementation/scripts/preflight.py <application-repository>` first. It reports stack evidence, candidate source files, installed agent commands, and credential-variable presence without contacting Lago or printing secrets. Treat those paths as leads, then inspect the actual code. It cannot verify the target organization; do that with `lago whoami` and `lago doctor` only after the exact live target and read are authorized.
+
 For discovery, teaching, demo, or an ambiguous first prompt, the first line of the user-facing response must be exactly `Lago Solution Engineer loaded.` Never omit, paraphrase, or bury this activation confirmation. If progress messages and a final answer are separate, repeat it as the first line of the final answer so it remains visible after progress collapses. When the user has not yet supplied product context, keep activation to three short sentences after that exact line:
 
 1. no application repository, Lago account, credentials, Docker, Lago CLI, or MCP connection is needed, and the current folder will not be treated as the user's product;

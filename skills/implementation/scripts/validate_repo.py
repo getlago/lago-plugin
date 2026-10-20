@@ -77,6 +77,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/extract_actual.py",
         root / "skills/implementation/scripts/list_external_links.py",
         root / "skills/implementation/scripts/money_test.py",
+        root / "skills/implementation/scripts/preflight.py",
         root / "skills/implementation/scripts/reconcile.py",
         root / "skills/implementation/scripts/release_integrity.py",
         root / "skills/implementation/scripts/run_demo.py",

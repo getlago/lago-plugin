@@ -22,6 +22,7 @@ The Lago plugin for coding agents. One Agent Skill, `skills/implementation/`, is
 | `START_HERE.md` | Install-free entry point. Its fenced blocks marked `file=` are the source for `packages/init/templates/`. |
 | `packages/init/` | Unpublished `@getlago/init` CLI. Dry run by default. |
 | `evals/implementation/` | 100 behavioral cases, scored by hand before a release. |
+| `evals/benchmark/` | Billing-correctness benchmark tooling. Results stay outside the repository; never commit them. |
 | `evals/triggers/`, `evals/fresh-agent/` | `claude plugin eval` suites and the Codex trigger runner, with archived evidence. |
 | `docs/architecture.md` | Accepted architecture decisions. |
 

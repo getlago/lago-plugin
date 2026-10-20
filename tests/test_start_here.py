@@ -6,6 +6,7 @@ import base64
 import hashlib
 import hmac
 import importlib.util
+import io
 import json
 import os
 import re
@@ -253,7 +254,7 @@ class StartHereTest(unittest.TestCase):
             import urllib.request
             for status in (301, 302, 303, 307, 308):
                 with self.subTest(status=status), self.assertRaises(module.urllib.error.HTTPError) as refused:
-                    module.NoRedirect().redirect_request(urllib.request.Request("https://api.example/"), None,
+                    module.NoRedirect().redirect_request(urllib.request.Request("https://api.example/"), io.BytesIO(b""),
                         status, "redirect", {}, "http://api.example/")
                 refused.exception.close()
         finally:

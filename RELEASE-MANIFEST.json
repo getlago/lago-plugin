@@ -19,7 +19,7 @@
     "docs/architecture.md": "cf38465e56c3ce11c15f1981d343c412b505c992605a8e0dd176cf1c2631e021",
     "docs/assumptions-and-decisions.md": "146dea932d7f19110865bf8b8115ae97eeb30e04bd2e1956d16ba1ba54f44b82",
     "docs/public-content-audit.md": "4cf8f9db7020c28ca6e732311a981144dcd5740f06a7d4e2496972735727d725",
-    "docs/release-evidence/start-here-2026-10-19/README.md": "cc2e1570fbf2a7f8976f6f28c2e2cf09be9dc848068071b6e48bcdfc4757c5de",
+    "docs/release-evidence/start-here-2026-10-19/README.md": "f95a77f8089e1eb5ae5697158d82ec52fc96fa5b873e2410e293330c21336113",
     "docs/release-evidence/start-here-2026-10-19/START_HERE.snapshot.md": "2f66ca6bb99eb4c6e0a2320509a2de0c8b97fa2115d31709e26b6c80da1ca808",
     "docs/release-evidence/start-here-2026-10-19/aggregate-result.json": "12c992c4d04bf3ce572e1187f42ab243b708446d1142278302dc2ff7ece05df0",
     "docs/release-evidence/start-here-2026-10-19/with-1.json": "19ed127ca35692ce6511e31ffa131f1569403878a13561106df125d378221210",
@@ -117,7 +117,7 @@
     "tests/fixtures/reconcile-lago-pass.csv": "3f014c6b188e923866cd769d35925e43c233a927862b8c6d54e10263d1d3c388",
     "tests/fixtures/reconcile-source.csv": "e923e2ada463394e2cd94dc939b0dba058799a2a90e3f2f32f9b37100125016e",
     "tests/test_scripts.py": "68e774e1f8a9e8d83bf533df990bb0286f85de599bab9f86898d36945a627154",
-    "tests/test_start_here.py": "45cbc30768efa6358eceaf75b71633dca6723833714bcd7574be14e66d19a933"
+    "tests/test_start_here.py": "c728fdf484599f4e1ca53e5057491c70c1027f4d858b387d7b30f8711f37e8f8"
   },
   "schema": 1
 }

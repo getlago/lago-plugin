@@ -58,7 +58,7 @@ def verify_bundle(root: Path) -> dict:
 def verify_demo(root: Path, home: Path, integrity: dict) -> dict:
     if integrity["status"] != "PASS":
         return {"passed": False, "reason": "not executed: bundle integrity failed"}
-    step = run([sys.executable, str(root / "plugins/lago/skills/implementation/scripts/run_demo.py"), "--json"], home, home)
+    step = run([sys.executable, str(root / "skills/implementation/scripts/run_demo.py"), "--json"], home, home)
     return {"passed": step["exit_code"] == 0, "step": step}
 
 
@@ -113,7 +113,7 @@ def check_copilot(home: Path) -> dict:
     enabled = settings.get("enabledPlugins", {}).get("lago@lago-plugins") is True
     skill = installed_skill(home, PLUGIN / "skills")
     integrity = verify_bundle(PLUGIN)
-    demo = verify_demo(REPO, home, integrity)
+    demo = verify_demo(PLUGIN, home, integrity)
     passed = (all(s["exit_code"] == 0 for s in steps) and installed and listed
               and source_matches and enabled and skill["identical"] == 1
               and integrity["status"] == "PASS" and demo["passed"])

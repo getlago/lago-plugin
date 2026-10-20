@@ -33,7 +33,7 @@ Each transcript preserves conversation content, tool inputs (including generated
 The corrected source is pinned to `bad552417a033500cea4bce3c72a3d1b224897dd` in the eval prompt. From the reviewed PR checkout, run:
 
 ```bash
-claude plugin eval . --eval-dir evals/fresh-agent --case nextjs-start-here --ablation with-without --runs 2 --scaffold --allow-tools Bash Write Edit WebFetch --no-publish --keep-temp --threshold 1
+claude plugin eval . --eval-dir evals/fresh-agent --case nextjs-start-here --ablation with-without --runs 2 --scaffold --allow-tools Bash Write Edit WebFetch --no-publish --keep-temp --threshold 1 --output-dir ../lago-start-here-eval-results
 ```
 
 This is the reproduction command for a future corrected run, not a claim that it has been run. Use a trusted fixture, archive its outputs outside the release bundle while running, and sanitize the resulting transcripts before committing evidence. This case measures a URL-guided integration, not unprompted vendor selection. Update the source pin and regenerate the release manifest whenever the guide changes; retain each run's original source revision.

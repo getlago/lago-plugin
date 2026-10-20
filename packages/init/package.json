@@ -1,0 +1,34 @@
+{
+  "name": "@getlago/init",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Add usage-based billing with Lago to a Node.js or Python application. Detects the stack and scaffolds the billing module from START_HERE.md.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "lago-init": "bin/lago-init.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "sync-templates": "node scripts/sync-templates.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getlago/lago-plugin.git",
+    "directory": "packages/init"
+  },
+  "keywords": [
+    "lago",
+    "billing",
+    "usage-based-billing",
+    "metering"
+  ]
+}

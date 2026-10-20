@@ -4,6 +4,8 @@ Meet a Lago Solution Engineer to explore billing, or ask it to build directly in
 
 You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
 
+No plugin support in your agent, or nothing installed yet? Follow [START_HERE.md](START_HERE.md): one page with the offline demo and complete Node.js/TypeScript and Python integration code.
+
 Install this Lago-maintained plugin directly from this repository. Official OpenAI or Anthropic marketplace listings are separate from making the source public. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
 
 ## Install

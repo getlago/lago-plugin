@@ -24,7 +24,10 @@ def links(root: Path, domains: set[str]) -> list[str]:
         text = path.read_text(encoding="utf-8")
         for value in URL.findall(text):
             value = value.rstrip(".,;:")
-            host = (urlparse(value).hostname or "").lower()
+            try:
+                host = (urlparse(value).hostname or "").lower()
+            except ValueError:  # templated or malformed URL in code, not a link
+                continue
             if not domains or any(
                 host == domain or host.endswith(f".{domain}") for domain in domains
             ):

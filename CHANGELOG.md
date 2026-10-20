@@ -4,8 +4,18 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+### Added
+
+- `START_HERE.md`: install-free entry point with the offline demo and tested Node.js/TypeScript and Python code for customer sync, subscriptions, idempotent usage events, JWT or HMAC webhook verification, and entitlement and prepaid-balance checks.
+- `packages/init` (unpublished): dependency-free `@getlago/init` CLI that detects a Node.js or Python stack and scaffolds the `START_HERE.md` billing module. Dry run by default; never overwrites files.
+- CI job that runs the `START_HERE.md` code against a fake Lago API and checks the init templates for drift.
+
 ### Changed
 
+- Hardened install-free examples: refuse authenticated redirects, retry non-JSON transient responses, persist webhooks for durable polling, scope paginated wallet snapshots to eligible charges, and make subscription cadence and invoice reconciliation explicit.
+
+- `llms.txt` leads with `START_HERE.md` and lists tasks in developer wording, such as billing per token in a Next.js app, adding prepaid credits, and migrating from Stripe Billing.
+- Release integrity ignores `node_modules`.
 - Direct application implementation requests can start on the first turn without a prior demo or accepted solution brief; the blueprint remains a preview and money-changing decisions remain explicit.
 - Clarified that the application owns product events while Lago owns the selected billing functions.
 - Prepared the repository for public installation: removed internal-access wording and the dated competitor benchmark; clarified recurring unique-count metrics in the beginner reference.

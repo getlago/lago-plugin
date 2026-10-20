@@ -10,3 +10,7 @@ evals/benchmark/**/workspaces/
 Thumbs.db
 desktop.ini
 __MACOSX/
+
+.env
+.env.*
+!.env.example

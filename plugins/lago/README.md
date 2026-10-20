@@ -72,7 +72,7 @@ Claude runs these only when the skill calls for them. Each one uses only the Pyt
 | `scripts/validate_event.py` | Checks a synthetic usage event file. | Nothing |
 | `scripts/validate_demo_target.py` | Refuses a live demo URL unless it is a local loopback Lago instance with an explicit port and a `lago-plugin-demo-*` Compose project. | Nothing |
 | `scripts/extract_actual.py` | Extracts the billed amount from a saved Lago API response. | Only the `--output` path you give it, otherwise stdout |
-| `scripts/money_test.py` | Compares an expected amount with the extracted Lago evidence. | Nothing |
+| `scripts/money_test.py` | Compares an expected amount with the extracted Lago evidence. | Python may create a local `__pycache__` for the imported extractor; `python3 -B` suppresses it |
 | `scripts/reconcile.py` | Compares two CSV exports by key, currency, and amount, read-only. | Nothing |
 
 All paths are under `skills/implementation/` in this plugin.
@@ -94,11 +94,12 @@ The plugin never reads a credential from your environment and never asks for one
 
 ### Files written
 
+- Python may cache imported helper bytecode under `skills/implementation/scripts/__pycache__/`; run with `python3 -B` to suppress this runtime cache.
 - Code, tests, and documents that Claude writes in your project when you ask it to, such as an event contract or a validation report built from the bundled templates.
 - The `--output` file of `extract_actual.py`, when requested, and the explicitly selected manifest path when a maintainer runs `release_integrity.py create`.
 - An approved live demo creates a dedicated local directory, Compose configuration, container image cache, containers, network and persistent Docker volumes containing synthetic billing data. Report the exact paths and resources before creation. Teardown requires separate approval for those exact resources.
 
-The plugin keeps no state of its own and stores no personal data.
+The plugin stores no billing records, credentials or personal data of its own. Python bytecode caches are derived from the shipped source.
 
 ### Approval for production writes
 

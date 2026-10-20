@@ -29,10 +29,18 @@ def digest(path: Path) -> str:
     return value.hexdigest()
 
 
+def is_eval_output(relative: Path) -> bool:
+    """Local `claude plugin eval` output under evals/<suite>/results/ is not part of the bundle."""
+    parts = relative.parts
+    return len(parts) > 3 and parts[0] == "evals" and parts[2] == "results"
+
+
 def bundle_files(root: Path) -> dict[str, str]:
     files: dict[str, str] = {}
     for path in sorted(root.rglob("*")):
         if any(part in IGNORED_PARTS for part in path.parts):
+            continue
+        if is_eval_output(path.relative_to(root)):
             continue
         if path.name in {MANIFEST_NAME, ".DS_Store"}:
             continue

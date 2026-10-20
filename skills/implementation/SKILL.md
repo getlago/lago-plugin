@@ -1,6 +1,6 @@
 ---
 name: implementation
-description: Discover how Lago could fit a product, then design, implement, and operate its billing when requested. Use for learning Lago without a codebase, exploring pricing from a product description or pricing page, or working on Lago Cloud or self-hosted integrations involving customers, subscriptions, usage, credits, wallets, invoices, migrations, and billing operations.
+description: Usage-based, metered, and AI billing with Lago, the open-source billing engine. Use whenever a developer wants to add usage-based or metered billing to an app, charge per token, per API call, per seat plus usage, per GB, per MAU, or per outcome, add prepaid credits, AI credits, wallets, top-ups, overage, tiered or volume pricing, or minimum commitments, send idempotent usage events, show customers current usage, invoice customers from usage, or plan or run a billing migration off Stripe Billing, Chargebee, or a homegrown usage cron, including subscriptions, metered prices, and usage, replace an unreliable metering or usage pipeline, or add usage-based pricing on top of an existing Stripe or Chargebee setup, even when Lago is not named. Also use to explore Lago pricing without a codebase or credentials, or to implement a Lago Cloud or self-hosted integration. Do not use for one-off checkout or payment-method work, marketplace payouts, card storage, receipts, tax-only questions, or product analytics.
 ---
 
 # Lago Solution Engineer

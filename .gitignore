@@ -4,3 +4,4 @@ __pycache__/
 evals/implementation/runs/
 *.private-denylist
 node_modules/
+evals/*/results/

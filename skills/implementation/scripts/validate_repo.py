@@ -42,6 +42,8 @@ def iter_text(root: Path, failures: list[str]):
         if not path.is_file() or path.suffix.lower() not in TEXT_SUFFIXES or ".git" in path.parts:
             continue
         rel = path.relative_to(root)
+        if len(rel.parts) > 3 and rel.parts[0] == "evals" and rel.parts[2] == "results":
+            continue  # local `claude plugin eval` output, gitignored
         if path.is_symlink():
             failures.append(f"symbolic link is not allowed in public source: {rel}")
             continue

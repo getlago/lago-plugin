@@ -6,7 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
-- Trigger evals: 32 developer-worded prompts and 15 near-misses for `claude plugin eval`, plus a Codex harness that installs `lago@lago-plugins` into a temporary `CODEX_HOME`. Claude Code hit rate went from 86/96 to 95/96, and false triggers from 2/45 to 0/45. Historical Codex scores were withdrawn because the original scorer accepted unsuccessful reads; the corrected harness reports successful loading and incomplete attempts separately.
+- Trigger evals: 32 developer-worded prompts and 15 near-misses for `claude plugin eval`, plus a Codex harness that installs `lago@lago-plugins` into a temporary `CODEX_HOME`. Claude Code hit rate went from 86/96 to 95/96, and observed false triggers from 2/42 to 0/43; three baseline and two after-change negative attempts timed out, so both evaluations are incomplete. Historical Codex scores were withdrawn because the original scorer accepted unsuccessful reads; the corrected harness reports successful loading and incomplete attempts separately.
 - `START_HERE.md`: install-free entry point with the offline demo and tested Node.js/TypeScript and Python code for customer sync, subscriptions, idempotent usage events, JWT or HMAC webhook verification, and entitlement and prepaid-balance checks.
 - `packages/init` (unpublished): dependency-free `@getlago/init` CLI that detects a Node.js or Python stack and scaffolds the `START_HERE.md` billing module. Dry run by default; never overwrites files.
 - CI job that runs the `START_HERE.md` code against a fake Lago API and checks the init templates for drift.

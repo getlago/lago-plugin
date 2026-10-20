@@ -141,6 +141,16 @@ class TriggerSuiteTests(unittest.TestCase):
         source["partial"] = True
         self.assertFalse(summarizer.summarize(source)["complete"])
 
+    def test_archived_claude_timeouts_are_not_successful_negatives(self):
+        summarizer = load("trigger_summarize", TRIGGERS / "summarize.py")
+        for arm, hits, negatives, errors in (("before", "86/96", "2/42", 3), ("after", "95/96", "0/43", 2)):
+            with self.subTest(arm=arm):
+                result = summarizer.summarize(json.loads((TRIGGERS / "evidence" / f"claude-{arm}.json").read_text()))
+                self.assertFalse(result["complete"])
+                self.assertEqual(result["hit_rate"], hits)
+                self.assertEqual(result["false_trigger_rate"], negatives)
+                self.assertEqual(result["coverage"]["negative"]["errors"], errors)
+
     def test_description_fits_agent_skills_limit(self):
         # https://agentskills.io/specification: description is 1-1024 characters.
         frontmatter = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8").split("\n---\n", 1)[0]

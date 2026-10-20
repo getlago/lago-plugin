@@ -8,7 +8,7 @@
     ".github/workflows/ci.yml": "0ee3328f50bd62a275e256f5f6265992398a45620f6b4ff51d9860704f608cf8",
     ".github/workflows/docs-links.yml": "1cd46308d61e78cb14653826fbb8c32a9499ac029565b7f2f3bc2742cdb91e74",
     ".gitignore": "a030f2bb20a1e3f9d91a8c2edfc81bc516a5ca9cae85ab26f017cd71a1c4ad88",
-    "CHANGELOG.md": "a7ec6dbb4de46b55d46b4b65792b816a1bc1595b5545409f04e7c706765f23a9",
+    "CHANGELOG.md": "3524f17f1c2119c5f4711ad754845854840b26360f4a296c3b150a55779cf6fb",
     "CONTRIBUTING.md": "63d09efe277c7270069b299a121c9fc1c840f8877d5c6ea1b34505e26e71980a",
     "LICENSE": "a586c6551ce311a9e882cf34aba6b5f5c3e882d07450a6c49a920851fcce3e5f",
     "README.md": "5fdbbf5a8802facef15c9c677286d74e8e6317e09532c7fb8019b5771f68e93d",
@@ -51,10 +51,12 @@
     "evals/implementation/README.md": "89ccb0846e193b92d599eb5023527f7d44af1e11e39a4e82b24924f6c807991a",
     "evals/implementation/cases.json": "0ba2a6b729640412bbbaeeac8692165d4c2e023303ebafcde45c6d9b7069dde0",
     "evals/implementation/scorecard.md": "333bed5cd0c00670221640c4f9e68cbfe05ec4d3e2667d01abd80732d46f1b39",
-    "evals/triggers/README.md": "9c6bfaf069c0a4cdd1c65c94f982278476994bc785251a0d2a63edca47804f1f",
+    "evals/triggers/README.md": "f8c3fd0b13b1ed048e87a7e4498d4e0494e7d571156aa16254e11c1fba4be309",
     "evals/triggers/codex_triggers.py": "5e1987012072782d7ee1843c452f605248b3cb03b7ed6756532d2417f7c98a6e",
     "evals/triggers/evidence/claude-after.json": "bbb3a78d658e71d4151fb8de7726bf8c18061d50c4ec7561749cb3d4447d4206",
     "evals/triggers/evidence/claude-before.json": "f543b45683af06eecd6779bb92897076ce12d4f90082e783fd126567740a2512",
+    "evals/triggers/evidence/codex-smoke-negative.json": "b1ebda69fbf684a69caaf13fddd0b4d9496c9a5dae14886bde44d57f339b4c6f",
+    "evals/triggers/evidence/codex-smoke-positive.json": "65276aa9a53bb4551d6883bc634946929d1dee11a55b35ee6eda902d05eb484b",
     "evals/triggers/negative/api-rate-limit/graders/not-fired.md": "4771ae1db584cbc230b5f1395ba5a98be4807164bdead2bcb52d3826bf360f88",
     "evals/triggers/negative/api-rate-limit/prompt.md": "ba40041f73ffda9a862d85b2120dd5c58a5dc5513e7bef4c5f4f2aca31b79489",
     "evals/triggers/negative/apple-pay-checkout/graders/not-fired.md": "4771ae1db584cbc230b5f1395ba5a98be4807164bdead2bcb52d3826bf360f88",
@@ -218,7 +220,7 @@
     "tests/test_install_commands.py": "c20dc87331a82680eec90ac57f91ef5d39ed02015da49136433a148093784e26",
     "tests/test_scripts.py": "68e774e1f8a9e8d83bf533df990bb0286f85de599bab9f86898d36945a627154",
     "tests/test_start_here.py": "c728fdf484599f4e1ca53e5057491c70c1027f4d858b387d7b30f8711f37e8f8",
-    "tests/test_triggers.py": "712ef52805f11ee4eb3e501fd2c96970e4eced39643c86aed7a4cc586997967d"
+    "tests/test_triggers.py": "6179e92c91d63f56a4a26dc222cca1ecb33e26539b40a3acef9dbd5eda1cc015"
   },
   "schema": 1
 }

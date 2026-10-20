@@ -34,7 +34,8 @@ Claude Code 2.1.304, Codex CLI 0.163.0, measured 2026-10-19. The before column i
 | Agent | Measure | Before | After |
 | --- | --- | ---: | ---: |
 | Claude Code, 3 runs per prompt | Positive prompts that fired the skill | 86/96 (90%) | 95/96 (99%) |
-| Claude Code, 3 runs per prompt | Near-misses that fired it | 2/45 | 0/45 |
+| Claude Code, 3 runs per prompt | Near-misses that fired it (completed observations) | 2/42 | 0/43 |
+| Claude Code | Incomplete negative attempts | 3/45 | 2/45 |
 
 **Claude Code misses before:**
 - "Add usage-based billing to this Next.js app"
@@ -48,6 +49,8 @@ Claude Code 2.1.304, Codex CLI 0.163.0, measured 2026-10-19. The before column i
 **False triggers before:**
 - Claude Code: EU VAT, single-order receipt
 
+Both historical evaluations are incomplete: the personal-expense-tracker case timed out three times before and twice after. The old summarizer incorrectly counted those timeouts as valid negatives. The corrected summarizer exits 1 for both archived files while reporting the usable observations.
+
 These are small samples. Rerun after any description change and compare against this table.
 
 The historical Codex numbers are withdrawn: the old runner accepted commands mentioning a skill path without proving a successful read. Its baseline also omitted one failed negative attempt. A new full before/after comparison is pending; no replacement improvement claim is made.
@@ -60,3 +63,7 @@ python3 evals/triggers/summarize.py evals/triggers/evidence/claude-after.json
 ```
 
 These preserve per-attempt graders, errors, timestamps and CLI version; ephemeral trace paths were removed and local checkout paths were replaced with `<checkout>`. The original artifacts did not capture model IDs or source hashes. The before revision above was reported by the original operator; an immutable after revision cannot be established from these files. These are historical observations, not a fully reproducible benchmark or evidence of integration correctness. Future comparisons must archive exact clean source commits, model IDs, CLI versions, commands and per-run observations for both arms.
+
+## Corrected-runner smoke checks
+
+At clean commit `4d9e081e41a1ee9346889936150f08aecdfe658a`, Codex CLI 0.163.0 loaded the skill for `seat-plus-usage` and did not load it for `eu-vat-calculation` (one attempt each, default model unpinned). [Positive evidence](evidence/codex-smoke-positive.json) and [negative evidence](evidence/codex-smoke-negative.json) record the source, runner and skill hashes, commands, timestamps and outcomes. The ephemeral home path is redacted. These check the runner against a live CLI; they are not a replacement benchmark.

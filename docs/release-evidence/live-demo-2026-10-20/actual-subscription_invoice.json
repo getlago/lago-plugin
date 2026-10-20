@@ -1,0 +1,27 @@
+{
+  "currency": "USD",
+  "quantity": "1",
+  "unit_price": "99",
+  "subtotal": "99",
+  "discounts": "0",
+  "credits": "0",
+  "tax": "0",
+  "total": "99",
+  "_basis": {
+    "quantity": "sum of invoice fee units",
+    "unit_price": "effective subtotal divided by quantity",
+    "credits": "credit notes + prepaid credits + progressive-billing credits",
+    "credit_components": {
+      "credit_notes_amount_cents": "0",
+      "prepaid_credit_amount_cents": "0",
+      "progressive_billing_credit_amount_cents": "0"
+    },
+    "item_code": "lago_plugin_demo_atlas_pro"
+  },
+  "_evidence": {
+    "generated_by": "extract_actual.py",
+    "source_kind": "invoice",
+    "source_id": "b6eb49ed-ff74-4f8a-b4f1-a727af353f43",
+    "source_sha256": "a9db0ef9f189a8691c5ea475193470f83e865b5cdaf7c5f342ea771e95182ceb"
+  }
+}

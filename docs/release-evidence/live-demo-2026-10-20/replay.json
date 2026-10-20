@@ -1,0 +1,23 @@
+{
+  "transaction_id": "lago_plugin_demo_demo_evt_small_input",
+  "http_status": 422,
+  "response": {
+    "status": 422,
+    "error": "Unprocessable Entity",
+    "code": "validation_errors",
+    "error_details": {
+      "transaction_id": [
+        "value_already_exist"
+      ]
+    }
+  },
+  "amount_cents_before": 1017,
+  "amount_cents_after": 1017,
+  "units_before": [
+    "1001000.0"
+  ],
+  "units_after": [
+    "1001000.0"
+  ],
+  "no_double_billing": true
+}

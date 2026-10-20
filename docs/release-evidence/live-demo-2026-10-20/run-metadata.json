@@ -1,0 +1,74 @@
+{
+  "status": "LIVE_SELF_HOSTED_INVOICES_VALIDATED",
+  "run_at": "2026-10-20T05:08:02.128836+00:00",
+  "image": "getlago/lago:v1.55.0@sha256:60ecc02cdb2854c918e28a6436ccb4033d8f4a0447bc0b5150936596ebe2a290",
+  "project": "lago-plugin-demo-clean1",
+  "isolation": {
+    "webhook_endpoints": 0,
+    "organization_webhook_urls": [],
+    "smtp_configured": false,
+    "pdf_generation": false,
+    "events_store": "postgres"
+  },
+  "objects": {
+    "billable_metric": "lago_plugin_demo_ai_tokens",
+    "plan": "lago_plugin_demo_atlas_pro",
+    "customer": "lago_plugin_demo_acme",
+    "customer_lago_id": "a7349b57-c2bc-4cc4-80b7-6b18fcc101c1",
+    "subscription": "lago_plugin_demo_acme_atlas_pro",
+    "wallet_lago_id": "e97798dc-c884-4fe6-acdd-c10864ba5bc2",
+    "events": [
+      "lago_plugin_demo_demo_prior_usage",
+      "lago_plugin_demo_demo_evt_small_input",
+      "lago_plugin_demo_demo_evt_small_output",
+      "lago_plugin_demo_demo_evt_large_input",
+      "lago_plugin_demo_demo_evt_large_output"
+    ]
+  },
+  "replay": {
+    "transaction_id": "lago_plugin_demo_demo_evt_small_input",
+    "http_status": 422,
+    "response": {
+      "status": 422,
+      "error": "Unprocessable Entity",
+      "code": "validation_errors",
+      "error_details": {
+        "transaction_id": [
+          "value_already_exist"
+        ]
+      }
+    },
+    "amount_cents_before": 1017,
+    "amount_cents_after": 1017,
+    "units_before": [
+      "1001000.0"
+    ],
+    "units_after": [
+      "1001000.0"
+    ],
+    "no_double_billing": true
+  },
+  "invoices": {
+    "usage_invoice": {
+      "invoice_lago_id": "350478e4-46a3-4f23-9118-105cf44d90fe",
+      "number": "LAG-22A8-001-002",
+      "total_amount_cents": 17,
+      "extract_exit": 0,
+      "money_test_exit": 0,
+      "money_test": "{\n  \"status\": \"PASS\",\n  \"mismatches\": []\n}"
+    },
+    "subscription_invoice": {
+      "invoice_lago_id": "b6eb49ed-ff74-4f8a-b4f1-a727af353f43",
+      "number": "LAG-22A8-001-001",
+      "total_amount_cents": 9900,
+      "extract_exit": 0,
+      "money_test_exit": 0,
+      "money_test": "{\n  \"status\": \"PASS\",\n  \"mismatches\": []\n}"
+    }
+  },
+  "period_total": "99.17",
+  "expected_period_total": "99.17",
+  "script_sha256": "4fa2f24731d9aa3e16dfffbafc957890fe7e963f52a83292486e6e412e875eec",
+  "source_commit": "96c9d4c12a122df9f6a6c6d98b24ddedf3e3cbbd",
+  "source_dirty": false
+}

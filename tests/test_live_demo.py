@@ -70,6 +70,20 @@ class LiveDemoTests(unittest.TestCase):
         self.assertRegex(self.demo.IMAGE, r"^getlago/lago:v\d+\.\d+\.\d+@sha256:[0-9a-f]{64}$")
         self.assertIn('LAGO_DISABLE_SIGNUP: "true"', compose)
 
+    def test_archived_live_demo_evidence_passes_money_tests(self):
+        evidence = ROOT / "docs/release-evidence/live-demo-2026-10-20"
+        metadata = json.loads((evidence / "run-metadata.json").read_text(encoding="utf-8"))
+        self.assertEqual(metadata["status"], "LIVE_SELF_HOSTED_INVOICES_VALIDATED")
+        self.assertFalse(metadata["source_dirty"])
+        self.assertTrue(metadata["replay"]["no_double_billing"])
+        self.assertEqual(metadata["period_total"], "99.17")
+        for kind in ("subscription_invoice", "usage_invoice"):
+            with self.subTest(kind=kind):
+                result = subprocess.run([sys.executable, str(SCRIPTS / "money_test.py"), str(evidence / f"expected-{kind}.json"),
+                                         str(evidence / f"actual-{kind}.json"), "--actual-source", str(evidence / f"lago-{kind}.json")],
+                                        capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_extractor_accepts_subscription_fees(self):
         source = ROOT / "tests/fixtures/lago-subscription-invoice-payload.json"
         result = subprocess.run([sys.executable, str(SCRIPTS / "extract_actual.py"), str(source)], capture_output=True, text=True)

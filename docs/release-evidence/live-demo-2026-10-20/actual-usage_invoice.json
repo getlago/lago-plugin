@@ -1,0 +1,27 @@
+{
+  "currency": "USD",
+  "quantity": "1001000",
+  "unit_price": "0.00001015984015984015984015984016",
+  "subtotal": "10.17",
+  "discounts": "0",
+  "credits": "10",
+  "tax": "0",
+  "total": "0.17",
+  "_basis": {
+    "quantity": "sum of invoice fee units",
+    "unit_price": "effective subtotal divided by quantity",
+    "credits": "credit notes + prepaid credits + progressive-billing credits",
+    "credit_components": {
+      "credit_notes_amount_cents": "0",
+      "prepaid_credit_amount_cents": "10",
+      "progressive_billing_credit_amount_cents": "0"
+    },
+    "item_code": "lago_plugin_demo_ai_tokens"
+  },
+  "_evidence": {
+    "generated_by": "extract_actual.py",
+    "source_kind": "invoice",
+    "source_id": "350478e4-46a3-4f23-9118-105cf44d90fe",
+    "source_sha256": "36cbdc7332b55d2048969c9c87d1984a24a795a30bbd9f726fe1aaad1323320e"
+  }
+}

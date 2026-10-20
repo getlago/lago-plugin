@@ -2,7 +2,7 @@
 
 This is the canonical Lago Solution Engineer demo, adapted from Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai). Its bundled walkthrough runs entirely offline; optional live validation runs only on a dedicated isolated self-hosted Lago instance. The model names and prices are illustrative, not current OpenAI pricing. Atlas AI is the merchant using Lago, Acme Corp is Atlas's customer, and an Acme employee is the end user. The walkthrough shows why one product action creates a non-trivial metering problem before turning it into an explainable billing result.
 
-Run the instant walkthrough with `python3 skills/implementation/scripts/run_demo.py`. The user does not need to configure anything, provide credentials, or modify a workspace.
+Run the instant walkthrough with `python3 skills/implementation/scripts/run_demo.py` from the plugin folder. The user does not need to configure anything, provide credentials, or modify a workspace.
 
 ## What it teaches
 

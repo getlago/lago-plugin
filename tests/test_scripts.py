@@ -7,13 +7,15 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPTS = ROOT / "skills/implementation/scripts"
+SCRIPTS = ROOT / "plugins/lago/skills/implementation/scripts"
+# Maintainer tooling lives outside the shipped plugin.
+TOOLS = ROOT / "scripts"
 FIXTURES = ROOT / "tests/fixtures"
 
 
 def run(script: str, *args: object) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, str(SCRIPTS / script), *(str(arg) for arg in args)],
+        [sys.executable, str((TOOLS if (TOOLS / script).is_file() else SCRIPTS) / script), *(str(arg) for arg in args)],
         cwd=ROOT,
         text=True,
         capture_output=True,
@@ -624,7 +626,7 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("https://swagger.getlago.com/openapi.yaml", result.stdout)
 
     def test_runtime_skill_requires_activation_and_capability_boundary(self):
-        skill = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8")
+        skill = (ROOT / "plugins/lago/skills/implementation/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("Lago Solution Engineer loaded.", skill)
         self.assertIn("First-run routing and silent preflight", skill)
         self.assertIn("Do not assume the current folder is the user's product repository", skill)
@@ -649,11 +651,11 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("I’m switching from solution design to implementation.", skill)
         self.assertIn("Product → Lago opportunity map", skill)
         self.assertIn("Product** sees packaging", skill)
-        discovery = (ROOT / "skills/implementation/references/discovery.md").read_text(encoding="utf-8")
+        discovery = (ROOT / "plugins/lago/skills/implementation/references/discovery.md").read_text(encoding="utf-8")
         self.assertIn("No existing billing code is not a blocker.", discovery)
-        primitives = (ROOT / "skills/implementation/references/primitives.md").read_text(encoding="utf-8")
+        primitives = (ROOT / "plugins/lago/skills/implementation/references/primitives.md").read_text(encoding="utf-8")
         self.assertIn("Your application → Lago", primitives)
-        solution_engineering = (ROOT / "skills/implementation/references/solution-engineering.md").read_text(encoding="utf-8")
+        solution_engineering = (ROOT / "plugins/lago/skills/implementation/references/solution-engineering.md").read_text(encoding="utf-8")
         self.assertIn("Sound like a great pre-sales engineer", solution_engineering)
         self.assertIn("supported opportunity → why it matters → fit assessment and boundary", solution_engineering)
         self.assertIn("Enthusiasm changes the delivery, never the evidence threshold", solution_engineering)
@@ -663,33 +665,33 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("the sign-off must end with `[Your name]`", solution_engineering)
         self.assertIn("separate explicit approval for that exact final email", solution_engineering)
         self.assertIn("Never quiz the user", primitives)
-        vendor_positioning = (ROOT / "skills/implementation/references/vendor-positioning.md").read_text(encoding="utf-8")
+        vendor_positioning = (ROOT / "plugins/lago/skills/implementation/references/vendor-positioning.md").read_text(encoding="utf-8")
         self.assertIn("No named alternative vendors are approved in this release", vendor_positioning)
         self.assertIn("reviewed source control", vendor_positioning)
-        demo = (ROOT / "skills/implementation/references/demo.md").read_text(encoding="utf-8")
+        demo = (ROOT / "plugins/lago/skills/implementation/references/demo.md").read_text(encoding="utf-8")
         self.assertIn("Never seed demo customers", demo)
         self.assertIn("including an account the user calls development, test, or staging", demo)
         self.assertIn("product action → multiple durable usage records", demo)
         self.assertIn("Atlas AI is the merchant", demo)
         self.assertIn("integration-specific validation", demo)
-        canonical_demo = (ROOT / "examples/per-token-ai.md").read_text(encoding="utf-8")
+        canonical_demo = (ROOT / "plugins/lago/examples/per-token-ai.md").read_text(encoding="utf-8")
         self.assertIn("The model names and prices are illustrative", canonical_demo)
         self.assertIn("$0.37", canonical_demo)
-        guided = (ROOT / "skills/implementation/references/guided-experience.md").read_text(encoding="utf-8")
+        guided = (ROOT / "plugins/lago/skills/implementation/references/guided-experience.md").read_text(encoding="utf-8")
         self.assertIn("the billing blueprint", guided)
         self.assertIn("Offline example complete", guided)
         self.assertIn("You do not need to do anything", guided)
         self.assertIn("Gratification before intake", guided)
         self.assertIn("One truth, three buyer views", guided)
         self.assertIn("do not restart discovery", guided)
-        use_cases = (ROOT / "skills/implementation/references/use-case-discovery.md").read_text(encoding="utf-8")
+        use_cases = (ROOT / "plugins/lago/skills/implementation/references/use-case-discovery.md").read_text(encoding="utf-8")
         self.assertIn("Opportunity scan", use_cases)
         self.assertIn("High-value AI-native patterns", use_cases)
         self.assertIn("application—not Lago—enforce", use_cases)
         self.assertIn("Do not assume Lago must replace the full billing stack", use_cases)
         self.assertIn("deliberate five-pattern check", use_cases)
         self.assertIn("money test match the recommended first candidate exactly", use_cases)
-        events = (ROOT / "skills/implementation/references/events.md").read_text(encoding="utf-8")
+        events = (ROOT / "plugins/lago/skills/implementation/references/events.md").read_text(encoding="utf-8")
         self.assertIn("customer identity and subscription identity distinct", events)
         self.assertIn("expert mode", skill)
         self.assertIn("guided mode", skill)
@@ -697,8 +699,8 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("never let `demo works` imply `ready for production`", skill)
 
     def test_manifest_identity_and_versions_match(self):
-        codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
-        claude = json.loads((ROOT / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
+        codex = json.loads((ROOT / "plugins/lago/.codex-plugin/plugin.json").read_text(encoding="utf-8"))
+        claude = json.loads((ROOT / "plugins/lago/.claude-plugin/plugin.json").read_text(encoding="utf-8"))
         codex_marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text(encoding="utf-8"))
         claude_marketplace = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text(encoding="utf-8"))
         self.assertEqual(codex["name"], claude["name"])
@@ -752,7 +754,7 @@ class ScriptTests(unittest.TestCase):
         self.assertFalse(metadata["email_delivery_enabled"])
 
     def test_migration_ledger_tracks_cutover_and_rollback_boundaries(self):
-        path = ROOT / "skills/implementation/templates/migration-ledger.csv"
+        path = ROOT / "plugins/lago/skills/implementation/templates/migration-ledger.csv"
         with path.open(newline="", encoding="utf-8") as handle:
             rows = list(csv.reader(handle))
         self.assertTrue(rows)

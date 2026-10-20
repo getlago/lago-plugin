@@ -5,12 +5,14 @@ Use public primary sources and synthetic data. Keep the main skill compact; add 
 For behavior changes, add or update an eval case and test observable outcomes. Run:
 
 ```bash
-python3 skills/implementation/scripts/validate_repo.py .
+python3 scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
-python3 skills/implementation/scripts/release_integrity.py check . --manifest RELEASE-MANIFEST.json
+python3 plugins/lago/skills/implementation/scripts/release_integrity.py check plugins/lago --manifest plugins/lago/RELEASE-MANIFEST.json
 claude plugin validate .
+claude plugin validate plugins/lago --profile directory --strict
+python3 scripts/check_directory_limits.py plugins/lago
 ```
 
-After any source change, regenerate `RELEASE-MANIFEST.json` before the final validation commit. Never “fix” an integrity failure by updating only the hash without reviewing the changed file.
+After any source change, regenerate `plugins/lago/RELEASE-MANIFEST.json` before the final validation commit. Never “fix” an integrity failure by updating only the hash without reviewing the changed file.
 
 Document version-sensitive claims with a focused official link. Report offline and live validation separately. Use conventional commits and include changed behavior, evidence, risks, and compatibility in the pull request.

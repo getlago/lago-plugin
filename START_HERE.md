@@ -12,7 +12,7 @@ No account, key, Docker, or install is needed. Python 3.9 or later is enough.
 
 ```bash
 git clone --depth 1 https://github.com/getlago/lago-plugin.git
-python3 lago-plugin/skills/implementation/scripts/run_demo.py
+python3 lago-plugin/plugins/lago/skills/implementation/scripts/run_demo.py
 ```
 
 The script follows one AI action from four token records and a retry to a duplicate-safe `$0.37` charge, `$0.20` of remaining included usage, and `$0.17` of overage. It writes no files and contacts no service. `--json` prints machine-readable evidence.

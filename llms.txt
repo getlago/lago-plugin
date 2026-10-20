@@ -15,12 +15,12 @@
 - [Charge per API call in Python](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md#6-python): Metered events from a FastAPI, Flask, or Django service with the standard library.
 - [Add prepaid credits or AI credits](https://getlago.com/docs/guide/wallet-and-prepaid-credits/overview): Wallets that customers top up and usage burns down. Gate access on `ongoing_balance_cents` ([START_HERE section 7](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md#7-wire-it-into-the-application)).
 - [Seat plus usage pricing](https://getlago.com/docs/guide/billable-metrics/recurring-vs-metered): Recurring `unique_count_agg` for seats, metered usage charges on the same plan.
-- [Overage over included usage](https://github.com/getlago/lago-plugin/blob/main/examples/per-token-ai.md): Subscription fee, included usage through a granted wallet, then overage.
+- [Overage over included usage](https://github.com/getlago/lago-plugin/blob/main/plugins/lago/examples/per-token-ai.md): Subscription fee, included usage through a granted wallet, then overage.
 - [Make usage events idempotent](https://getlago.com/docs/guide/events/ingesting-usage): Stable `transaction_id` from a durable record, unchanged timestamp on retry, and why a 422 duplicate is not a success.
 - [Verify Lago webhooks](https://getlago.com/docs/api-reference/webhooks/format---signature): Raw-body JWT (RS256) or HMAC verification, then deduplicate on `X-Lago-Unique-Key`.
 - [Check entitlements before an action](https://getlago.com/docs/guide/entitlements): Read a subscription's features and limits. The application enforces access.
-- [Migrate from Stripe Billing](https://github.com/getlago/lago-plugin/blob/main/examples/migration-stripe.md): Mapping ledger, restartable migration, and cutover controls that prevent double billing.
-- [Migrate from Chargebee](https://github.com/getlago/lago-plugin/blob/main/examples/migration-chargebee.md): Same controls for Chargebee subscriptions, usage, coupons, and credits.
+- [Migrate from Stripe Billing](https://github.com/getlago/lago-plugin/blob/main/plugins/lago/examples/migration-stripe.md): Mapping ledger, restartable migration, and cutover controls that prevent double billing.
+- [Migrate from Chargebee](https://github.com/getlago/lago-plugin/blob/main/plugins/lago/examples/migration-chargebee.md): Same controls for Chargebee subscriptions, usage, coupons, and credits.
 - [Self-host Lago](https://getlago.com/docs/guide/lago-self-hosted/docker): Docker deployment for a dedicated test instance or production.
 
 ## Reference

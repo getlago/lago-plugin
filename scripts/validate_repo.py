@@ -28,6 +28,8 @@ SEMVER = re.compile(
 )
 COMPANY_ONLY_IDENTITY = re.compile(r"lago" + r"@" + r"lago(?![-A-Za-z0-9_])", re.I)
 MAX_TEXT_BYTES = 5_000_000
+# The shipped plugin folder; everything else in the repository is development tooling.
+PLUGIN = "plugins/lago"
 
 
 def load_json(path: Path, failures: list[str]) -> object:
@@ -60,33 +62,38 @@ def iter_text(root: Path, failures: list[str]):
 
 def validate(root: Path, denylist: Path | None) -> list[str]:
     failures: list[str] = []
-    codex = root / ".codex-plugin/plugin.json"
-    claude = root / ".claude-plugin/plugin.json"
+    plugin = root / PLUGIN
+    codex = plugin / ".codex-plugin/plugin.json"
+    claude = plugin / ".claude-plugin/plugin.json"
     codex_marketplace = root / ".agents/plugins/marketplace.json"
     claude_marketplace = root / ".claude-plugin/marketplace.json"
-    skill = root / "skills/implementation/SKILL.md"
-    primitives = root / "skills/implementation/references/primitives.md"
-    solution_engineering = root / "skills/implementation/references/solution-engineering.md"
-    vendor_positioning = root / "skills/implementation/references/vendor-positioning.md"
-    solution_brief = root / "skills/implementation/templates/solution-brief.md"
-    demo = root / "skills/implementation/references/demo.md"
-    validation = root / "skills/implementation/references/validation.md"
-    cli = root / "skills/implementation/references/cli.md"
-    openai_yaml = root / "skills/implementation/agents/openai.yaml"
+    skill = plugin / "skills/implementation/SKILL.md"
+    primitives = plugin / "skills/implementation/references/primitives.md"
+    solution_engineering = plugin / "skills/implementation/references/solution-engineering.md"
+    vendor_positioning = plugin / "skills/implementation/references/vendor-positioning.md"
+    solution_brief = plugin / "skills/implementation/templates/solution-brief.md"
+    demo = plugin / "skills/implementation/references/demo.md"
+    validation = plugin / "skills/implementation/references/validation.md"
+    cli = plugin / "skills/implementation/references/cli.md"
+    openai_yaml = plugin / "skills/implementation/agents/openai.yaml"
     required_scripts = (
-        root / "skills/implementation/scripts/extract_actual.py",
-        root / "skills/implementation/scripts/list_external_links.py",
-        root / "skills/implementation/scripts/money_test.py",
-        root / "skills/implementation/scripts/reconcile.py",
-        root / "skills/implementation/scripts/release_integrity.py",
-        root / "skills/implementation/scripts/run_demo.py",
-        root / "skills/implementation/scripts/validate_demo_target.py",
-        root / "skills/implementation/scripts/validate_event.py",
-        root / "skills/implementation/scripts/validate_repo.py",
+        plugin / "skills/implementation/scripts/extract_actual.py",
+        plugin / "skills/implementation/scripts/money_test.py",
+        plugin / "skills/implementation/scripts/reconcile.py",
+        plugin / "skills/implementation/scripts/release_integrity.py",
+        plugin / "skills/implementation/scripts/run_demo.py",
+        plugin / "skills/implementation/scripts/validate_demo_target.py",
+        plugin / "skills/implementation/scripts/validate_event.py",
+        root / "scripts/build_agent_files.py",
+        root / "scripts/check_directory_limits.py",
+        root / "scripts/list_external_links.py",
+        root / "scripts/validate_repo.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", plugin / "README.md", plugin / "LICENSE", plugin / "RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
+    if (root / "LICENSE").is_file() and (plugin / "LICENSE").is_file() and (root / "LICENSE").read_bytes() != (plugin / "LICENSE").read_bytes():
+        failures.append(f"{PLUGIN}/LICENSE must match the root LICENSE")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
     versions: list[str] = []
     for label, data in (("Codex", codex_data), ("Claude", claude_data)):
@@ -122,10 +129,13 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         ] if isinstance(plugins, list) else []
         if len(entries) != 1:
             failures.append(f"{label} marketplace must expose lago@lago-plugins")
+        elif label == "Claude":
+            if entries[0].get("source") != f"./{PLUGIN}":
+                failures.append(f"Claude marketplace source must be ./{PLUGIN}")
         elif label == "Codex":
             entry = entries[0]
-            if entry.get("source") != {"source": "local", "path": "./"}:
-                failures.append("Codex marketplace source must be the local plugin root")
+            if entry.get("source") != {"source": "local", "path": f"./{PLUGIN}"}:
+                failures.append(f"Codex marketplace source must be the local plugin folder ./{PLUGIN}")
             policy = entry.get("policy")
             if not isinstance(policy, dict) or policy.get("installation") != "AVAILABLE" or policy.get("authentication") != "ON_USE":
                 failures.append("Codex marketplace policy must preserve AVAILABLE/ON_USE")
@@ -309,8 +319,9 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
                     failures.append(f"generated agent manifest is stale: {relative} (run build_agent_files.py)")
         except (OSError, KeyError, StopIteration, ValueError) as error:
             failures.append(f"cannot generate agent manifests: {error}")
-    if (root / "plugin.json").exists():
-        failures.append("root plugin.json would take precedence over .claude-plugin/ in Copilot CLI and over .codex-plugin/ in Codex")
+    for label, folder in (("root", root), (PLUGIN, plugin)):
+        if (folder / "plugin.json").exists():
+            failures.append(f"{label} plugin.json would take precedence over .claude-plugin/ in Copilot CLI and over .codex-plugin/ in Codex")
     main = skill.read_text(encoding="utf-8") if skill.is_file() else ""
     for gate in ("target environment", "affected objects", "billing impact", "rollback/recovery", "explicit approval"):
         if gate not in main.lower():
@@ -320,7 +331,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parents[3])
+    parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--denylist", type=Path, help="optional private list of names/terms; one per line")
     args = parser.parse_args()
     failures = validate(args.root.resolve(), args.denylist)

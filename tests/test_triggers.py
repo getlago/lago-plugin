@@ -153,13 +153,13 @@ class TriggerSuiteTests(unittest.TestCase):
 
     def test_description_fits_agent_skills_limit(self):
         # https://agentskills.io/specification: description is 1-1024 characters.
-        frontmatter = (ROOT / "skills/implementation/SKILL.md").read_text(encoding="utf-8").split("\n---\n", 1)[0]
+        frontmatter = (ROOT / "plugins/lago/skills/implementation/SKILL.md").read_text(encoding="utf-8").split("\n---\n", 1)[0]
         description = re.search(r"^description: (.+)$", frontmatter, re.M).group(1)
         self.assertLessEqual(len(description), 1024)
         self.assertNotIn(": ", description, "a colon-space breaks the unquoted YAML value")
 
     def test_eval_output_is_outside_the_bundle_but_nothing_else_is(self):
-        integrity = load("release_integrity_under_test", ROOT / "skills/implementation/scripts/release_integrity.py")
+        integrity = load("release_integrity_under_test", ROOT / "plugins/lago/skills/implementation/scripts/release_integrity.py")
         self.assertTrue(integrity.is_eval_output(Path("evals/triggers/results/run/aggregate-result.json")))
         self.assertFalse(integrity.is_eval_output(Path("evals/triggers/positive/seat-plus-usage/prompt.md")))
         self.assertFalse(integrity.is_eval_output(Path("skills/implementation/results/x.json")))

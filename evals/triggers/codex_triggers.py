@@ -35,7 +35,7 @@ from pathlib import Path
 
 CASES = Path(__file__).resolve().parent
 REPO = CASES.parents[1]
-SKILL = REPO / "skills/implementation"
+SKILL = REPO / "plugins/lago/skills/implementation"
 FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
 
 
@@ -89,7 +89,7 @@ def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | No
             skill_path = root / ".agents/skills/implementation/SKILL.md"
             shutil.copytree(SKILL, skill_path.parent)
         else:
-            candidates = [p for p in codex_home.rglob("skills/implementation/SKILL.md")
+            candidates = [p for p in codex_home.rglob("plugins/lago/skills/implementation/SKILL.md")
                           if p.read_bytes() == (SKILL / "SKILL.md").read_bytes()]
             if len(candidates) != 1:
                 return {"outcome": "error", "reason": "installed skill path is ambiguous or missing"}

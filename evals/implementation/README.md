@@ -7,7 +7,7 @@ The suite includes anonymized field-replay patterns for AI-native billing, walle
 Deterministic preflight:
 
 ```bash
-python3 skills/implementation/scripts/validate_repo.py .
+python3 scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
 ```
 

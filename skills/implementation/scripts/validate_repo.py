@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import re
 import sys
@@ -296,6 +297,20 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
                     continue
                 if not resolved.exists():
                     failures.append(f"broken relative link: {rel} -> {target}")
+    builder = Path(__file__).with_name("build_agent_files.py")
+    if builder.is_file():
+        spec = importlib.util.spec_from_file_location("build_agent_files", builder)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        try:
+            for relative, content in module.generated(root).items():
+                target = root / relative
+                if not target.is_file() or target.read_text(encoding="utf-8") != content:
+                    failures.append(f"generated agent manifest is stale: {relative} (run build_agent_files.py)")
+        except (OSError, KeyError, StopIteration, ValueError) as error:
+            failures.append(f"cannot generate agent manifests: {error}")
+    if (root / "plugin.json").exists():
+        failures.append("root plugin.json would take precedence over .claude-plugin/ in Copilot CLI and over .codex-plugin/ in Codex")
     main = skill.read_text(encoding="utf-8") if skill.is_file() else ""
     for gate in ("target environment", "affected objects", "billing impact", "rollback/recovery", "explicit approval"):
         if gate not in main.lower():

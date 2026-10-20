@@ -51,6 +51,48 @@ $lago:implementation prepare a self-hosted Kubernetes deployment
 
 Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
 
+### GitHub Copilot CLI
+
+Copilot CLI reads the same marketplace as Claude Code. Run each command in your terminal:
+
+```bash
+copilot plugin marketplace add getlago/lago-plugin
+copilot plugin install lago@lago-plugins
+```
+
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/getlago/lago-plugin
+```
+
+The extension exposes the same `implementation` skill. Goose reads the same `gemini-extension.json`.
+
+### Cursor
+
+In Cursor, open **Customize**, choose **From GitHub Repository**, and enter `getlago/lago-plugin`. The repository ships `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+
+### Other agents with Agent Skills
+
+Any agent that reads `SKILL.md` from `.agents/skills/` can install the skill alone:
+
+```bash
+npx skills add getlago/lago-plugin --skill implementation
+```
+
+This copies only `skills/implementation/`. Without the full plugin bundle, the skill cannot verify `RELEASE-MANIFEST.json`, so it shows the offline walkthrough from its reference instead of running the bundled demo script. Prefer a plugin or extension install when your agent supports one.
+
+| Agent | Install path | Verified |
+| --- | --- | --- |
+| Claude Code, Codex | Plugin `lago@lago-plugins` | Claude Code triggering evals and Codex smoke checks, see [evals/triggers](evals/triggers/README.md) |
+| GitHub Copilot CLI | Plugin `lago@lago-plugins` from `.claude-plugin/` | Install and skill discovery, Copilot CLI 1.0.100 |
+| Gemini CLI | Extension from `gemini-extension.json` | Validation, install, and skill discovery, Gemini CLI 0.64.0 |
+| Cursor | `.cursor-plugin/` | Generated from Cursor's documented format; not tested in Cursor |
+| Goose, Devin | Read `gemini-extension.json` or `.claude-plugin/` per their docs | Not tested |
+| skills.sh agents | Skill only | Install, skills 1.7.4 |
+
+[docs/release-evidence/agents-2026-10-19](docs/release-evidence/agents-2026-10-19/README.md) records the commands and results.
+
 ## Start here
 
 After installation, from any task or folder, ask:

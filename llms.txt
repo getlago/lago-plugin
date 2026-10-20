@@ -7,6 +7,7 @@
 - [START_HERE.md](https://github.com/getlago/lago-plugin/blob/main/START_HERE.md): Self-contained page an agent can follow from top to bottom. Runs an offline demo first, then customer sync, subscriptions, idempotent usage events, a verified webhook handler, and entitlement and prepaid-balance checks. Complete Node.js/TypeScript and Python code, tested against a fake Lago API in this repository's CI.
 - [Offline example](https://github.com/getlago/lago-plugin#start-here): One AI action becomes a duplicate-safe `$0.37` usage charge, included credit, and `$0.17` overage. No account, API key, Docker, or install.
 - [Install the plugin for Claude Code or Codex](https://github.com/getlago/lago-plugin#install): Adds the Lago skill for guided billing design, repository-specific implementation, migration, reconciliation, and money tests. In an interactive Claude Code session: `/plugin marketplace add getlago/lago-plugin`, then `/plugin install lago@lago-plugins`, then `/lago:implementation`. In your terminal for Codex: `codex plugin marketplace add getlago/lago-plugin`, then `codex plugin add lago@lago-plugins`, then `$lago:implementation` in a new task.
+- [Install in GitHub Copilot CLI, Gemini CLI, Cursor, or any Agent Skills agent](https://github.com/getlago/lago-plugin#github-copilot-cli): Copilot CLI uses the same `lago@lago-plugins` marketplace. Gemini CLI installs the repository as an extension. Cursor imports it from GitHub. `npx skills add getlago/lago-plugin --skill implementation` copies the skill alone.
 
 ## Tasks
 

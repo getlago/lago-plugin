@@ -6,6 +6,9 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- Other agents: generated `gemini-extension.json` (Gemini CLI, Goose) and `.cursor-plugin/` manifests (Cursor), plus README install paths for GitHub Copilot CLI, which reads `.claude-plugin/`, and for skills.sh. `build_agent_files.py` generates them from `.claude-plugin/`. The repository validator fails on drift or on a root `plugin.json`.
+- Root `AGENTS.md` for coding agents working in or arriving at this repository.
+- `evals/agent-installs/verify_installs.py`: installs the checkout with pinned Gemini CLI, Copilot CLI, and skills.sh in temporary homes, and records whether the installed skill is byte-identical.
 - Trigger evals: 32 developer-worded prompts and 15 near-misses for `claude plugin eval`, plus a Codex harness that installs `lago@lago-plugins` into a temporary `CODEX_HOME`. Claude Code hit rate went from 86/96 to 95/96, and observed false triggers from 2/42 to 0/43; three baseline and two after-change negative attempts timed out, so both evaluations are incomplete. Historical Codex scores were withdrawn because the original scorer accepted unsuccessful reads; the corrected harness reports successful loading and incomplete attempts separately.
 - `START_HERE.md`: install-free entry point with the offline demo and tested Node.js/TypeScript and Python code for customer sync, subscriptions, idempotent usage events, JWT or HMAC webhook verification, and entitlement and prepaid-balance checks.
 - `packages/init` (unpublished): dependency-free `@getlago/init` CLI that detects a Node.js or Python stack and scaffolds the `START_HERE.md` billing module. Dry run by default; never overwrites files.

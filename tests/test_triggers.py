@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import subprocess
+import tempfile
 import re
 import sys
 import unittest
+from unittest.mock import Mock, patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,17 +52,94 @@ class TriggerSuiteTests(unittest.TestCase):
     def test_summary_counts_turn_capped_runs(self):
         summarize = load("trigger_summarize", TRIGGERS / "summarize.py")
         result = {"claudeVersion": "test", "costUsd": 1, "cases": [
-            {"name": "seat-plus-usage", "arms": {"with": [
-                {"error": "exit 1: Reached maximum number of turns (4)", "graders": [{"passed": True}]},
-                {"error": None, "graders": [{"passed": False}]},
+            {"name": "seat-plus-usage", "runsPerCase": 3, "arms": {"with": [
+                {"error": "exit 1: Reached maximum number of turns (4)", "graders": [{"name": "fired", "passed": True}]},
+                {"error": None, "graders": [{"name": "fired", "passed": False}]},
                 {"error": "timed out", "graders": []},
             ]}},
-            {"name": "eu-vat-calculation", "arms": {"with": [{"error": None, "graders": [{"passed": False}]}]}},
+            {"name": "eu-vat-calculation", "runsPerCase": 1, "arms": {"with": [{"error": None, "graders": [{"name": "not-fired", "passed": False}]}]}},
         ]}
         summary = summarize.summarize(result)
+        self.assertFalse(summary["complete"])
+        self.assertEqual(summary["coverage"]["positive"]["errors"], 1)
+        self.assertEqual(summary["coverage"]["positive"]["planned"], 3)
         self.assertEqual(summary["hit_rate"], "1/2")
         self.assertEqual(summary["false_trigger_rate"], "1/1")
         self.assertEqual(summary["false_triggers"], ["eu-vat-calculation"])
+
+    def test_codex_requires_successful_exact_read(self):
+        runner = load("codex_triggers", TRIGGERS / "codex_triggers.py")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "SKILL.md"
+            path.write_text("Synthetic skill contents\n")
+            event = {"type": "item.completed", "item": {
+                "type": "command_execution", "status": "completed", "exit_code": 0,
+                "command": f"cat {path}", "aggregated_output": path.read_text()}}
+            self.assertTrue(runner.observed_read(event, path))
+            for field, value in [("command", "echo implementation/SKILL.md"),
+                                 ("command", "cat /unrelated/implementation/SKILL.md"),
+                                 ("command", f"echo cat {path}"),
+                                 ("command", f"cat {path}; true"),
+                                 ("exit_code", 1), ("status", "failed"),
+                                 ("aggregated_output", "No such file"),
+                                 ("aggregated_output", "Synthetic")]:
+                with self.subTest(field=field, value=value):
+                    changed = {**event, "item": {**event["item"], field: value}}
+                    self.assertFalse(runner.observed_read(changed, path))
+            self.assertFalse(runner.observed_read({**event, "type": "item.started"}, path))
+
+    def test_codex_reaps_process_after_verified_read(self):
+        runner = load("codex_triggers", TRIGGERS / "codex_triggers.py")
+        process = Mock()
+        process.stdout = Mock(wraps=None)
+        process.stdout.__iter__ = Mock(return_value=iter(['{"type":"item.completed","item":{"command":"cat skill", "exit_code":0}}\n']))
+        process.poll.return_value = None
+        with patch.object(runner.subprocess, "run"), patch.object(runner.subprocess, "Popen", return_value=process), patch.object(runner, "observed_read", return_value=True):
+            result = runner.run_once("synthetic", 30, None, None)
+        self.assertEqual(result["outcome"], "loaded")
+        process.kill.assert_called_once()
+        process.wait.assert_called_once()
+        process.stdout.close.assert_called_once()
+
+    def test_codex_cli_fails_on_incomplete_attempt(self):
+        runner = load("codex_triggers", TRIGGERS / "codex_triggers.py")
+        with patch.object(sys, "argv", ["codex_triggers.py", "--project-skill"]), patch.object(runner, "load_cases", return_value=[("positive", "synthetic", "prompt")]), patch.object(runner, "run_once", return_value={"outcome": "error", "reason": "timeout"}), patch.object(runner.subprocess, "check_output", return_value="test"), patch("builtins.print"):
+            self.assertEqual(runner.main(), 1)
+
+    def test_codex_coverage_preserves_each_error(self):
+        runner = load("codex_triggers", TRIGGERS / "codex_triggers.py")
+        runs = [{"kind": "positive", "outcome": outcome} for outcome in ("loaded", "error", "error")]
+        summary = runner.summarize_runs(runs)
+        self.assertFalse(summary["complete"])
+        self.assertEqual(summary["coverage"]["positive"], {"planned": 3, "completed": 1, "errors": 2, "loaded": 1})
+        self.assertEqual(len(summary["runs"]), 3)
+        self.assertFalse(runner.summarize_runs([])["complete"])
+
+    def test_claude_rejects_infrastructure_failure_and_missing_attempts(self):
+        summarizer = load("trigger_summarize", TRIGGERS / "summarize.py")
+        source = {"cases": [{"name": "eu-vat-calculation", "runsPerCase": 2, "arms": {"with": [
+            {"error": "authentication failed", "graders": [{"name": "not-fired", "passed": True}]}
+        ]}}]}
+        result = summarizer.summarize(source)
+        self.assertFalse(result["complete"])
+        self.assertEqual(result["false_trigger_rate"], "0/0")
+        self.assertEqual(result["coverage"]["negative"]["errors"], 2)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "result.json"
+            path.write_text(json.dumps(source))
+            process = subprocess.run([sys.executable, str(TRIGGERS / "summarize.py"), str(path)], capture_output=True)
+            self.assertEqual(process.returncode, 1)
+
+    def test_claude_requires_expected_grader_and_rejects_partial(self):
+        summarizer = load("trigger_summarize", TRIGGERS / "summarize.py")
+        source = {"cases": [{"name": "seat-plus-usage", "runsPerCase": 1, "arms": {"with": [
+            {"graders": [{"name": "unrelated", "passed": True}]}
+        ]}}]}
+        self.assertFalse(summarizer.summarize(source)["complete"])
+        source["cases"][0]["arms"]["with"][0]["graders"][0]["name"] = "fired"
+        self.assertTrue(summarizer.summarize(source)["complete"])
+        source["partial"] = True
+        self.assertFalse(summarizer.summarize(source)["complete"])
 
     def test_description_fits_agent_skills_limit(self):
         # https://agentskills.io/specification: description is 1-1024 characters.

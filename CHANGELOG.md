@@ -6,7 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
-- Trigger evals: 32 developer-worded prompts and 15 near-misses for `claude plugin eval`, plus a Codex harness that installs `lago@lago-plugins` into a temporary `CODEX_HOME`. Claude Code hit rate went from 86/96 to 95/96, and false triggers from 2/45 to 0/45. Codex false triggers went from 3/29 to 0/30, with all 64 positive runs hitting before and after.
+- Trigger evals: 32 developer-worded prompts and 15 near-misses for `claude plugin eval`, plus a Codex harness that installs `lago@lago-plugins` into a temporary `CODEX_HOME`. Claude Code hit rate went from 86/96 to 95/96, and false triggers from 2/45 to 0/45. Historical Codex scores were withdrawn because the original scorer accepted unsuccessful reads; the corrected harness reports successful loading and incomplete attempts separately.
 - `START_HERE.md`: install-free entry point with the offline demo and tested Node.js/TypeScript and Python code for customer sync, subscriptions, idempotent usage events, JWT or HMAC webhook verification, and entitlement and prepaid-balance checks.
 - `packages/init` (unpublished): dependency-free `@getlago/init` CLI that detects a Node.js or Python stack and scaffolds the `START_HERE.md` billing module. Dry run by default; never overwrites files.
 - CI job that runs the `START_HERE.md` code against a fake Lago API and checks the init templates for drift.
@@ -15,6 +15,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 - The skill description leads with the words developers use: usage-based or metered billing, per token, per API call, seat plus usage, prepaid credits and wallets, overage, and migration off Stripe Billing or Chargebee. It also says when not to use the skill.
 - The repository validator and release integrity skip local `claude plugin eval` output under `evals/<suite>/results/`.
+- `START_HERE.md`, `llms.txt`, and the `@getlago/init` output show the exact Claude Code and Codex install commands for `lago@lago-plugins`; tests check README consistency, command order, invocation, and the CLI's actual dry-run output.
 - Hardened install-free examples: refuse authenticated redirects, retry non-JSON transient responses, persist webhooks for durable polling, scope paginated wallet snapshots to eligible charges, and make subscription cadence and invoice reconciliation explicit.
 
 - `llms.txt` leads with `START_HERE.md` and lists tasks in developer wording, such as billing per token in a Next.js app, adding prepaid credits, and migrating from Stripe Billing.

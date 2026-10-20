@@ -6,7 +6,7 @@ fresh, empty Git workspace with a read-only sandbox. A run counts as triggered
 when the agent reads the skill's SKILL.md; it stops at that read or at the
 timeout.
 
-Default (`--plugin`): install this checkout as `lago@lago-plugins` into a
+Default: install this checkout as `lago@lago-plugins` into a
 temporary CODEX_HOME, the same path users take with `codex plugin add`. Only
 auth.json is copied from the user's CODEX_HOME (mode 600), and the temporary
 home is deleted afterwards. The user's own config and plugins are untouched.
@@ -19,6 +19,9 @@ skill is visible in the workspace, which biases toward triggering.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
+import shlex
 import json
 import os
 import re
@@ -33,7 +36,6 @@ from pathlib import Path
 CASES = Path(__file__).resolve().parent
 REPO = CASES.parents[1]
 SKILL = REPO / "skills/implementation"
-READ_SKILL = re.compile(r"implementation/SKILL\.md")
 FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
 
 
@@ -55,11 +57,43 @@ def install_plugin(codex_home: Path) -> None:
         subprocess.run(command, env=env, check=True, capture_output=True, stdin=subprocess.DEVNULL)
 
 
-def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | None) -> bool | None:
+def observed_read(event: dict, skill_path: Path) -> bool:
+    """Conservative evidence: completed standalone cat of our file and its contents.
+
+    Other read forms are unclassified attempts, never a claimed successful load.
+    This intentionally measures loading, not merely mentioning or attempting a read.
+    """
+    item = event.get("item") or {}
+    if (event.get("type") != "item.completed"
+            or item.get("type") != "command_execution"
+            or item.get("status") != "completed" or item.get("exit_code") != 0):
+        return False
+    try:
+        words = shlex.split(item.get("command") or "")
+        if len(words) == 3 and Path(words[0]).name in ("sh", "bash", "zsh") and words[1] in ("-c", "-lc"):
+            words = shlex.split(words[2])
+    except ValueError:
+        return False
+    if len(words) == 3 and words[1] == "--":
+        words.pop(1)
+    return (len(words) == 2 and words[0] in ("cat", "/bin/cat", "/usr/bin/cat")
+            and Path(words[1]).is_absolute()
+            and Path(words[1]).resolve() == skill_path.resolve()
+            and (item.get("aggregated_output") or "").strip() == skill_path.read_text().strip())
+
+
+def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | None) -> dict:
     with tempfile.TemporaryDirectory(prefix="lago-trigger-") as workspace:
         root = Path(workspace)
         if codex_home is None:
-            shutil.copytree(SKILL, root / ".agents/skills/implementation")
+            skill_path = root / ".agents/skills/implementation/SKILL.md"
+            shutil.copytree(SKILL, skill_path.parent)
+        else:
+            candidates = [p for p in codex_home.rglob("skills/implementation/SKILL.md")
+                          if p.read_bytes() == (SKILL / "SKILL.md").read_bytes()]
+            if len(candidates) != 1:
+                return {"outcome": "error", "reason": "installed skill path is ambiguous or missing"}
+            skill_path = candidates[0]
         subprocess.run(["git", "init", "-q"], cwd=root, check=True)
         command = ["codex", "exec", "--json", "--ephemeral", "--sandbox", "read-only", "-C", workspace]
         if codex_home is None:
@@ -68,21 +102,56 @@ def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | No
         if model:
             command += ["-m", model]
         process = subprocess.Popen(command + [prompt], env=env, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
-        timer = threading.Timer(timeout, process.kill)
+        expired = threading.Event()
+        def expire():
+            expired.set()
+            process.kill()
+        timer = threading.Timer(timeout, expire)
         timer.start()
+        attempted = False
         try:
             for line in process.stdout:
                 try:
-                    item = json.loads(line).get("item") or {}
+                    event = json.loads(line)
                 except json.JSONDecodeError:
                     continue
-                if item.get("type") == "command_execution" and READ_SKILL.search(item.get("command") or ""):
-                    process.kill()
-                    return True
+                item = event.get("item") or {}
+                attempted |= "SKILL.md" in (item.get("command") or "")
+                if observed_read(event, skill_path):
+                    return {"outcome": "loaded", "evidence": {
+                        "command": item["command"], "exit_code": item["exit_code"],
+                        "content_sha256": hashlib.sha256(skill_path.read_bytes()).hexdigest()}}
             process.wait()
-            return False if process.returncode == 0 else None
+            if expired.is_set():
+                return {"outcome": "error", "reason": "timeout"}
+            if process.returncode != 0:
+                return {"outcome": "error", "reason": "process failed", "exit_code": process.returncode}
+            if attempted:
+                return {"outcome": "error", "reason": "skill read attempted but not verified"}
+            return {"outcome": "not_loaded"}
         finally:
             timer.cancel()
+            timer.join()
+            if process.poll() is None:
+                process.kill()
+            process.wait()
+            process.stdout.close()
+
+
+def summarize_runs(runs: list[dict]) -> dict:
+    totals = {kind: {"planned": 0, "completed": 0, "errors": 0, "loaded": 0}
+              for kind in ("positive", "negative")}
+    for run in runs:
+        count = totals[run["kind"]]
+        count["planned"] += 1
+        if run["outcome"] == "error":
+            count["errors"] += 1
+        else:
+            count["completed"] += 1
+            count["loaded"] += run["outcome"] == "loaded"
+    return {"coverage": totals, "complete": bool(runs) and all(v["errors"] == 0 for v in totals.values()),
+            "hit_rate": "{loaded}/{completed}".format(**totals["positive"]),
+            "false_trigger_rate": "{loaded}/{completed}".format(**totals["negative"]), "runs": runs}
 
 
 def main() -> int:
@@ -94,34 +163,34 @@ def main() -> int:
     parser.add_argument("--model")
     parser.add_argument("--project-skill", action="store_true", help="copy the skill into each workspace instead of installing the plugin")
     args = parser.parse_args()
-    jobs = [(kind, name, prompt) for kind, name, prompt in load_cases(args.case) for _ in range(args.runs)]
+    if min(args.runs, args.concurrency, args.timeout) < 1:
+        parser.error("runs, concurrency and timeout must be positive")
+    started_at = datetime.now(timezone.utc).isoformat()
+    jobs = [(kind, name, prompt, attempt) for kind, name, prompt in load_cases(args.case) for attempt in range(1, args.runs + 1)]
+    if not jobs:
+        parser.error("no cases matched")
     with tempfile.TemporaryDirectory(prefix="lago-codex-home-") as home:
         codex_home = None if args.project_skill else Path(home)
         if codex_home:
             install_plugin(codex_home)
         with ThreadPoolExecutor(args.concurrency) as pool:
-            fired = list(pool.map(lambda job: run_once(job[2], args.timeout, args.model, codex_home), jobs))
-    totals = {"positive": [0, 0], "negative": [0, 0]}
-    misses, false_fires, errors = set(), set(), set()
-    for (kind, name, _), result in zip(jobs, fired):
-        if result is None:
-            errors.add(name)
-            continue
-        totals[kind][0] += int(result)
-        totals[kind][1] += 1
-        if kind == "positive" and not result:
-            misses.add(name)
-        if kind == "negative" and result:
-            false_fires.add(name)
-    print(json.dumps({
+            outcomes = list(pool.map(lambda job: run_once(job[2], args.timeout, args.model, codex_home), jobs))
+    runs = [{"kind": kind, "case": name, "attempt": attempt, **outcome}
+            for (kind, name, _, attempt), outcome in zip(jobs, outcomes)]
+    summary = summarize_runs(runs)
+    summary.update({
+        "started_at": started_at,
+        "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "mode": "project-skill" if args.project_skill else "plugin lago@lago-plugins",
-        "hit_rate": "{}/{}".format(*totals["positive"]),
-        "false_trigger_rate": "{}/{}".format(*totals["negative"]),
-        "misses": sorted(misses),
-        "false_triggers": sorted(false_fires),
-        "errors": sorted(errors),
-    }, indent=2))
-    return 0
+        "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip(),
+        "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO, text=True).strip()),
+        "skill_sha256": hashlib.sha256((SKILL / "SKILL.md").read_bytes()).hexdigest(),
+        "codex_version": subprocess.check_output(["codex", "--version"], text=True).strip(),
+        "requested_model": args.model or "CLI default (not pinned)",
+        "command": sys.argv,
+    })
+    print(json.dumps(summary, indent=2))
+    return 0 if summary["complete"] else 1
 
 
 if __name__ == "__main__":

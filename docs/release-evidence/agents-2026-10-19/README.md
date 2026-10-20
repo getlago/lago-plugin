@@ -18,7 +18,7 @@ gemini extensions install https://github.com/getlago/lago-plugin --ref 9d3593c37
 
 Gemini CLI 0.64.0 installed it, and `skills list` showed `implementation [Enabled]`. The installed `SKILL.md` hash is `03ecfca42b3c10fcf315e178c07bd15f825e13f1dd7c534202b5540c308335b3`, identical to the checkout's.
 
-## CTO review correction
+## Review correction
 
 The original Gemini check was insufficient: `.gemini-extension-install.json`, written by Gemini CLI after installation, caused release integrity to fail on an unexpected file. Merely finding `RELEASE-MANIFEST.json` did not prove the demo could run. The verifier now permits that exact root bookkeeping file only for a Gemini bundle; modified payloads, symlinks and other extra files still fail. No production approval or billing guidance changed.
 

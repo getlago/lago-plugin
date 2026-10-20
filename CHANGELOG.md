@@ -4,6 +4,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+### Fixed
+
+- Archived evidence no longer includes spend fields, model thinking blocks, local user names in directory listings, local tool paths, or internal role labels. A test keeps them out.
+
 ### Added
 
 - Other agents: generated `gemini-extension.json` (Gemini CLI, Goose) and `.cursor-plugin/` manifests (Cursor), plus README install paths for GitHub Copilot CLI, which reads `.claude-plugin/`, and for skills.sh. `build_agent_files.py` generates them from `.claude-plugin/`. The repository validator fails on drift or on a root `plugin.json`.

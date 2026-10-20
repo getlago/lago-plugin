@@ -36,4 +36,7 @@ Next:
   1. See the money first, offline: git clone --depth 1 https://github.com/getlago/lago-plugin.git && python3 lago-plugin/skills/implementation/scripts/run_demo.py
   2. Set LAGO_API_URL (ask for the region: US https://api.getlago.com, EU https://api.eu.getlago.com, or self-hosted) and LAGO_API_KEY in the secret manager.
   3. Create the metric and plan once, then wire customers, subscriptions, usage, and webhooks: ${START_HERE}
+  4. Optional, guided help in your agent:
+     Claude Code: /plugin marketplace add getlago/lago-plugin, then /plugin install lago@lago-plugins
+     Codex:       codex plugin marketplace add getlago/lago-plugin, then codex plugin add lago@lago-plugins
 ${write ? "" : "\nRe-run with --write to create the files."}`);

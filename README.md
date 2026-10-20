@@ -51,6 +51,50 @@ $lago:implementation prepare a self-hosted Kubernetes deployment
 
 Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
 
+### GitHub Copilot CLI
+
+Copilot CLI reads the same marketplace as Claude Code. Run each command in your terminal:
+
+```bash
+copilot plugin marketplace add getlago/lago-plugin
+copilot plugin install lago@lago-plugins
+```
+
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/getlago/lago-plugin
+```
+
+The extension exposes the same `implementation` skill. The integrity check permits only Gemini’s root `.gemini-extension-install.json` bookkeeping file as an extra file; bundled code remains hash-checked. Goose documents support for the same `gemini-extension.json` format, but has not been tested here.
+
+### Cursor
+
+In Cursor, open **Customize**, choose **From GitHub Repository**, and enter `getlago/lago-plugin`. The repository ships `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+
+### Other agents with Agent Skills
+
+Any agent that reads `SKILL.md` from `.agents/skills/` can install the skill alone:
+
+```bash
+npx skills add getlago/lago-plugin --skill implementation
+```
+
+This copies only `skills/implementation/`. Without the full plugin bundle, the skill cannot verify `RELEASE-MANIFEST.json`, so it shows the offline walkthrough from its reference instead of running the bundled demo script. Links to repository-level `examples/` are also unavailable in a skill-only install; read those examples in this repository. Prefer a plugin or extension install when your agent supports one.
+
+| Agent | Install path | Verified |
+| --- | --- | --- |
+| Claude Code, Codex | Plugin `lago@lago-plugins` | Claude Code triggering evals and Codex smoke checks, see [evals/triggers](evals/triggers/README.md) |
+| GitHub Copilot CLI | Plugin `lago@lago-plugins` from `.claude-plugin/` | Local marketplace install, verified source binding, bundle integrity and offline demo, Copilot CLI 1.0.100 |
+| Gemini CLI | Extension from `gemini-extension.json` | Validation, install, discovery, installed bundle integrity and offline demo, Gemini CLI 0.64.0 |
+| Cursor | `.cursor-plugin/` | Generated from Cursor's documented format; not tested in Cursor |
+| Goose, Devin | Read `gemini-extension.json` or `.claude-plugin/` per their docs | Not tested |
+| skills.sh agents | Skill only | Install, skills 1.7.4 |
+
+[docs/release-evidence/agents-2026-10-19](docs/release-evidence/agents-2026-10-19/README.md) records the commands and results. These installation checks do not demonstrate automatic selection or integration correctness on the new agents.
+
+Format and installation references: [Copilot CLI](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference), [Gemini CLI](https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/extensions/reference.md), [Cursor manifests](https://cursor.com/docs/reference/plugins.md), [Cursor repository import](https://cursor.com/docs/rules), [Goose formats](https://raw.githubusercontent.com/aaif-goose/goose/main/documentation/docs/guides/context-engineering/plugins.md), and [Devin compatibility](https://docs.devin.ai/cli/extensibility/plugins).
+
 ## Start here
 
 After installation, from any task or folder, ask:

@@ -1,0 +1,135 @@
+{
+  "started_at": "2026-10-20T04:01:22.687082+00:00",
+  "source_commit": "9d3593c37233fa81c480dee2f33ad09cd61f24f4",
+  "source_dirty": false,
+  "skill_sha256": "03ecfca42b3c10fcf315e178c07bd15f825e13f1dd7c534202b5540c308335b3",
+  "runner_sha256": "fef0d82cf11bae6bd06d58c2b89d4a4e4beddcac627a22a2f671c2d8ed0db88a",
+  "node": "v24.2.0",
+  "checks": [
+    {
+      "agent": "gemini-cli",
+      "cli": "@google/gemini-cli@0.64.0",
+      "passed": true,
+      "skill": {
+        "found": 1,
+        "identical": 1,
+        "paths": [
+          "<home>/.gemini/extensions/lago/skills/implementation/SKILL.md"
+        ]
+      },
+      "steps": [
+        {
+          "command": "npx -y @google/gemini-cli@0.64.0 extensions validate <checkout>",
+          "exit_code": 0,
+          "output_tail": [
+            "Extension <checkout> has been successfully validated."
+          ]
+        },
+        {
+          "command": "npx -y @google/gemini-cli@0.64.0 extensions install <checkout> --consent",
+          "exit_code": 0,
+          "output_tail": [
+            "Do you trust the files in this folder?",
+            "",
+            "The extension source at \"<checkout>\" is not trusted.",
+            "",
+            "Trusting a folder allows Gemini CLI to load its local configurations,",
+            "including custom commands, hooks, MCP servers, agent skills, and",
+            "settings. These configurations could execute code on your behalf or",
+            "change the behavior of the CLI.",
+            "",
+            "Do you want to trust this folder and continue with the installation? [y/N]: You have consented to the following:",
+            "The extension you are about to install may have been created by a third-party developer and sourced from a public repository. Google does not vet, endorse, or guarantee the functionality or security of extensions. Please carefully inspect any extension and its source code before installing to understand the permissions it requires and the actions it may perform.",
+            "Extension \"lago\" installed successfully and enabled."
+          ]
+        },
+        {
+          "command": "npx -y @google/gemini-cli@0.64.0 skills list",
+          "exit_code": 0,
+          "output_tail": [
+            "Discovered Agent Skills:",
+            "",
+            "implementation [Enabled]",
+            "  Description: Usage-based, metered, and AI billing with Lago, the open-source billing engine. Use whenever a developer wants to add usage-based or metered billing to an app, charge per token, per API call, per seat plus usage, per GB, per MAU, or per outcome, add prepaid credits, AI credits, wallets, top-ups, overage, tiered or volume pricing, or minimum commitments, send idempotent usage events, show customers current usage, invoice customers from usage, or plan or run a billing migration off Stripe Billing, Chargebee, or a homegrown usage cron, including subscriptions, metered prices, and usage, replace an unreliable metering or usage pipeline, or add usage-based pricing on top of an existing Stripe or Chargebee setup, even when Lago is not named. Also use to explore Lago pricing without a codebase or credentials, or to implement a Lago Cloud or self-hosted integration. Do not use for one-off checkout or payment-method work, marketplace payouts, card storage, receipts, tax-only questions, or product analytics.",
+            "  Location:    <home>/.gemini/extensions/lago/skills/implementation/SKILL.md",
+            "",
+            "Ripgrep is not available. Falling back to GrepTool.",
+            "Loading extension: lago",
+            "Scheduling MCP context refresh...",
+            "Executing MCP context refresh...",
+            "MCP context refresh complete."
+          ]
+        }
+      ],
+      "bundle_has_release_manifest": true
+    },
+    {
+      "agent": "github-copilot-cli",
+      "cli": "@github/copilot@1.0.100",
+      "passed": true,
+      "steps": [
+        {
+          "command": "npx -y @github/copilot@1.0.100 plugin marketplace add <checkout>",
+          "exit_code": 0,
+          "output_tail": [
+            "Marketplace \"lago-plugins\" added successfully."
+          ]
+        },
+        {
+          "command": "npx -y @github/copilot@1.0.100 plugin install lago@lago-plugins",
+          "exit_code": 0,
+          "output_tail": [
+            "Plugin \"lago\" installed successfully. Installed 1 skill.",
+            "Enabled \"lago@lago-plugins\". It is loaded live from <checkout>, so edits take effect on the next session \u2014 nothing was copied."
+          ]
+        },
+        {
+          "command": "npx -y @github/copilot@1.0.100 plugin list",
+          "exit_code": 0,
+          "output_tail": [
+            "Built-in plugins:",
+            "  \u2022 browser-use (v0.0.4) [disabled]",
+            "Live Plugins (loaded from a local marketplace directory, never copied):",
+            "  \u2022 lago@lago-plugins (v0.2.0) (enabled)",
+            "      from <checkout>"
+          ]
+        }
+      ],
+      "note": "local marketplace plugins load live from the source directory; nothing is copied"
+    },
+    {
+      "agent": "skills.sh",
+      "cli": "skills@1.7.4",
+      "passed": true,
+      "skill": {
+        "found": 1,
+        "identical": 1,
+        "paths": [
+          "<home>/project/.agents/skills/implementation/SKILL.md"
+        ]
+      },
+      "steps": [
+        {
+          "command": "npx -y skills@1.7.4 add <checkout> --skill implementation -a codex -a cursor -a github-copilot -a gemini-cli --copy -y",
+          "exit_code": 0,
+          "output_tail": [
+            "\u25c7  Installation complete",
+            "\u001b[?25h",
+            "\u2502",
+            "\u25c7  Installed 1 skill \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e",
+            "\u2502                                       \u2502",
+            "\u2502  \u2713 implementation (copied)            \u2502",
+            "\u2502    \u2192 ./.agents/skills/implementation  \u2502",
+            "\u2502                                       \u2502",
+            "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f",
+            "",
+            "\u2502",
+            "\u2514  Done!  Review skills before use; they run with full agent permissions."
+          ]
+        }
+      ],
+      "bundle_has_release_manifest": false
+    }
+  ],
+  "complete": true
+}

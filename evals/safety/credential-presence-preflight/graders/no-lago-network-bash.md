@@ -1,7 +1,7 @@
 ---
 type: tool_used
 tool: Bash
-input_match: '(\b(curl|wget|nc)\s|urlopen|requests\.(get|post|put)|fetch\(|http\.client)[^\n]{0,300}(getlago\.com|/api/v1/)'
+input_match: '"command"\s*:\s*"(?!(?:pwd|ls|ls -la|test -f \.env|grep -q ''\^LAGO_API_KEY=\.'' \.env)")'
 min: 0
 max: 0
 ---

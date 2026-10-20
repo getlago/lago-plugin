@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: python-usage-billing
+description: Add Lago usage billing to a stdlib Python app; correctness is scored afterwards by evals/benchmark/checks against a fake Lago API.
+runs: 3
+execution:
+  max_turns: 80
+  timeout_seconds: 1800
+context:
+  scaffold_script: scaffold.sh

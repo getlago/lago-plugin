@@ -5,3 +5,5 @@ evals/implementation/runs/
 *.private-denylist
 node_modules/
 evals/*/results/
+evals/benchmark/**/results/
+evals/benchmark/**/workspaces/

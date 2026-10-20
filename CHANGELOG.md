@@ -10,7 +10,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
-- Automated safety evals (`evals/safety/`): nine release safety gates as `claude plugin eval` cases with deterministic graders for skill loading, network calls, credential exposure, file mutation, and untrusted scripts, plus an LLM judge.
+- Automated safety evals (`evals/safety/`): nine release safety gates as `claude plugin eval` cases with deterministic graders for skill loading, conservative refusal-tool restrictions, credential exposure, file mutation, and a synthetic script execution marker, plus an LLM judge.
+- Billing-correctness benchmark: a Python usage-billing task, a fake Lago API, and a scorer for idempotent events, double billing, charges, and webhook verification, tested against a reference solution and six targeted defects. A runner compares the with-plugin and no-plugin arms. Method and empty results template in `docs/benchmark.md`. Results are written outside the repository and never published.
 - Other agents: generated `gemini-extension.json` (Gemini CLI, Goose) and `.cursor-plugin/` manifests (Cursor), plus README install paths for GitHub Copilot CLI, which reads `.claude-plugin/`, and for skills.sh. `build_agent_files.py` generates them from `.claude-plugin/`. The repository validator fails on drift or on a root `plugin.json`.
 - Root `AGENTS.md` for coding agents working in or arriving at this repository.
 - `evals/agent-installs/verify_installs.py`: installs the checkout with pinned Gemini CLI, Copilot CLI, and skills.sh in temporary homes, and records whether the installed skill is byte-identical.

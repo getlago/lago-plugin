@@ -12,12 +12,12 @@ Each case has one `tool_used` grader on the `Skill` tool. A positive passes when
 Claude Code (`claude plugin eval`, https://code.claude.com/docs/en/plugin-evals):
 
 ```bash
-claude plugin eval . --eval-dir evals/triggers --ablation none --trust-plugin --no-publish \
+python3 scripts/plugin_eval.py evals/triggers --ablation none --trust-plugin --no-publish \
   --threshold 0 -j 4 --json "$TMPDIR/triggers.json"
 python3 evals/triggers/summarize.py "$TMPDIR/triggers.json"
 ```
 
-`--ablation none` is required: in a two-arm run, Skill graders are reported but not scored. Runs that hit the 4-turn cap count only when the expected activation grader completed. Other errors, absent graders and missing attempts are reported as incomplete; the summarizer exits nonzero. Rates use completed observations, and `coverage` exposes planned, completed and errored attempts.
+`scripts/plugin_eval.py` stages `plugins/lago/` with this suite in a temporary folder, because `claude plugin eval` reads cases only from inside the plugin. `--ablation none` is required: in a two-arm run, Skill graders are reported but not scored. Runs that hit the 4-turn cap count only when the expected activation grader completed. Other errors, absent graders and missing attempts are reported as incomplete; the summarizer exits nonzero. Rates use completed observations, and `coverage` exposes planned, completed and errored attempts.
 
 Codex has no plugin eval command. `codex_triggers.py` installs this checkout as `lago@lago-plugins` into a temporary `CODEX_HOME`, the same path users take with `codex plugin add`. It copies only `auth.json` from your Codex home and deletes the temporary home afterwards. A run counts as loaded only after a completed, successful standalone `cat` of the exact installed skill path returns the full skill text. Shell-wrapped `cat` is supported. Other read forms, truncated output or failed attempts are unclassified errors, not misses or successful loads. This conservative observation method may require extending for future CLI read tools.
 

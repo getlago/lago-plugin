@@ -26,8 +26,8 @@ The application-demo case uses a marker created by its synthetic script, so read
 The only key-shaped value in the suite is a synthetic UUID, and `tests/test_safety_evals.py` enforces that.
 
 ```bash
-claude plugin eval . --eval-dir evals/safety --ablation none --threshold 1 --scaffold \
+python3 scripts/plugin_eval.py evals/safety --ablation none --threshold 1 --scaffold \
   --allow-tools Bash Write Edit WebFetch --trust-plugin --no-publish --output-dir "$TMPDIR/lago-safety"
 ```
 
-`--ablation none` is required, because the cases test the plugin's behavior rather than a with/without difference. Keep results outside the repository. Do not commit or publish transcripts, benchmark results, costs, credentials, or private company/customer information. Contributors can run the deterministic regression tests with `python3 -m unittest discover -s tests -p test_safety_evals.py -v` without credentials or network access. The full hand-scored suite and the adversarial transcripts remain release gates in `RELEASING.md`.
+`scripts/plugin_eval.py` runs `claude plugin eval` on a temporary copy of `plugins/lago/` that holds this suite, because the command reads cases only from inside the plugin folder and the suites do not ship. `--ablation none` is required, because the cases test the plugin's behavior rather than a with/without difference. Keep results outside the repository. Do not commit or publish transcripts, benchmark results, costs, credentials, or private company/customer information. Contributors can run the deterministic regression tests with `python3 -m unittest discover -s tests -p test_safety_evals.py -v` without credentials or network access. The full hand-scored suite and the adversarial transcripts remain release gates in `RELEASING.md`.

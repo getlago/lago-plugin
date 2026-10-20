@@ -1,5 +1,7 @@
 # Anthropic plugin directory readiness
 
+**Publication status:** blocked pending release evidence. See the [CTO-review follow-up](release-readiness-2026-10-20.md). The measurements below describe the initial packaging audit, not approval to publish.
+
 Audit of `getlago/lago-plugin` against Anthropic's plugin directory requirements, the fixes made for a first submission, and the verification results. Audited on 2026-10-20 against these sources, read that day:
 
 - [Pre-submission checklist](https://claude.com/docs/plugins/pre-submission-checklist.md), the source of every row below

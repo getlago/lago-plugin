@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Lock the pinned Claude CI validator and its dependency tree outside the shipped plugin.
+
 - Disclose Python helper bytecode caches and ignore local environment files while retaining examples.
 
 - Make the no-install completion contract explicit: activation, durable outbox/inbox workers, entitlement wiring and runnable recovery tests; prohibit handing off unconnected helpers as an implemented integration.

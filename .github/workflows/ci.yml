@@ -80,8 +80,8 @@ jobs:
       # Pinned to a release at least two weeks old. `--profile directory` arrived
       # after 2.1.292; add it here once a release that has it is two weeks old.
       - name: Install Claude Code
-        run: npm install --global @anthropic-ai/claude-code@2.1.292
+        run: npm ci --prefix .github/tools/claude
       - name: Validate the plugin and marketplace manifests
         run: |
-          claude plugin validate plugins/lago --strict
-          claude plugin validate . --strict
+          .github/tools/claude/node_modules/.bin/claude plugin validate plugins/lago --strict
+          .github/tools/claude/node_modules/.bin/claude plugin validate . --strict

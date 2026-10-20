@@ -3,7 +3,6 @@
   "claudeVersion": "2.1.304",
   "startedAt": "2026-10-19T23:51:51.903Z",
   "durationSeconds": 415,
-  "costUsd": 3.2246353,
   "partial": false,
   "suite": {
     "root": "[EVAL_ROOT]",
@@ -112,8 +111,6 @@
             "score": 1,
             "passed": true,
             "turns": 35,
-            "costUsd": 1.0940331,
-            "judgeCostUsd": 0.007258400000000002,
             "durationSeconds": 236,
             "startedAt": "2026-10-19T23:51:51.939Z",
             "error": null,
@@ -137,7 +134,7 @@
                 "name": "fetched-start-here",
                 "passed": true,
                 "weight": 1,
-                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "explanation": "WebFetch called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -161,7 +158,7 @@
                 "name": "writes-explicit-timestamp",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -169,7 +166,7 @@
                 "name": "writes-subscription-id-on-events",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -177,7 +174,7 @@
                 "name": "writes-webhook-dedupe",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 3x (expected 1..\u221e)",
+                "explanation": "Write called 3x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -185,7 +182,7 @@
                 "name": "writes-webhook-signature-check",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -195,8 +192,6 @@
             "score": 0.875,
             "passed": false,
             "turns": 33,
-            "costUsd": 0.9872642000000001,
-            "judgeCostUsd": 0.0071012,
             "durationSeconds": 221,
             "startedAt": "2026-10-19T23:51:51.939Z",
             "error": null,
@@ -220,7 +215,7 @@
                 "name": "fetched-start-here",
                 "passed": true,
                 "weight": 1,
-                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "explanation": "WebFetch called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -244,7 +239,7 @@
                 "name": "writes-explicit-timestamp",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -252,7 +247,7 @@
                 "name": "writes-subscription-id-on-events",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -260,7 +255,7 @@
                 "name": "writes-webhook-dedupe",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -268,7 +263,7 @@
                 "name": "writes-webhook-signature-check",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -280,8 +275,6 @@
             "score": 1,
             "passed": true,
             "turns": 21,
-            "costUsd": 0.5006921,
-            "judgeCostUsd": 0.007779900000000001,
             "durationSeconds": 133,
             "startedAt": "2026-10-19T23:55:33.092Z",
             "error": null,
@@ -305,7 +298,7 @@
                 "name": "fetched-start-here",
                 "passed": true,
                 "weight": 1,
-                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "explanation": "WebFetch called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -329,7 +322,7 @@
                 "name": "writes-explicit-timestamp",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -337,7 +330,7 @@
                 "name": "writes-subscription-id-on-events",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -345,7 +338,7 @@
                 "name": "writes-webhook-dedupe",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -353,7 +346,7 @@
                 "name": "writes-webhook-signature-check",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -363,8 +356,6 @@
             "score": 1,
             "passed": true,
             "turns": 20,
-            "costUsd": 0.6426459,
-            "judgeCostUsd": 0.006926000000000002,
             "durationSeconds": 179,
             "startedAt": "2026-10-19T23:55:48.412Z",
             "error": null,
@@ -388,7 +379,7 @@
                 "name": "fetched-start-here",
                 "passed": true,
                 "weight": 1,
-                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "explanation": "WebFetch called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -412,7 +403,7 @@
                 "name": "writes-explicit-timestamp",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -420,7 +411,7 @@
                 "name": "writes-subscription-id-on-events",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -428,7 +419,7 @@
                 "name": "writes-webhook-dedupe",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 1x (expected 1..\u221e)",
+                "explanation": "Write called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               },
@@ -436,7 +427,7 @@
                 "name": "writes-webhook-signature-check",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Write called 2x (expected 1..\u221e)",
+                "explanation": "Write called 2x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }

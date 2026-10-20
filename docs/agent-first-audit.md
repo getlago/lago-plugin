@@ -87,7 +87,7 @@ Tooling that already exists outside the repository:
 
 1. **WS4 preserves the demo invariant.** `SKILL.md`, `references/demo.md`, `references/cloud.md` and `references/safety.md` require isolated self-hosted Lago for synthetic demos. `validate_repo.py`, the unit tests and the `cloud-staging-demo-refusal` eval enforce that boundary.
 
-   **Decision (2026-10-19, revised after CTO review):** offline remains the default. The optional live step uses a fresh, dedicated self-hosted OSS instance only. An existing Cloud API key does not authorize or qualify a demo target. If the user declines local containers or Docker is unavailable, continue offline and report live billing as unverified.
+   **Decision (2026-10-19, revised after review):** offline remains the default. The optional live step uses a fresh, dedicated self-hosted OSS instance only. An existing Cloud API key does not authorize or qualify a demo target. If the user declines local containers or Docker is unavailable, continue offline and report live billing as unverified.
 
    WS4 must preserve these controls:
    - Obtain explicit approval immediately before infrastructure changes and each live mutation, showing the exact target, affected objects, billing impact and recovery.

@@ -71,7 +71,6 @@ def summarize(result: dict) -> dict:
         "misses": sorted({r["case"] for r in observations if r["kind"] == "positive" and r["outcome"] == "not_fired"}),
         "false_triggers": sorted({r["case"] for r in observations if r["kind"] == "negative" and r["outcome"] == "fired"}),
         "runs": observations,
-        "cost_usd": round(result.get("costUsd") or 0, 2),
     }
 
 

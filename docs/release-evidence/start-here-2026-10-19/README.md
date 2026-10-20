@@ -22,7 +22,7 @@ The second with-plugin run failed `correct-integration` with `judge votes: FAIL 
 
 ## Artifacts
 
-- [Harness results and grader definitions](aggregate-result.json), retaining scores, costs, errors, votes and explanations.
+- [Harness results and grader definitions](aggregate-result.json), retaining scores, errors, votes and explanations. Spend fields, model thinking blocks and local user and tool paths were removed before publishing.
 - [With-plugin run 1](with-1.json) and [run 2](with-2.json).
 - [Without-plugin run 1](without-1.json) and [run 2](without-2.json).
 

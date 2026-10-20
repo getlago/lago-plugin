@@ -3,7 +3,6 @@
   "claudeVersion": "2.1.304",
   "startedAt": "2026-10-20T00:14:04.672Z",
   "durationSeconds": 958,
-  "costUsd": 24.514037,
   "partial": false,
   "suite": {
     "root": "<checkout>",
@@ -47,8 +46,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.063336,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:14:04.776Z",
             "error": null,
@@ -68,8 +65,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.0627896,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:14:04.776Z",
             "error": null,
@@ -89,8 +84,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.06298319999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:14:04.776Z",
             "error": null,
@@ -141,8 +134,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.05949,
-            "judgeCostUsd": 0,
             "durationSeconds": 9,
             "startedAt": "2026-10-20T00:14:04.777Z",
             "error": null,
@@ -162,8 +153,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.06417060000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:14:13.388Z",
             "error": null,
@@ -183,8 +172,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.0633112,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:14:15.468Z",
             "error": null,
@@ -235,8 +222,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.0684934,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:14:15.932Z",
             "error": null,
@@ -256,8 +241,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.06988939999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:14:20.847Z",
             "error": null,
@@ -277,8 +260,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.0664134,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:14:24.561Z",
             "error": null,
@@ -329,8 +310,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.0618238,
-            "judgeCostUsd": 0,
             "durationSeconds": 10,
             "startedAt": "2026-10-20T00:14:28.282Z",
             "error": null,
@@ -350,8 +329,6 @@
             "score": 1,
             "passed": true,
             "turns": 4,
-            "costUsd": 0.06459000000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:14:31.185Z",
             "error": null,
@@ -371,8 +348,6 @@
             "score": 1,
             "passed": true,
             "turns": 4,
-            "costUsd": 0.0646964,
-            "judgeCostUsd": 0,
             "durationSeconds": 10,
             "startedAt": "2026-10-20T00:14:38.262Z",
             "error": null,
@@ -423,8 +398,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.06611239999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:14:38.503Z",
             "error": null,
@@ -444,8 +417,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.0693778,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:14:38.519Z",
             "error": null,
@@ -465,8 +436,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.0619926,
-            "judgeCostUsd": 0,
             "durationSeconds": 10,
             "startedAt": "2026-10-20T00:14:42.197Z",
             "error": null,
@@ -517,8 +486,6 @@
             "score": 1,
             "passed": true,
             "turns": 9,
-            "costUsd": 0.21169400000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 300,
             "startedAt": "2026-10-20T00:14:48.739Z",
             "error": "timed out after 300s",
@@ -538,8 +505,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.6281334000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 133,
             "startedAt": "2026-10-20T00:14:51.651Z",
             "error": null,
@@ -559,8 +524,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.18778820000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 300,
             "startedAt": "2026-10-20T00:14:52.683Z",
             "error": "timed out after 300s",
@@ -611,8 +574,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.0644544,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:14:52.715Z",
             "error": null,
@@ -632,8 +593,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.15276859999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 26,
             "startedAt": "2026-10-20T00:15:10.260Z",
             "error": null,
@@ -653,8 +612,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.061634999999999995,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:15:35.771Z",
             "error": null,
@@ -705,8 +662,6 @@
             "score": 1,
             "passed": true,
             "turns": 4,
-            "costUsd": 0.0666854,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:15:46.602Z",
             "error": null,
@@ -726,8 +681,6 @@
             "score": 1,
             "passed": true,
             "turns": 4,
-            "costUsd": 0.0645824,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:16:00.659Z",
             "error": null,
@@ -747,8 +700,6 @@
             "score": 1,
             "passed": true,
             "turns": 4,
-            "costUsd": 0.0675104,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:16:11.319Z",
             "error": null,
@@ -799,8 +750,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.0852794,
-            "judgeCostUsd": 0,
             "durationSeconds": 24,
             "startedAt": "2026-10-20T00:16:24.264Z",
             "error": null,
@@ -820,8 +769,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.0825432,
-            "judgeCostUsd": 0,
             "durationSeconds": 21,
             "startedAt": "2026-10-20T00:16:48.536Z",
             "error": null,
@@ -841,8 +788,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.08024540000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 20,
             "startedAt": "2026-10-20T00:17:04.369Z",
             "error": null,
@@ -893,8 +838,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.058436,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:17:09.615Z",
             "error": null,
@@ -914,8 +857,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.0591616,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:17:23.175Z",
             "error": null,
@@ -935,8 +876,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.058776,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:17:23.973Z",
             "error": null,
@@ -987,8 +926,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.05811859999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:17:35.399Z",
             "error": null,
@@ -1008,8 +945,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.058401400000000006,
-            "judgeCostUsd": 0,
             "durationSeconds": 9,
             "startedAt": "2026-10-20T00:17:36.704Z",
             "error": null,
@@ -1029,8 +964,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.057533999999999995,
-            "judgeCostUsd": 0,
             "durationSeconds": 9,
             "startedAt": "2026-10-20T00:17:46.162Z",
             "error": null,
@@ -1081,8 +1014,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.062469399999999994,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:17:46.972Z",
             "error": null,
@@ -1102,8 +1033,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.07140139999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:17:54.827Z",
             "error": null,
@@ -1123,8 +1052,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.0648694,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:17:58.824Z",
             "error": null,
@@ -1175,8 +1102,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.22503499999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 57,
             "startedAt": "2026-10-20T00:18:12.583Z",
             "error": null,
@@ -1196,8 +1121,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.30744359999999993,
-            "judgeCostUsd": 0,
             "durationSeconds": 72,
             "startedAt": "2026-10-20T00:18:12.649Z",
             "error": null,
@@ -1217,8 +1140,6 @@
             "score": 1,
             "passed": true,
             "turns": 3,
-            "costUsd": 0.5107712000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 113,
             "startedAt": "2026-10-20T00:19:09.534Z",
             "error": null,
@@ -1269,8 +1190,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.0641696,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:19:24.750Z",
             "error": null,
@@ -1290,8 +1209,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.0649798,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:19:37.290Z",
             "error": null,
@@ -1311,8 +1228,6 @@
             "score": 1,
             "passed": true,
             "turns": 2,
-            "costUsd": 0.0641118,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:19:48.804Z",
             "error": null,
@@ -1363,8 +1278,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.06588939999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:19:50.176Z",
             "error": null,
@@ -1384,8 +1297,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.0635014,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:19:52.780Z",
             "error": null,
@@ -1405,8 +1316,6 @@
             "score": 1,
             "passed": true,
             "turns": 1,
-            "costUsd": 0.0664094,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:20:01.162Z",
             "error": null,
@@ -1454,8 +1363,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.25556840000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 31,
             "startedAt": "2026-10-20T00:20:04.066Z",
             "error": null,
@@ -1465,7 +1372,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1475,8 +1382,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.17255879999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:20:04.664Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1486,7 +1391,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1496,8 +1401,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.17626300000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:20:15.794Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1507,7 +1410,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1545,8 +1448,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2232822,
-            "judgeCostUsd": 0,
             "durationSeconds": 22,
             "startedAt": "2026-10-20T00:20:17.444Z",
             "error": null,
@@ -1556,7 +1457,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1566,8 +1467,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.26106019999999996,
-            "judgeCostUsd": 0,
             "durationSeconds": 26,
             "startedAt": "2026-10-20T00:20:29.820Z",
             "error": null,
@@ -1577,7 +1476,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1587,8 +1486,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2228762,
-            "judgeCostUsd": 0,
             "durationSeconds": 20,
             "startedAt": "2026-10-20T00:20:34.985Z",
             "error": null,
@@ -1598,7 +1495,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1636,8 +1533,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.176257,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:20:39.703Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1647,7 +1542,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1657,8 +1552,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1774658,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:20:53.652Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1668,7 +1561,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1678,8 +1571,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.2439786,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:20:55.432Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1689,7 +1580,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1727,8 +1618,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2107668,
-            "judgeCostUsd": 0,
             "durationSeconds": 31,
             "startedAt": "2026-10-20T00:20:55.777Z",
             "error": null,
@@ -1738,7 +1627,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1748,8 +1637,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.24481600000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 26,
             "startedAt": "2026-10-20T00:21:02.902Z",
             "error": null,
@@ -1759,7 +1646,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1769,8 +1656,6 @@
             "score": 1,
             "passed": true,
             "turns": 9,
-            "costUsd": 0.29674860000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 38,
             "startedAt": "2026-10-20T00:21:06.485Z",
             "error": null,
@@ -1780,7 +1665,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1818,8 +1703,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1567816,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:21:10.140Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1829,7 +1712,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1839,8 +1722,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1938992,
-            "judgeCostUsd": 0,
             "durationSeconds": 34,
             "startedAt": "2026-10-20T00:21:25.070Z",
             "error": null,
@@ -1850,7 +1731,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1860,8 +1741,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1693854,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:21:26.916Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1871,7 +1750,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1909,8 +1788,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.185029,
-            "judgeCostUsd": 0,
             "durationSeconds": 26,
             "startedAt": "2026-10-20T00:21:28.616Z",
             "error": null,
@@ -1920,7 +1797,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1930,8 +1807,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1378518,
-            "judgeCostUsd": 0,
             "durationSeconds": 17,
             "startedAt": "2026-10-20T00:21:39.038Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -1941,7 +1816,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -1951,8 +1826,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.1861552,
-            "judgeCostUsd": 0,
             "durationSeconds": 30,
             "startedAt": "2026-10-20T00:21:44.745Z",
             "error": null,
@@ -1962,7 +1835,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2000,8 +1873,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.3112594,
-            "judgeCostUsd": 0,
             "durationSeconds": 40,
             "startedAt": "2026-10-20T00:21:54.869Z",
             "error": null,
@@ -2011,7 +1882,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2021,8 +1892,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.2658058,
-            "judgeCostUsd": 0,
             "durationSeconds": 21,
             "startedAt": "2026-10-20T00:21:56.032Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -2032,7 +1901,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2042,8 +1911,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.3154182,
-            "judgeCostUsd": 0,
             "durationSeconds": 42,
             "startedAt": "2026-10-20T00:21:58.750Z",
             "error": null,
@@ -2053,7 +1920,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2091,8 +1958,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.187129,
-            "judgeCostUsd": 0,
             "durationSeconds": 21,
             "startedAt": "2026-10-20T00:22:14.318Z",
             "error": null,
@@ -2102,7 +1967,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2112,8 +1977,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.20157860000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 23,
             "startedAt": "2026-10-20T00:22:16.880Z",
             "error": null,
@@ -2123,7 +1986,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2133,8 +1996,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2342318,
-            "judgeCostUsd": 0,
             "durationSeconds": 30,
             "startedAt": "2026-10-20T00:22:34.571Z",
             "error": null,
@@ -2144,7 +2005,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2182,8 +2043,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1709484,
-            "judgeCostUsd": 0,
             "durationSeconds": 19,
             "startedAt": "2026-10-20T00:22:35.701Z",
             "error": null,
@@ -2193,7 +2052,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2203,8 +2062,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1309794,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:22:39.969Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -2214,7 +2071,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2224,8 +2081,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.17323339999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:22:40.703Z",
             "error": null,
@@ -2235,7 +2090,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2273,8 +2128,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.22774519999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:22:51.323Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -2284,7 +2137,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2294,8 +2147,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.21968520000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:22:55.139Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -2305,7 +2156,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2315,8 +2166,6 @@
             "score": 1,
             "passed": true,
             "turns": 9,
-            "costUsd": 0.23211980000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 36,
             "startedAt": "2026-10-20T00:22:56.924Z",
             "error": null,
@@ -2326,7 +2175,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2364,8 +2213,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2814928,
-            "judgeCostUsd": 0,
             "durationSeconds": 35,
             "startedAt": "2026-10-20T00:23:04.115Z",
             "error": null,
@@ -2375,7 +2222,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2385,8 +2232,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.29671499999999995,
-            "judgeCostUsd": 0,
             "durationSeconds": 36,
             "startedAt": "2026-10-20T00:23:05.653Z",
             "error": null,
@@ -2396,7 +2241,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2406,8 +2251,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.30295320000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 41,
             "startedAt": "2026-10-20T00:23:09.489Z",
             "error": null,
@@ -2417,7 +2260,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2455,8 +2298,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.2799016,
-            "judgeCostUsd": 0,
             "durationSeconds": 36,
             "startedAt": "2026-10-20T00:23:32.717Z",
             "error": null,
@@ -2466,7 +2307,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2476,8 +2317,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.282585,
-            "judgeCostUsd": 0,
             "durationSeconds": 35,
             "startedAt": "2026-10-20T00:23:38.716Z",
             "error": null,
@@ -2487,7 +2326,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2497,8 +2336,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.295162,
-            "judgeCostUsd": 0,
             "durationSeconds": 40,
             "startedAt": "2026-10-20T00:23:41.633Z",
             "error": null,
@@ -2508,7 +2345,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2546,8 +2383,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1749348,
-            "judgeCostUsd": 0,
             "durationSeconds": 26,
             "startedAt": "2026-10-20T00:23:50.546Z",
             "error": null,
@@ -2557,7 +2392,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2567,8 +2402,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1699654,
-            "judgeCostUsd": 0,
             "durationSeconds": 24,
             "startedAt": "2026-10-20T00:24:08.966Z",
             "error": null,
@@ -2578,7 +2411,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2588,8 +2421,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.2035958,
-            "judgeCostUsd": 0,
             "durationSeconds": 23,
             "startedAt": "2026-10-20T00:24:13.286Z",
             "error": null,
@@ -2599,7 +2430,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2637,8 +2468,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.25083700000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 22,
             "startedAt": "2026-10-20T00:24:16.233Z",
             "error": null,
@@ -2648,7 +2477,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2658,8 +2487,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.24149559999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 31,
             "startedAt": "2026-10-20T00:24:21.880Z",
             "error": null,
@@ -2669,7 +2496,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2679,8 +2506,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.21920099999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 21,
             "startedAt": "2026-10-20T00:24:32.611Z",
             "error": null,
@@ -2690,7 +2515,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2728,8 +2553,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1691308,
-            "judgeCostUsd": 0,
             "durationSeconds": 21,
             "startedAt": "2026-10-20T00:24:36.157Z",
             "error": null,
@@ -2739,7 +2562,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2749,8 +2572,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.1755372,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:24:37.819Z",
             "error": null,
@@ -2760,7 +2581,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2770,8 +2591,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.17533040000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 17,
             "startedAt": "2026-10-20T00:24:52.641Z",
             "error": null,
@@ -2781,7 +2600,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2819,8 +2638,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1765392,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:24:53.988Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -2830,7 +2647,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2840,8 +2657,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.18686740000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 22,
             "startedAt": "2026-10-20T00:24:54.255Z",
             "error": null,
@@ -2851,7 +2666,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2861,8 +2676,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2313802,
-            "judgeCostUsd": 0,
             "durationSeconds": 28,
             "startedAt": "2026-10-20T00:24:57.484Z",
             "error": null,
@@ -2872,7 +2685,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2910,8 +2723,6 @@
             "score": 1,
             "passed": true,
             "turns": 11,
-            "costUsd": 0.3094328,
-            "judgeCostUsd": 0,
             "durationSeconds": 57,
             "startedAt": "2026-10-20T00:25:07.229Z",
             "error": null,
@@ -2921,7 +2732,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2931,8 +2742,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.25074179999999996,
-            "judgeCostUsd": 0,
             "durationSeconds": 52,
             "startedAt": "2026-10-20T00:25:09.808Z",
             "error": null,
@@ -2942,7 +2751,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -2952,8 +2761,6 @@
             "score": 1,
             "passed": true,
             "turns": 9,
-            "costUsd": 0.29708199999999996,
-            "judgeCostUsd": 0,
             "durationSeconds": 59,
             "startedAt": "2026-10-20T00:25:15.989Z",
             "error": null,
@@ -2963,7 +2770,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3001,8 +2808,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1722784,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:25:25.842Z",
             "error": null,
@@ -3012,7 +2817,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3022,8 +2827,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1737768,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:25:40.651Z",
             "error": null,
@@ -3033,7 +2836,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3043,8 +2846,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1447454,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:25:58.478Z",
             "error": null,
@@ -3054,7 +2855,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3092,8 +2893,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.18949300000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 25,
             "startedAt": "2026-10-20T00:26:01.665Z",
             "error": null,
@@ -3103,7 +2902,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3113,8 +2912,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.17030280000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:26:04.237Z",
             "error": null,
@@ -3124,7 +2921,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3134,8 +2931,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.1882774,
-            "judgeCostUsd": 0,
             "durationSeconds": 19,
             "startedAt": "2026-10-20T00:26:15.423Z",
             "error": null,
@@ -3145,7 +2940,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3183,8 +2978,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1793448,
-            "judgeCostUsd": 0,
             "durationSeconds": 19,
             "startedAt": "2026-10-20T00:26:16.135Z",
             "error": null,
@@ -3194,7 +2987,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3204,8 +2997,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1655338,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:26:18.912Z",
             "error": null,
@@ -3215,7 +3006,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3225,8 +3016,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1654436,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:26:26.253Z",
             "error": null,
@@ -3236,7 +3025,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3274,8 +3063,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.20033120000000004,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:26:33.087Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3285,7 +3072,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3295,8 +3082,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1739238,
-            "judgeCostUsd": 0,
             "durationSeconds": 15,
             "startedAt": "2026-10-20T00:26:34.787Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3306,7 +3091,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3316,8 +3101,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1778422,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:26:35.426Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3327,7 +3110,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3365,8 +3148,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.2698796,
-            "judgeCostUsd": 0,
             "durationSeconds": 37,
             "startedAt": "2026-10-20T00:26:40.106Z",
             "error": null,
@@ -3376,7 +3157,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3386,8 +3167,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.27627820000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 37,
             "startedAt": "2026-10-20T00:26:46.281Z",
             "error": null,
@@ -3397,7 +3176,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3407,8 +3186,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.27976840000000003,
-            "judgeCostUsd": 0,
             "durationSeconds": 33,
             "startedAt": "2026-10-20T00:26:47.768Z",
             "error": null,
@@ -3418,7 +3195,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3456,8 +3233,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1331804,
-            "judgeCostUsd": 0,
             "durationSeconds": 10,
             "startedAt": "2026-10-20T00:26:49.336Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3467,7 +3242,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3477,8 +3252,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1686566,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:26:59.191Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3488,7 +3261,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3498,8 +3271,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.17119020000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:27:12.508Z",
             "error": null,
@@ -3509,7 +3280,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3547,8 +3318,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1788752,
-            "judgeCostUsd": 0,
             "durationSeconds": 17,
             "startedAt": "2026-10-20T00:27:16.945Z",
             "error": null,
@@ -3558,7 +3327,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3568,8 +3337,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1806092,
-            "judgeCostUsd": 0,
             "durationSeconds": 19,
             "startedAt": "2026-10-20T00:27:20.787Z",
             "error": null,
@@ -3579,7 +3346,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3589,8 +3356,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.18201319999999999,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:27:23.597Z",
             "error": null,
@@ -3600,7 +3365,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3638,8 +3403,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1709822,
-            "judgeCostUsd": 0,
             "durationSeconds": 22,
             "startedAt": "2026-10-20T00:27:28.916Z",
             "error": null,
@@ -3649,7 +3412,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3659,8 +3422,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.16658440000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:27:34.418Z",
             "error": null,
@@ -3670,7 +3431,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3680,8 +3441,6 @@
             "score": 0,
             "passed": false,
             "turns": 2,
-            "costUsd": 0.065593,
-            "judgeCostUsd": 0,
             "durationSeconds": 13,
             "startedAt": "2026-10-20T00:27:39.793Z",
             "error": null,
@@ -3691,7 +3450,7 @@
                 "name": "fired",
                 "passed": false,
                 "weight": 1,
-                "explanation": "Skill called 0x (expected 1..\u221e)",
+                "explanation": "Skill called 0x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3729,8 +3488,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.21084,
-            "judgeCostUsd": 0,
             "durationSeconds": 26,
             "startedAt": "2026-10-20T00:27:41.897Z",
             "error": null,
@@ -3740,7 +3497,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3750,8 +3507,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2101614,
-            "judgeCostUsd": 0,
             "durationSeconds": 25,
             "startedAt": "2026-10-20T00:27:48.032Z",
             "error": null,
@@ -3761,7 +3516,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3771,8 +3526,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1742436,
-            "judgeCostUsd": 0,
             "durationSeconds": 23,
             "startedAt": "2026-10-20T00:27:50.472Z",
             "error": null,
@@ -3782,7 +3535,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3820,8 +3573,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1376216,
-            "judgeCostUsd": 0,
             "durationSeconds": 12,
             "startedAt": "2026-10-20T00:27:53.141Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3831,7 +3582,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3841,8 +3592,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1332556,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:28:04.821Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3852,7 +3601,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3862,8 +3611,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1756458,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:28:07.488Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3873,7 +3620,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3911,8 +3658,6 @@
             "score": 1,
             "passed": true,
             "turns": 9,
-            "costUsd": 0.30418239999999996,
-            "judgeCostUsd": 0,
             "durationSeconds": 41,
             "startedAt": "2026-10-20T00:28:13.212Z",
             "error": null,
@@ -3922,7 +3667,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3932,8 +3677,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.23941800000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 18,
             "startedAt": "2026-10-20T00:28:13.462Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -3943,7 +3686,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -3953,8 +3696,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.2797616,
-            "judgeCostUsd": 0,
             "durationSeconds": 32,
             "startedAt": "2026-10-20T00:28:21.199Z",
             "error": null,
@@ -3964,7 +3705,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4002,8 +3743,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.13177540000000001,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:28:25.524Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -4013,7 +3752,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4023,8 +3762,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1723766,
-            "judgeCostUsd": 0,
             "durationSeconds": 16,
             "startedAt": "2026-10-20T00:28:31.065Z",
             "error": null,
@@ -4034,7 +3771,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4044,8 +3781,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.15463439999999998,
-            "judgeCostUsd": 0,
             "durationSeconds": 22,
             "startedAt": "2026-10-20T00:28:41.830Z",
             "error": null,
@@ -4055,7 +3790,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4093,8 +3828,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1678308,
-            "judgeCostUsd": 0,
             "durationSeconds": 24,
             "startedAt": "2026-10-20T00:28:46.774Z",
             "error": null,
@@ -4104,7 +3837,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4114,8 +3847,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.183833,
-            "judgeCostUsd": 0,
             "durationSeconds": 20,
             "startedAt": "2026-10-20T00:28:53.406Z",
             "error": null,
@@ -4125,7 +3856,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4135,8 +3866,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.1317644,
-            "judgeCostUsd": 0,
             "durationSeconds": 11,
             "startedAt": "2026-10-20T00:28:53.868Z",
             "error": "exit 1: Reached maximum number of turns (4)",
@@ -4146,7 +3875,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4184,8 +3913,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.2777214,
-            "judgeCostUsd": 0,
             "durationSeconds": 37,
             "startedAt": "2026-10-20T00:29:03.784Z",
             "error": null,
@@ -4195,7 +3922,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4205,8 +3932,6 @@
             "score": 1,
             "passed": true,
             "turns": 8,
-            "costUsd": 0.2989036,
-            "judgeCostUsd": 0,
             "durationSeconds": 43,
             "startedAt": "2026-10-20T00:29:04.638Z",
             "error": null,
@@ -4216,7 +3941,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4226,8 +3951,6 @@
             "score": 1,
             "passed": true,
             "turns": 7,
-            "costUsd": 0.2296026,
-            "judgeCostUsd": 0,
             "durationSeconds": 35,
             "startedAt": "2026-10-20T00:29:11.203Z",
             "error": null,
@@ -4237,7 +3960,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4275,8 +3998,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.166028,
-            "judgeCostUsd": 0,
             "durationSeconds": 14,
             "startedAt": "2026-10-20T00:29:13.640Z",
             "error": null,
@@ -4286,7 +4007,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4296,8 +4017,6 @@
             "score": 1,
             "passed": true,
             "turns": 5,
-            "costUsd": 0.17583320000000002,
-            "judgeCostUsd": 0,
             "durationSeconds": 20,
             "startedAt": "2026-10-20T00:29:27.404Z",
             "error": null,
@@ -4307,7 +4026,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }
@@ -4317,8 +4036,6 @@
             "score": 1,
             "passed": true,
             "turns": 6,
-            "costUsd": 0.1776722,
-            "judgeCostUsd": 0,
             "durationSeconds": 22,
             "startedAt": "2026-10-20T00:29:40.382Z",
             "error": null,
@@ -4328,7 +4045,7 @@
                 "name": "fired",
                 "passed": true,
                 "weight": 1,
-                "explanation": "Skill called 1x (expected 1..\u221e)",
+                "explanation": "Skill called 1x (expected 1..∞)",
                 "withOnly": false,
                 "scored": true
               }

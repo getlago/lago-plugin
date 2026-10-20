@@ -22,6 +22,24 @@ def run(script: str, *args: object) -> subprocess.CompletedProcess[str]:
 
 
 class ScriptTests(unittest.TestCase):
+    def test_preflight_is_read_only_and_does_not_expose_source_or_credentials(self):
+        with tempfile.TemporaryDirectory() as directory:
+            app = Path(directory)
+            (app / "pyproject.toml").write_text("[project]\nname = 'demo'\n")
+            (app / "store.py").write_text("customer subscription usage billing secret_marker_123")
+            (app / ".env").write_text("LAGO_API_KEY=secret_marker_123")
+            result = run("preflight.py", app)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            self.assertEqual(report["application_manifests"], ["pyproject.toml"])
+            self.assertEqual(report["candidate_source_files"]["usage"], ["store.py"])
+            for agent in report["available_agent_commands"]:
+                self.assertTrue(report["install_guidance_for_available_agents"][agent])
+            self.assertFalse(report["target_organization_verified"])
+            self.assertFalse(report["live_actions_taken"])
+            self.assertNotIn("secret_marker_123", result.stdout)
+            self.assertNotIn(".env", result.stdout)
+
     def test_public_repository_validator(self):
         result = run("validate_repo.py", ROOT)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

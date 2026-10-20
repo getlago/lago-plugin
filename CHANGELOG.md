@@ -6,10 +6,14 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
+- Release integrity failed inside every running Claude Code session, because Claude Code writes `.in_use/<pid>` liveness records into the installed plugin copy. The check now exempts only root-level, digit-named records of at most 1 KiB when the bundle declares a Claude Code plugin, like the existing Gemini install-record exemption. Found by a clean marketplace install test; the skill must not run bundled code when integrity fails, so this blocked or weakened the offline demo.
 - Archived evidence no longer includes spend fields, model thinking blocks, local user names in directory listings, local tool paths, or internal role labels. A test keeps them out.
 
 ### Added
 
+- `plugins/lago/README.md`: the directory listing text, with install steps and a "What this plugin runs, sends and stores" disclosure.
+- `scripts/check_directory_limits.py` and a CI job that runs it with `claude plugin validate plugins/lago --profile directory --strict`.
+- `docs/directory-readiness.md` (audit against the pre-submission checklist) and `docs/directory-submission-handoff.md` (portal steps for the Lago Owner who submits).
 - Automated safety evals (`evals/safety/`): nine release safety gates as `claude plugin eval` cases with deterministic graders for skill loading, conservative refusal-tool restrictions, credential exposure, file mutation, and a synthetic script execution marker, plus an LLM judge.
 - Billing-correctness benchmark: a Python usage-billing task, a fake Lago API, and a scorer for idempotent events, double billing, charges, and webhook verification, tested against a reference solution and six targeted defects. A runner compares the with-plugin and no-plugin arms. Method and empty results template in `docs/benchmark.md`. Results are written outside the repository and never published.
 - Other agents: generated `gemini-extension.json` (Gemini CLI, Goose) and `.cursor-plugin/` manifests (Cursor), plus README install paths for GitHub Copilot CLI, which reads `.claude-plugin/`, and for skills.sh. `build_agent_files.py` generates them from `.claude-plugin/`. The repository validator fails on drift or on a root `plugin.json`.
@@ -22,6 +26,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Changed
 
+- Directory readiness: the shipped plugin moved to `plugins/lago/` so it can be submitted to Anthropic's plugin directory. The root marketplaces point at it, so `lago@lago-plugins` and the Claude Code, Codex, Copilot CLI, and Cursor install commands are unchanged. Gemini CLI installs from a subfolder with `gemini skills install --path`, or the full extension from a clone. `examples/` ships inside the plugin, where the skill already linked to it. Maintainer tooling (`validate_repo.py`, `build_agent_files.py`, `list_external_links.py`) moved to `scripts/` and no longer ships. `RELEASE-MANIFEST.json` now covers the plugin folder only.
+- `plugin.json`: a one-sentence developer description, `icon`, `documentationUrl`, `privacyPolicyUrl`, and `termsOfServiceUrl`. Claude Code and Codex manifests are at version 0.3.0 for the next release.
 - Gemini installations retain the offline demo: release integrity permits only the root CLI-owned `.gemini-extension-install.json` as installation metadata while still rejecting symlinks, modified source and other unexpected files. Agent install verification now requires bundle integrity and the offline demo for full installs, checks Copilot’s live source binding, and sanitizes failure paths.
 
 - The skill description leads with the words developers use: usage-based or metered billing, per token, per API call, seat plus usage, prepaid credits and wallets, overage, and migration off Stripe Billing or Chargebee. It also says when not to use the skill.

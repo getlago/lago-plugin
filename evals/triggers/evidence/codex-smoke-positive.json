@@ -1,0 +1,53 @@
+{
+  "coverage": {
+    "positive": {
+      "planned": 1,
+      "completed": 1,
+      "errors": 0,
+      "loaded": 1
+    },
+    "negative": {
+      "planned": 0,
+      "completed": 0,
+      "errors": 0,
+      "loaded": 0
+    }
+  },
+  "complete": true,
+  "hit_rate": "1/1",
+  "false_trigger_rate": "0/0",
+  "runs": [
+    {
+      "kind": "positive",
+      "case": "seat-plus-usage",
+      "attempt": 1,
+      "outcome": "loaded",
+      "evidence": {
+        "command": "/bin/zsh -lc 'cat <CODEX_HOME>/plugins/cache/lago-plugins/lago/0.2.0/skills/implementation/SKILL.md'",
+        "exit_code": 0,
+        "content_sha256": "03ecfca42b3c10fcf315e178c07bd15f825e13f1dd7c534202b5540c308335b3"
+      }
+    }
+  ],
+  "started_at": "2026-10-20T03:40:14.795670+00:00",
+  "runner_sha256": "5e1987012072782d7ee1843c452f605248b3cb03b7ed6756532d2417f7c98a6e",
+  "mode": "plugin lago@lago-plugins",
+  "source_commit": "4d9e081e41a1ee9346889936150f08aecdfe658a",
+  "source_dirty": false,
+  "skill_sha256": "03ecfca42b3c10fcf315e178c07bd15f825e13f1dd7c534202b5540c308335b3",
+  "codex_version": "codex-cli 0.163.0",
+  "requested_model": "CLI default (not pinned)",
+  "command": [
+    "evals/triggers/codex_triggers.py",
+    "--case",
+    "seat-plus-usage",
+    "--runs",
+    "1",
+    "--timeout",
+    "120"
+  ],
+  "archiveNote": {
+    "original_sha256": "96a18ec8065ba4b27b780fe4fa3e0ed751224b72ee39ce353bae83a6e6a0fcbb",
+    "sanitization": "Replaced temporary home path in command with <CODEX_HOME>. Smoke test only, default model not pinned."
+  }
+}

@@ -71,14 +71,15 @@ def check(repo: Path, plugin: Path) -> tuple[list[str], dict[str, object]]:
         if not PATH_SEGMENT.match(segment):
             failures.append(f"plugin path segment has characters other than letters, digits, dots, hyphens, underscores: {segment}")
     staged = git(repo, "ls-files", "-s", "-z").decode("utf-8").split("\0")
-    tracked: list[tuple[str, str]] = []
+    tracked: list[tuple[str, str, str]] = []
     for line in filter(None, staged):
         meta, path = line.split("\t", 1)
-        tracked.append((meta.split()[0], path))
+        mode, blob = meta.split()[:2]
+        tracked.append((mode, blob, path))
     if (repo / ".gitmodules").exists():
         failures.append("Git submodules are not allowed: .gitmodules")
     seen: dict[str, str] = {}
-    for mode, path in tracked:
+    for mode, blob, path in tracked:
         lowered = path.lower()
         if lowered in seen:
             failures.append(f"names differ only by capitalization: {seen[lowered]} and {path}")
@@ -95,15 +96,18 @@ def check(repo: Path, plugin: Path) -> tuple[list[str], dict[str, object]]:
         if mode == "160000":
             failures.append(f"Git submodule: {path}")
         if PurePosixPath(path).name == ".gitattributes":
-            for number, rule in enumerate((repo / path).read_text(encoding="utf-8").splitlines(), 1):
+            for number, rule in enumerate(git(repo, "cat-file", "blob", blob).decode("utf-8").splitlines(), 1):
                 found = FORBIDDEN_ATTRIBUTES.search(rule.split("#", 1)[0])
                 if found:
                     failures.append(f"{path}:{number} sets {found.group(1)}, which stops directory validation")
-    plugin_files = [path for _, path in tracked if path == prefix or path.startswith(prefix + "/")]
+    # Read contents from Git, as the directory does, not from the working tree.
+    plugin_files = [(mode, blob, path) for mode, blob, path in tracked if path.startswith(prefix + "/")]
     if len(plugin_files) > MAX_PLUGIN_FILES:
         failures.append(f"plugin folder has {len(plugin_files)} files; the limit is {MAX_PLUGIN_FILES}")
-    for path in plugin_files:
-        data = (repo / path).read_bytes()
+    for mode, blob, path in plugin_files:
+        if mode in {"120000", "160000"}:
+            continue  # reported above; not file contents
+        data = git(repo, "cat-file", "blob", blob)
         if data.startswith(b"version https://git-lfs.github.com/spec/"):
             failures.append(f"Git LFS pointer: {path}")
         file_kind = kind(data)

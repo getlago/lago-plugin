@@ -76,7 +76,7 @@ Validation in the portal is the final word. The local validator "checks a subset
 | E-4 No real credentials anywhere, examples included | likely block | pass | Before: the synthetic UUID `LAGO_API_KEY=8d1c…` in `evals/safety/*/scaffold.sh`, `evals/safety/pasted-production-key-chat/prompt.md`, and `tests/`, all inside the old plugin folder. After: none inside `plugins/lago/` | Moved out of the scanned folder by the layout change. The synthetic key stays in the safety evals, which need a realistic key shape. |
 | E-5 No credential read from the user's environment, even in README examples | held (likely) | pass | Before: `START_HERE.md` and the README read `process.env.LAGO_API_KEY` / `os.environ["LAGO_API_KEY"]`. After: no environment read anywhere under `plugins/lago/` | Moved out of the scanned folder. No `userConfig` is added: the plugin itself uses no credential, and asking for one at install would break the credential-free start. |
 | E-6 Scripts the validator cannot follow | pass | pass, review possible | The seven Python helpers run only when `SKILL.md` tells Claude to, which the checklist excludes from this check | None. If a reviewer asks, see the handoff. |
-| E-7 Remote MCP types and URLs | pass (none) | pass (none) | — | Not added. See the handoff for the MCP connector. |
+| E-7 Remote MCP types and URLs | pass (none) | pass (none) | n/a | Not added. See the handoff for the MCP connector. |
 
 ## F. Choices a reviewer always checks
 
@@ -90,7 +90,7 @@ Validation in the portal is the final word. The local validator "checks a subset
 
 | Check | Status | Evidence |
 | --- | --- | --- |
-| G-1 Valid `hooks/hooks.json` | pass (none) | — |
+| G-1 Valid `hooks/hooks.json` | pass (none) | n/a |
 | G-2 YAML front matter with `description` as one text value | pass | `skills/implementation/SKILL.md` lines 1-4; `scripts/validate_repo.py` enforces the exact shape |
 | G-3 Exact folder and file names | pass | `skills/implementation/SKILL.md` |
 | G-4 No `bin/` directory (claude.ai and Cowork skip plugins that have one) | pass | none |
@@ -102,7 +102,7 @@ Validation in the portal is the final word. The local validator "checks a subset
 | H-1 Every network destination described in the README | partial | pass | `plugins/lago/README.md`, "What this plugin runs, sends and stores": no network when offline; documentation hosts; the Lago Cloud US and EU API, a self-hosted URL, or a loopback demo only for live work the user starts |
 | H-2 Every file written described | partial | pass | Same section: project files written on request, and the `--output` of `extract_actual.py`. `run_demo.py` writes nothing. |
 | H-3 Readable source only | pass | pass | Markdown, JSON, CSV, YAML, and standard-library Python. Nothing minified or compiled. |
-| H-4 Hosts referenced inside the plugin | — | listed | `docs.getlago.com`, `getlago.com`, `www.getlago.com`, `doc.getlago.com`, `swagger.getlago.com`, `api.getlago.com`, `api.eu.getlago.com`, `github.com`, `docs.stripe.com`, `www.chargebee.com`, `apidocs.chargebee.com`, `learn.microsoft.com`, `docs.aws.amazon.com`. All are documentation links except the two API base URLs. |
+| H-4 Hosts referenced inside the plugin | n/a | listed | `docs.getlago.com`, `getlago.com`, `www.getlago.com`, `doc.getlago.com`, `swagger.getlago.com`, `api.getlago.com`, `api.eu.getlago.com`, `github.com`, `docs.stripe.com`, `www.chargebee.com`, `apidocs.chargebee.com`, `learn.microsoft.com`, `docs.aws.amazon.com`. All are documentation links except the two API base URLs. |
 | H-5 Secret-scanner false positives inside the plugin | 15 | 0 | `RELEASE-MANIFEST.json` paired the key `examples/per-token-ai.md` with a 64-character SHA-256, which matched gitleaks' `generic-api-key` rule. The example is now `examples/ai-usage-billing.md`. |
 
 ## Policy items relevant to review
@@ -235,8 +235,11 @@ $ gitleaks dir plugins/lago --redact
 no leaks found
 
 $ gitleaks git . --log-opts="origin/main..HEAD" --redact
-GITLEAKS_BRANCH
+10 commits scanned.
+leaks found: 1
 ```
+
+The one branch finding is `plugins/lago/RELEASE-MANIFEST.json` line 13 in the first commit, `0d9fcff`: the `per-token-ai.md` manifest entry described in H-5. A later commit on this branch renamed the file, and the tracked head scans clean. The directory scans the files of the commit it tracks, not history.
 
 Over the whole repository, gitleaks still reports the known synthetic test key `8d1c…` in `evals/safety/` and `tests/` and SHA-256 values in historical commits of the old root `RELEASE-MANIFEST.json`. None is a credential, and none is inside the plugin folder.
 

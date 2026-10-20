@@ -104,6 +104,17 @@ def check(root: Path, manifest_path: Path) -> dict[str, object]:
     if "gemini-extension.json" in expected and metadata in unexpected_files:
         unexpected_files.remove(metadata)
         install_metadata.append(metadata)
+    # Claude Code writes one small `.in_use/<pid>` liveness record per running
+    # session into its installed plugin copy. Exempt only these root-level,
+    # digit-named regular files of at most 1 KiB when the verified bundle declares
+    # a Claude Code plugin; any other name, nesting, or size remains unexpected.
+    if ".claude-plugin/plugin.json" in expected:
+        for path in sorted(unexpected_files):
+            parts = PurePosixPath(path).parts
+            if (len(parts) == 2 and parts[0] == ".in_use" and parts[1].isdigit()
+                    and (root / ".in_use" / parts[1]).stat().st_size <= 1024):
+                unexpected_files.remove(path)
+                install_metadata.append(path)
     unexpected = sorted(unexpected_files)
     changed = sorted(
         path for path in expected.keys() & actual.keys() if expected[path] != actual[path]

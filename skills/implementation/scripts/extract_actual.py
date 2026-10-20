@@ -67,7 +67,9 @@ def quantity_from_items(items: object, path: str) -> tuple[Decimal, set[str]]:
     for index, item in enumerate(items):
         if not isinstance(item, dict):
             raise ExtractionError(f"{path}[{index}] must be an object")
-        units = item.get("total_aggregated_units", item.get("units"))
+        units = item.get("total_aggregated_units")
+        if units is None:  # subscription fees carry total_aggregated_units: null
+            units = item.get("units")
         parsed_units = decimal_value(units, f"{path}[{index}].units")
         if parsed_units < 0:
             raise ExtractionError(f"{path}[{index}].units cannot be negative")

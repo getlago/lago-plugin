@@ -6,10 +6,12 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Fixed
 
+- `extract_actual.py` reads `units` when a fee's `total_aggregated_units` is null, as on subscription fees, so subscription invoices can be money-tested.
 - Archived evidence no longer includes spend fields, model thinking blocks, local user names in directory listings, local tool paths, or internal role labels. A test keeps them out.
 
 ### Added
 
+- Optional scripted live demo (`live_demo.py`): a fresh, digest-pinned, loopback-only self-hosted Lago with separately approved infrastructure, seed, finalize, and teardown phases. It ends with two finalized invoices verified by `extract_actual.py` and `money_test.py --actual-source`.
 - Billing-correctness benchmark: a Python usage-billing task, a fake Lago API, and a scorer for idempotent events, double billing, charges, and webhook verification, tested against a reference solution and six targeted defects. A runner compares the with-plugin and no-plugin arms. Method and empty results template in `docs/benchmark.md`. Results are written outside the repository and never published.
 - Other agents: generated `gemini-extension.json` (Gemini CLI, Goose) and `.cursor-plugin/` manifests (Cursor), plus README install paths for GitHub Copilot CLI, which reads `.claude-plugin/`, and for skills.sh. `build_agent_files.py` generates them from `.claude-plugin/`. The repository validator fails on drift or on a root `plugin.json`.
 - Root `AGENTS.md` for coding agents working in or arriving at this repository.

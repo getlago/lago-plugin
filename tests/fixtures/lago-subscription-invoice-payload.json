@@ -1,0 +1,25 @@
+{
+  "invoice": {
+    "lago_id": "2b902b90-2b90-2b90-2b90-2b902b902b90",
+    "number": "DEMO-002",
+    "currency": "USD",
+    "invoice_type": "subscription",
+    "fees_amount_cents": 9900,
+    "coupons_amount_cents": 0,
+    "credit_notes_amount_cents": 0,
+    "prepaid_credit_amount_cents": 0,
+    "progressive_billing_credit_amount_cents": 0,
+    "taxes_amount_cents": 0,
+    "total_amount_cents": 9900,
+    "fees": [
+      {
+        "units": "1.0",
+        "total_aggregated_units": null,
+        "item": {
+          "type": "subscription",
+          "code": "atlas_pro"
+        }
+      }
+    ]
+  }
+}

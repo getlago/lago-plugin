@@ -31,6 +31,18 @@ Keep the visible walkthrough to four compact beats: `Who sells what`, `One click
 7. Report every created object ID and the exact local resources used. Never enable payment collection, external tax, email delivery, or production webhooks for a demo.
 8. Offer teardown instructions. Stop containers or delete the dedicated demo data only after explicit approval for the exact project and volumes; never run broad Docker cleanup commands.
 
+## Scripted live demo
+
+`scripts/live_demo.py` runs steps 2 to 8 for the canonical Atlas example. It ends with real, finalized Lago invoices and money tests, on a fresh instance the script creates itself. It never accepts another target.
+
+1. Run `live_demo.py plan` and show the user the infrastructure gate.
+2. After the user approves that exact gate, run `up --approve infrastructure`. It pulls the pinned image by digest, starts a new `lago-plugin-demo-<suffix>` Compose project on loopback ports, and bootstraps one organization with a generated key kept in a private state directory. It then runs `validate_demo_target.py`, traces the URL to the project's published container port, and verifies there are no webhook destinations.
+3. Show the seed gate. After approval, run `seed --approve seed`. It creates the prefixed catalog, customer, subscription, and restricted wallet, sends usage after activation with durable transaction IDs and explicit timestamps, then replays one event and confirms that usage did not change.
+4. Show the finalize gate. After approval, run `finalize --approve finalize`. It terminates the subscription without a credit note, retrieves both finalized invoices, runs `extract_actual.py` and `money_test.py --actual-source` on each, reconciles the period total, and prints links to the invoices in the local Lago UI.
+5. Offer `teardown --approve teardown`, which removes only that project and its volume.
+
+Approval for one phase never covers the next. A failed check stops the run and reports the live proof as incomplete. Call a passing run `live self-hosted validation complete`, and keep production readiness separate.
+
 If Docker is unavailable or the user declines local containers, keep the demo offline. Generated fixtures, calculations, mocks, and application code remain useful, but label live Lago behavior unverified.
 
 Call the result `offline example complete`, not `validated` or `production-ready`. After an isolated self-hosted run, call it `live self-hosted validation complete` and keep production readiness as a separate gate.

@@ -195,7 +195,7 @@ Run it directly while developing the plugin:
 python3 skills/implementation/scripts/run_demo.py
 ```
 
-This writes no files and contacts no external service. Optional live validation follows the isolated self-hosted policy above and must not claim to reproduce current OpenAI pricing.
+This writes no files and contacts no external service. Optional live validation follows the isolated self-hosted policy above and must not claim to reproduce current OpenAI pricing. `skills/implementation/scripts/live_demo.py` runs that validation end to end on a fresh local Lago it creates in Docker, with a separate approval for each phase, and finishes with finalized invoices and passing money tests.
 
 ## Local development and validation
 

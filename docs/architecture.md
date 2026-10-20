@@ -26,3 +26,15 @@ The repository is named `lago-plugin`, the shareable marketplace is `lago-plugin
 - Dry run by default. `--write` creates files; existing files are never overwritten.
 - No network calls, credentials, package installs, or execution of project code. Detection reads manifests only.
 - `"private": true` until a maintainer approves publishing under `RELEASING.md`. The name `@getlago/init` was free on npm on 2026-10-19; `create-lago` is taken by an unrelated owner, and the `lago` binary name belongs to the official Go CLI.
+
+## Decision: scripted live self-hosted demo (2026-10-20)
+
+`skills/implementation/scripts/live_demo.py` turns the offline Atlas example into finalized invoices on a self-hosted Lago instance that the script creates itself. It adds infrastructure actions and generated local credentials, so it has these boundaries:
+
+- **Offline stays the default.** The live demo is optional and starts only from an explicit request.
+- **One target only.** It runs against a new `lago-plugin-demo-<suffix>` Compose project bound to `127.0.0.1`, using the image pinned by digest. It refuses existing projects or volumes. Before every write it runs `validate_demo_target.py` and traces the URL to the project's published container port. Lago Cloud and remote targets stay prohibited.
+- **Each phase is approved separately.** `up`, `seed`, `finalize`, and `teardown` each require a flag naming that phase, passed only after the user approves the exact gate shown.
+- **Isolation is checked, not assumed.** Before seeding, the API must show no webhook endpoints and no organization webhook URLs. SMTP is not configured and PDF generation is disabled.
+- **Credentials stay local.** The generated API key and password live in a mode-0600 state file outside any repository and are never printed.
+- **Completion needs real invoices.** It requires two finalized invoices whose preserved payloads pass `extract_actual.py` and `money_test.py --actual-source`, an exact period total, and a replay that adds no usage. A preview is not enough.
+

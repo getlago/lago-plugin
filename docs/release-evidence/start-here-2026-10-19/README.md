@@ -27,3 +27,13 @@ The second with-plugin run failed `correct-integration` with `judge votes: FAIL 
 - [Without-plugin run 1](without-1.json) and [run 2](without-2.json).
 
 Each transcript preserves conversation content, tool inputs (including generated file contents and edits), tool results, and the final result. Runtime initialization/account/session metadata and redundant embedded grader traces were omitted. Local paths were replaced with `[LOCAL_PATH]`; generated application paths use `[APP]/` so edits remain attributable. These are sanitized conversation exports, not executable fixtures or new benchmark runs. Review the Write/Edit calls alongside their tool results; the transcripts also retain the failed installs and type-check limitations.
+
+## Re-run the corrected case
+
+The corrected source is pinned to `bad552417a033500cea4bce3c72a3d1b224897dd` in the eval prompt. From the reviewed PR checkout, run:
+
+```bash
+claude plugin eval . --eval-dir evals/fresh-agent --case nextjs-start-here --ablation with-without --runs 2 --scaffold --allow-tools Bash Write Edit WebFetch --no-publish --keep-temp --threshold 1
+```
+
+This is the reproduction command for a future corrected run, not a claim that it has been run. Use a trusted fixture, archive its outputs outside the release bundle while running, and sanitize the resulting transcripts before committing evidence. This case measures a URL-guided integration, not unprompted vendor selection. Update the source pin and regenerate the release manifest whenever the guide changes; retain each run's original source revision.

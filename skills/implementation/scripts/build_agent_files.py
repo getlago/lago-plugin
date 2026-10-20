@@ -13,6 +13,13 @@ Amp) need no generated file. Formats, checked against raw docs on 2026-10-19:
   `skills` path) and `.cursor-plugin/marketplace.json` (`name`, `owner.name`,
   `plugins[].name`, `plugins[].source`). https://cursor.com/docs/reference/plugins.md
 
+- Copilot CLI compatibility and manifest lookup:
+  https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference
+- Goose Gemini extension compatibility:
+  https://raw.githubusercontent.com/aaif-goose/goose/main/documentation/docs/guides/context-engineering/plugins.md
+- Devin Claude manifest compatibility:
+  https://docs.devin.ai/cli/extensibility/plugins
+
 Never generate a root `plugin.json`: Copilot CLI prefers it over `.claude-plugin/`,
 and Codex reads it before `.codex-plugin/plugin.json`.
 

@@ -94,7 +94,17 @@ def check(root: Path, manifest_path: Path) -> dict[str, object]:
     expected = safe_manifest_files(root, manifest)
     actual = bundle_files(root)
     missing = sorted(set(expected) - set(actual))
-    unexpected = sorted(set(actual) - set(expected))
+    unexpected_files = set(actual) - set(expected)
+    # Gemini writes this local installation record after copying the bundle.
+    # Exempt only this root-level regular file when the verified bundle declares
+    # a Gemini extension. bundle_files still rejects symlinks; source files and
+    # all other extra files remain checked. If tracked in the manifest, hash it.
+    install_metadata = []
+    metadata = ".gemini-extension-install.json"
+    if "gemini-extension.json" in expected and metadata in unexpected_files:
+        unexpected_files.remove(metadata)
+        install_metadata.append(metadata)
+    unexpected = sorted(unexpected_files)
     changed = sorted(
         path for path in expected.keys() & actual.keys() if expected[path] != actual[path]
     )
@@ -103,6 +113,7 @@ def check(root: Path, manifest_path: Path) -> dict[str, object]:
         "files": len(expected),
         "missing": missing,
         "unexpected": unexpected,
+        "install_metadata": install_metadata,
         "changed": changed,
     }
 

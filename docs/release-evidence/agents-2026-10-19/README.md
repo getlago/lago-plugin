@@ -1,6 +1,6 @@
 # Agent install verification, 2026-10-19
 
-`evals/agent-installs/verify_installs.py` installs this repository with the real CLIs of other agents. Each CLI runs in a temporary HOME, so no user configuration or credentials are read or changed. A check passes only when the CLI reports success. Gemini CLI and skills.sh must also install a `SKILL.md` that is byte-identical to the checkout's.
+`evals/agent-installs/verify_installs.py` installs this repository with the real CLIs of other agents. Each CLI runs in a temporary HOME, so no user configuration or credentials are read or changed. The original checks below tested install and discovery only. They did not test the installed bundle integrity gate or the offline demo. The corrected runner additionally requires both for full-bundle installs and verifies Copilot’s configured source path.
 
 Run at clean commit `9d3593c37233fa81c480dee2f33ad09cd61f24f4` with Node v24.2.0. The raw output is in [verify-installs-9d3593c.json](verify-installs-9d3593c.json); temporary paths are redacted.
 
@@ -17,6 +17,12 @@ gemini extensions install https://github.com/getlago/lago-plugin --ref 9d3593c37
 ```
 
 Gemini CLI 0.64.0 installed it, and `skills list` showed `implementation [Enabled]`. The installed `SKILL.md` hash is `03ecfca42b3c10fcf315e178c07bd15f825e13f1dd7c534202b5540c308335b3`, identical to the checkout's.
+
+## CTO review correction
+
+The original Gemini check was insufficient: `.gemini-extension-install.json`, written by Gemini CLI after installation, caused release integrity to fail on an unexpected file. Merely finding `RELEASE-MANIFEST.json` did not prove the demo could run. The verifier now permits that exact root bookkeeping file only for a Gemini bundle; modified payloads, symlinks and other extra files still fail. No production approval or billing guidance changed.
+
+The corrected runner verifies the whole installed Gemini bundle, runs its offline demo only after integrity passes, and verifies Copilot’s enabled setting and marketplace source against the checkout before accepting its live-loaded bundle. Failure evidence is sanitized, and `--allow-dirty` cannot label a report complete.
 
 ## What this does not show
 

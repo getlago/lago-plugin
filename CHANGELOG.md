@@ -16,6 +16,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Changed
 
+- Gemini installations retain the offline demo: release integrity permits only the root CLI-owned `.gemini-extension-install.json` as installation metadata while still rejecting symlinks, modified source and other unexpected files. Agent install verification now requires bundle integrity and the offline demo for full installs, checks Copilot’s live source binding, and sanitizes failure paths.
+
 - The skill description leads with the words developers use: usage-based or metered billing, per token, per API call, seat plus usage, prepaid credits and wallets, overage, and migration off Stripe Billing or Chargebee. It also says when not to use the skill.
 - The repository validator and release integrity skip local `claude plugin eval` output under `evals/<suite>/results/`.
 - `START_HERE.md`, `llms.txt`, and the `@getlago/init` output show the exact Claude Code and Codex install commands for `lago@lago-plugins`; tests check README consistency, command order, invocation, and the CLI's actual dry-run output.

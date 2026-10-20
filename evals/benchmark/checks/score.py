@@ -6,6 +6,10 @@ process against a local fake Lago (fake_lago.py), with a clean environment that 
 only fake credentials. The first event delivery fails with HTTP 503 so retries are
 observable. Criteria are judged from what the fake received:
 
+After the scripted calls, the scenario keeps calling flush_usage() once a second
+for up to 90 seconds, like a worker, so solutions that back off before retrying
+are not penalized.
+
 - idempotent_events: every event attempt has an explicit timestamp; attempts with
   the same transaction_id share it; every attempted transaction_id is eventually
   stored, so the failed delivery was retried with its original ID, not dropped or
@@ -149,7 +153,7 @@ def judge(fake: FakeLago, scenario: dict) -> dict:
     return out
 
 
-def score(workspace: Path, timeout: int = 240) -> dict:
+def score(workspace: Path, timeout: int = 240, flush_window: int = 90) -> dict:
     fake = FakeLago(fail_first_event_posts=1)
     try:
         with tempfile.TemporaryDirectory(prefix="lago-bench-") as temp:
@@ -165,6 +169,7 @@ def score(workspace: Path, timeout: int = 240) -> dict:
                 "LAGO_WEBHOOK_HMAC_KEY": HMAC_KEY,
                 "ACME_DB_PATH": str(root / "acme.db"),
                 "PYTHONDONTWRITEBYTECODE": "1",
+                "BENCH_FLUSH_WINDOW": str(flush_window),
             }
             started = datetime.now()
             try:

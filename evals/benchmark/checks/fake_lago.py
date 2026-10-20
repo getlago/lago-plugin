@@ -95,6 +95,11 @@ class FakeLago:
     def handle(self, method: str, path: str, body) -> tuple[int, object]:
         url = urlparse(path)
         parts = [p for p in url.path.split("/") if p]
+        if parts == ["__bench", "state"]:
+            # Scenario-only progress probe, used to stop polling early. Not part of the Lago API.
+            attempted = {e.get("transaction_id") for r in self.requests if r["method"] == "POST" and "/events" in r["path"]
+                         for e in ((r["body"] or {}).get("events") or [(r["body"] or {}).get("event") or {}])}
+            return 200, {"stored": len(self.events), "unstored_attempts": len([t for t in attempted if t not in self.events])}
         if parts[:2] != ["api", "v1"]:
             return 404, {"status": 404, "error": "Not Found"}
         route, rest = parts[2] if len(parts) > 2 else "", parts[3:]
@@ -225,8 +230,11 @@ class FakeLago:
                 except ValueError:
                     body = None
                 with fake.lock:
-                    fake.requests.append({"method": method, "path": self.path, "body": body})
-                    if self.headers.get("Authorization") != f"Bearer {API_KEY}":
+                    if not self.path.startswith("/__bench/"):
+                        fake.requests.append({"method": method, "path": self.path, "body": body})
+                    if self.path.startswith("/__bench/"):
+                        status, payload = fake.handle(method, self.path, body)
+                    elif self.headers.get("Authorization") != f"Bearer {API_KEY}":
                         status, payload = 401, {"status": 401, "error": "Unauthorized"}
                     else:
                         status, payload = fake.handle(method, self.path, body)

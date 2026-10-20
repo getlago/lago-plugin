@@ -23,7 +23,7 @@ The prompt describes the pricing and environment only. It does not mention idemp
 The scenario:
 1. Creates the catalog and activates billing for one workspace.
 2. Records two generations totalling 120,000 tokens. The first event delivery fails with HTTP 503.
-3. Flushes, replays one generation, and flushes again.
+3. Flushes, replays one generation, and flushes again. Then it keeps calling `flush_usage()` once a second for up to 90 seconds, like a worker would, so solutions that back off before retrying are not penalized.
 4. Sends five webhooks.
 
 | Criterion | Passes when |
@@ -44,6 +44,7 @@ The scenario:
   - a subscription reusing the customer ID;
   - a per-token price off by 1,000×;
   - a missing webhook signature check;
+- a correct variant that backs off before retrying, which must pass every criterion;
 - a module that fails to import, which must fail every criterion.
 
 ## Run it

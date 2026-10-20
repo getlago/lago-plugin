@@ -71,6 +71,17 @@ class BenchmarkPrivacyTests(unittest.TestCase):
         self.assertIn('"--no-publish"', (BENCH / "run_benchmark.py").read_text(encoding="utf-8"))
 
 
+# Correct variants that a fair scorer must not penalize.
+CORRECT_VARIANTS = {
+    "backs off before retrying": mutate(
+        "            elif error.status == 429 or error.status >= 500:\n                continue",
+        "            elif error.status == 429 or error.status >= 500:\n"
+        "                _BACKOFF[row['generation_id']] = __import__('time').time() + 3\n                continue"
+    ).replace("    for row in rows:\n", "    for row in rows:\n        if _BACKOFF.get(row['generation_id'], 0) > __import__('time').time():\n            continue\n", 1)
+     .replace("METRIC_CODE = ", "_BACKOFF = {}\nMETRIC_CODE = ", 1),
+}
+
+
 @unittest.skipUnless(shutil.which("bash"), "bash is required for the task scaffold")
 class BenchmarkScorerTests(unittest.TestCase):
     @classmethod
@@ -82,7 +93,7 @@ class BenchmarkScorerTests(unittest.TestCase):
             workspace = Path(directory)
             subprocess.run(["bash", str(SCAFFOLD)], cwd=workspace, check=True, capture_output=True)
             (workspace / "billing.py").write_text(source, encoding="utf-8")
-            result = self.score.score(workspace, timeout=60)
+            result = self.score.score(workspace, timeout=60, flush_window=15)
         self.assertEqual(result["status"], "scored", result)
         return {name: value["result"] for name, value in result["criteria"].items()}
 
@@ -95,6 +106,11 @@ class BenchmarkScorerTests(unittest.TestCase):
                 results = self.run_solution(source)
                 # Only the targeted criterion fails, so a crash cannot pass for detection.
                 self.assertEqual([k for k, v in results.items() if v == "fail"], [criterion], results)
+
+    def test_correct_variants_pass(self):
+        for name, source in CORRECT_VARIANTS.items():
+            with self.subTest(variant=name):
+                self.assertEqual(set(self.run_solution(source).values()), {"pass"})
 
     def test_broken_module_fails_everything_without_crashing_the_scorer(self):
         results = self.run_solution("raise RuntimeError('not implemented')\n")

@@ -15,6 +15,7 @@ import os
 import sys
 import time
 import traceback
+import urllib.request
 from datetime import datetime, timezone
 
 
@@ -78,7 +79,26 @@ def main(result_path):
     step("flush_2", billing.flush_usage)
     step("replay_g1", lambda: billing.record_usage(results["generations"]["g1"]["id"]))
     step("flush_3", billing.flush_usage)
-    time.sleep(1)  # allow background delivery threads to finish
+    # A worker keeps calling flush_usage. Solutions that back off before retrying are
+    # correct, so keep flushing for up to BENCH_FLUSH_WINDOW seconds. Stop early once
+    # every attempted event is stored and the store has been stable for three polls.
+    deadline, stable, last = time.monotonic() + float(os.environ.get("BENCH_FLUSH_WINDOW", "90")), 0, None
+    polls = 0
+    while time.monotonic() < deadline and stable < 3:
+        time.sleep(1)
+        polls += 1
+        try:
+            billing.flush_usage()
+        except BaseException:  # noqa: BLE001 - a failing worker call is visible in the outcome
+            pass
+        try:
+            with urllib.request.urlopen(os.environ["LAGO_API_URL"] + "/__bench/state", timeout=5) as response:
+                state = json.loads(response.read())
+        except (OSError, ValueError):
+            break
+        stable = stable + 1 if state["unstored_attempts"] == 0 and state == last else 0
+        last = state
+    results["worker_polls"] = polls
 
     key = os.environ["LAGO_WEBHOOK_HMAC_KEY"].encode()
     body = json.dumps({"webhook_type": "invoice.created", "object_type": "invoice", "invoice": {"lago_id": "inv_bench_1"}}).encode()

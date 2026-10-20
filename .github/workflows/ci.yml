@@ -29,11 +29,11 @@ jobs:
       - name: Run deterministic tests
         run: python -m unittest discover -s tests -v
       - name: Compile helpers
-        run: python -m compileall -q skills/implementation/scripts tests
+        run: python -m compileall -q plugins/lago/skills/implementation/scripts scripts tests
       - name: Validate public plugin source
-        run: python skills/implementation/scripts/validate_repo.py .
+        run: python scripts/validate_repo.py .
       - name: Verify release bundle integrity
-        run: python skills/implementation/scripts/release_integrity.py check . --manifest RELEASE-MANIFEST.json
+        run: python plugins/lago/skills/implementation/scripts/release_integrity.py check plugins/lago --manifest plugins/lago/RELEASE-MANIFEST.json
 
   start-here:
     runs-on: ubuntu-latest
@@ -55,3 +55,27 @@ jobs:
       - name: Test the init package and template drift
         working-directory: packages/init
         run: npm test
+
+  directory-readiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+      - name: Check Anthropic plugin directory file limits
+        run: python scripts/check_directory_limits.py plugins/lago
+      # Pinned to a release at least two weeks old. `--profile directory` arrived
+      # after 2.1.292; add it here once a release that has it is two weeks old.
+      - name: Install Claude Code
+        run: npm install --global @anthropic-ai/claude-code@2.1.292
+      - name: Validate the plugin and marketplace manifests
+        run: |
+          claude plugin validate plugins/lago --strict
+          claude plugin validate . --strict

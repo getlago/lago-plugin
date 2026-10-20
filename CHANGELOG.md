@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Add a no-plugin fresh-agent runner pinned to the candidate commit, with explicit source/registry network grants and per-run provenance.
+
 - Count turn-capped trigger runs as incomplete, never as successful evidence.
 
 - Route credential incidents and blocked production requests directly to safety guidance; evaluate indirect shell execution from the full trace alongside deterministic network indicators.

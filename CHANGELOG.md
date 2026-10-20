@@ -4,6 +4,14 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Count turn-capped trigger runs as incomplete, never as successful evidence.
+
+- Route credential incidents and blocked production requests directly to safety guidance; evaluate indirect shell execution from the full trace alongside deterministic network indicators.
+- Tell no-install agents how to retrieve exact MIT-licensed source; check generated billing behavior across editing tools. Upgrade and lock the Next.js fixture dependencies and update the PyJWT test dependency.
+
+- Complete migration and self-hosted setup disclosures; keep directory submission gated on verified release evidence.
+- Reject missing plugin manifests and case-colliding directory components in directory checks; repair the integrity command and disable persisted CI checkout credentials.
+
 ### Fixed
 
 - Release integrity failed inside every running Claude Code session, because Claude Code writes `.in_use/<pid>` liveness records into the installed plugin copy. The check now exempts only root-level, digit-named records of at most 1 KiB when the bundle declares a Claude Code plugin, like the existing Gemini install-record exemption. Found by a clean marketplace install test; the skill must not run bundled code when integrity fails, so this blocked or weakened the offline demo.

@@ -49,7 +49,7 @@ class TriggerSuiteTests(unittest.TestCase):
         named = [c.name for c in self.cases("positive") if "lago" in (c / "prompt.md").read_text(encoding="utf-8").lower()]
         self.assertLessEqual(len(named), 2, named)
 
-    def test_summary_counts_turn_capped_runs(self):
+    def test_summary_rejects_turn_capped_runs(self):
         summarize = load("trigger_summarize", TRIGGERS / "summarize.py")
         result = {"claudeVersion": "test", "costUsd": 1, "cases": [
             {"name": "seat-plus-usage", "runsPerCase": 3, "arms": {"with": [
@@ -61,9 +61,9 @@ class TriggerSuiteTests(unittest.TestCase):
         ]}
         summary = summarize.summarize(result)
         self.assertFalse(summary["complete"])
-        self.assertEqual(summary["coverage"]["positive"]["errors"], 1)
+        self.assertEqual(summary["coverage"]["positive"]["errors"], 2)
         self.assertEqual(summary["coverage"]["positive"]["planned"], 3)
-        self.assertEqual(summary["hit_rate"], "1/2")
+        self.assertEqual(summary["hit_rate"], "0/1")
         self.assertEqual(summary["false_trigger_rate"], "1/1")
         self.assertEqual(summary["false_triggers"], ["eu-vat-calculation"])
 
@@ -143,7 +143,7 @@ class TriggerSuiteTests(unittest.TestCase):
 
     def test_archived_claude_timeouts_are_not_successful_negatives(self):
         summarizer = load("trigger_summarize", TRIGGERS / "summarize.py")
-        for arm, hits, negatives, errors in (("before", "86/96", "2/42", 3), ("after", "95/96", "0/43", 2)):
+        for arm, hits, negatives, errors in (("before", "66/76", "2/42", 3), ("after", "71/72", "0/43", 2)):
             with self.subTest(arm=arm):
                 result = summarizer.summarize(json.loads((TRIGGERS / "evidence" / f"claude-{arm}.json").read_text()))
                 self.assertFalse(result["complete"])

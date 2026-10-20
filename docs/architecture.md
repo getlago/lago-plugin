@@ -37,4 +37,4 @@ The shipped plugin moves from the repository root to `plugins/lago/`, so it can 
 - Gemini CLI installs extensions only from a repository root. A GitHub install now uses `gemini skills install --path plugins/lago/skills/implementation`; the full extension installs from a clone with `gemini extensions install ./lago-plugin/plugins/lago`.
 - The plugin has no hooks, MCP server, `userConfig`, package launchers, or `!` command lines, so the directory's stricter rules for plugins in a subfolder do not apply. Adding any of them needs a new entry here.
 
-This changes packaging only. No MCP, telemetry, runtime credential, production action, or new skill is added, and the approval gate is unchanged. `scripts/check_directory_limits.py` and `claude plugin validate plugins/lago --profile directory --strict` run in CI.
+This changes packaging only. No MCP, telemetry, runtime credential, production action, or new skill is added, and the approval gate is unchanged. `scripts/check_directory_limits.py` and ordinary strict manifest validation run in CI. The directory profile runs locally on Claude Code 2.1.305; the older pinned CI version does not support it yet.

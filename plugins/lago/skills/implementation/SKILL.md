@@ -18,9 +18,11 @@ The experience should reach these outcomes as relevant to the user's request; a 
 3. **Leave with a credible decision artifact:** recommend one model, show the calculation and system boundaries, name the highest-risk assumption, and define the smallest proof.
 4. **Implement without restarting discovery:** carry the same facts into a repository blueprint, code, tests, reconciliation, and buyer-specific handoff.
 
+For credential incidents and presence checks, read [safety](references/safety.md#safety-requests-before-discovery) first and handle only that narrow diagnostic request; skip application discovery, edits and demo execution.
+
 ## First-run routing and silent preflight
 
-Do not assume the current folder is the user's product repository. Before asking a question or proposing work, read [discovery](references/discovery.md), infer the user's intent, and silently classify the current working directory. For discovery, teaching, demo, or an ambiguous first prompt, use the folder only to avoid misrepresenting it; do not inspect its application architecture or treat it as the product. For an explicit repository assessment or implementation request, inspect it deeply and identify:
+Do not assume the current folder is the user's product repository. Outside the safety-only route above, before asking a question or proposing work, read [discovery](references/discovery.md), infer the user's intent, and silently classify the current working directory. For discovery, teaching, demo, or an ambiguous first prompt, use the folder only to avoid misrepresenting it; do not inspect its application architecture or treat it as the product. For an explicit repository assessment or implementation request, inspect it deeply and identify:
 
 - the resolved workspace path and whether it is a Git repository;
 - whether it is an application, monorepo, documentation/content repository, empty folder, or parent folder containing candidate repositories;

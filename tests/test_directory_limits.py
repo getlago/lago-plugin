@@ -90,6 +90,32 @@ class DirectoryLimitTests(unittest.TestCase):
         failures, _ = self.limits.check(self.repo, self.plugin)
         self.assertTrue(any("differ only by capitalization" in f for f in failures))
 
+    def test_case_colliding_parent_directories_fail(self):
+        (self.plugin / "rules").mkdir()
+        (self.plugin / "rules/first.md").write_text("a")
+        git(self.repo, "add", "-A")
+        blob = subprocess.run(["git", "-C", str(self.repo), "hash-object", "-w", "--stdin"], input=b"b",
+                              capture_output=True, check=True).stdout.decode().strip()
+        git(self.repo, "update-index", "--add", "--cacheinfo", f"100644,{blob},plugins/lago/Rules/second.md")
+        git(self.repo, "commit", "-q", "-m", "fixture")
+        failures, _ = self.limits.check(self.repo, self.plugin)
+        self.assertTrue(any("differ only by capitalization" in f for f in failures))
+
+    def test_missing_plugin_fails(self):
+        self.failures()
+        failures, counts = self.limits.check(self.repo, self.repo / "missing")
+        self.assertEqual(counts["plugin_files"], 0)
+        self.assertTrue(any("missing tracked plugin manifest" in f for f in failures))
+
+    def test_root_plugin_counts_and_checks_files(self):
+        (self.repo / ".claude-plugin").mkdir()
+        (self.repo / ".claude-plugin/plugin.json").write_text('{"name":"root"}')
+        (self.repo / "oversize.txt").write_text("x" * (self.limits.MAX_TEXT_BYTES + 1))
+        self.failures()
+        failures, counts = self.limits.check(self.repo, self.repo)
+        self.assertEqual(counts["plugin_files"], 4)
+        self.assertTrue(any("oversize.txt" in f for f in failures))
+
     def test_windows_device_name_fails(self):
         (self.plugin / "con.md").write_text("x")
         self.assertIn("name is invalid on Windows: plugins/lago/con.md", self.failures())

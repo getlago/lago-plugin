@@ -44,11 +44,8 @@ def summarize(result: dict) -> dict:
             run = runs[index] if index < len(runs) else {}
             graders = [g for g in run.get("graders", []) if g.get("name") == expected]
             error = run.get("error")
-            # A completed Skill grader remains usable when only the conversation
-            # hit its turn cap. Auth, timeout and other failures are not negatives.
-            capped = bool(error and str(error).startswith("exit 1: Reached maximum number of turns ("))
             valid = (len(graders) == 1 and isinstance(graders[0].get("passed"), bool)
-                     and not graders[0].get("error") and (not error or capped))
+                     and not graders[0].get("error") and not error)
             observation = {"case": name, "kind": kind, "attempt": index + 1}
             if not valid:
                 count["errors"] += 1
@@ -57,7 +54,7 @@ def summarize(result: dict) -> dict:
                 fired = graders[0]["passed"] if kind == "positive" else not graders[0]["passed"]
                 count["completed"] += 1
                 count["fired"] += fired
-                observation.update(outcome="fired" if fired else "not_fired", turn_capped=capped)
+                observation.update(outcome="fired" if fired else "not_fired")
             observations.append(observation)
     if result.get("partial"):
         problems.append("source evaluation is partial")

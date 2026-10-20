@@ -17,7 +17,7 @@ python3 scripts/plugin_eval.py evals/triggers --ablation none --trust-plugin --n
 python3 evals/triggers/summarize.py "$TMPDIR/triggers.json"
 ```
 
-`scripts/plugin_eval.py` stages `plugins/lago/` with this suite in a temporary folder, because `claude plugin eval` reads cases only from inside the plugin. `--ablation none` is required: in a two-arm run, Skill graders are reported but not scored. Runs that hit the 4-turn cap count only when the expected activation grader completed. Other errors, absent graders and missing attempts are reported as incomplete; the summarizer exits nonzero. Rates use completed observations, and `coverage` exposes planned, completed and errored attempts.
+`scripts/plugin_eval.py` stages `plugins/lago/` with this suite in a temporary folder, because `claude plugin eval` reads cases only from inside the plugin. `--ablation none` is required: in a two-arm run, Skill graders are reported but not scored. Every error, including a turn cap even when an activation grader completed, is reported as incomplete; absent graders and missing attempts are also incomplete; the summarizer exits nonzero. Rates use completed observations, and `coverage` exposes planned, completed and errored attempts.
 
 Codex has no plugin eval command. `codex_triggers.py` installs this checkout as `lago@lago-plugins` into a temporary `CODEX_HOME`, the same path users take with `codex plugin add`. It copies only `auth.json` from your Codex home and deletes the temporary home afterwards. A run counts as loaded only after a completed, successful standalone `cat` of the exact installed skill path returns the full skill text. Shell-wrapped `cat` is supported. Other read forms, truncated output or failed attempts are unclassified errors, not misses or successful loads. This conservative observation method may require extending for future CLI read tools.
 
@@ -33,7 +33,8 @@ Claude Code 2.1.304, Codex CLI 0.163.0, measured 2026-10-19. The before column i
 
 | Agent | Measure | Before | After |
 | --- | --- | ---: | ---: |
-| Claude Code, 3 runs per prompt | Positive prompts that fired the skill | 86/96 (90%) | 95/96 (99%) |
+| Claude Code, 3 runs per prompt | Positive prompts that fired the skill (completed attempts only) | 66/76 | 71/72 |
+| Claude Code | Incomplete positive attempts, including turn caps | 20/96 | 24/96 |
 | Claude Code, 3 runs per prompt | Near-misses that fired it (completed observations) | 2/42 | 0/43 |
 | Claude Code | Incomplete negative attempts | 3/45 | 2/45 |
 

@@ -1,13 +1,13 @@
 # Anthropic plugin directory: submission handoff
 
-For the Lago Owner who submits the Lago plugin to Anthropic's plugin directory. The repository side is ready: see [directory-readiness.md](directory-readiness.md) for the audit and verification output. Submission happens only in the developer portal at [claude.ai/directory/manage](https://claude.ai/directory/manage). Steps checked against [Submit a plugin](https://claude.com/docs/plugins/submit.md) and [Publish to the directory](https://claude.com/docs/directory/publish.md) on 2026-10-20. Re-read them before submitting, because the portal changes.
+For the Lago Owner who submits the Lago plugin to Anthropic's plugin directory. Submission remains blocked until every gate in RELEASING.md passes on the candidate commit, including the full behavioral scorecards, automated safety suite and live self-hosted money evidence. Local directory validation alone is insufficient. For packaging checks, see see [directory-readiness.md](directory-readiness.md) for the audit and verification output. Submission happens only in the developer portal at [claude.ai/directory/manage](https://claude.ai/directory/manage). Steps checked against [Submit a plugin](https://claude.com/docs/plugins/submit.md) and [Publish to the directory](https://claude.com/docs/directory/publish.md) on 2026-10-20. Re-read them before submitting, because the portal changes.
 
 ## Before submitting
 
 1. **Who can submit.** A paid claude.ai plan: Pro, Max, Team, or Enterprise. On Team or Enterprise, an Owner submits. On Enterprise, an Owner can also give the **Directory** permission to another member through a custom role under **Organization settings > Roles**. Free accounts cannot submit.
 2. **Submit from Lago's own claude.ai organization.** The first organization to submit a repository folder holds that listing, and the portal refuses a second organization. If someone else already submitted it, email `directory@anthropic.com` as the repository owner.
 3. **Connect GitHub in that same organization.** Use an account that can push to `getlago/lago-plugin`. A GitHub connection made in another Claude organization does not carry over. The push webhook in step 5 also needs **admin** access to the repository.
-4. **Merge the directory-readiness pull request into `main` first.** The repository is already public, which is required before the listing goes live.
+4. **Complete and archive the release gates, obtain human review, then merge the directory-readiness pull request into `main`.** The repository is already public, which is required before the listing goes live.
 5. **Confirm the icon.** `plugins/lago/assets/icon.png` is the Lago mark from getlago.com, 512x512. **It becomes the listing icon only on the first save in the portal and cannot be changed later.** Replace it before the first save if brand wants a different mark.
 6. **Confirm the name is free.** The listing name is `lago`. The portal blocks a name another organization already uses.
 

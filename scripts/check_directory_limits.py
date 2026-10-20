@@ -80,10 +80,13 @@ def check(repo: Path, plugin: Path) -> tuple[list[str], dict[str, object]]:
         failures.append("Git submodules are not allowed: .gitmodules")
     seen: dict[str, str] = {}
     for mode, blob, path in tracked:
-        lowered = path.lower()
-        if lowered in seen:
-            failures.append(f"names differ only by capitalization: {seen[lowered]} and {path}")
-        seen[lowered] = path
+        # Compare every ancestor too: Rules/a.md and rules/b.md collide.
+        for component in (*reversed(PurePosixPath(path).parents), PurePosixPath(path)):
+            name = component.as_posix()
+            lowered = name.lower()
+            if lowered in seen and seen[lowered] != name:
+                failures.append(f"names differ only by capitalization: {seen[lowered]} and {name}")
+            seen[lowered] = name
         for part in PurePosixPath(path).parts:
             stem = part.split(".", 1)[0].lower()
             if WINDOWS_FORBIDDEN.search(part) or part.endswith((".", " ")) or stem in WINDOWS_DEVICES:
@@ -101,7 +104,10 @@ def check(repo: Path, plugin: Path) -> tuple[list[str], dict[str, object]]:
                 if found:
                     failures.append(f"{path}:{number} sets {found.group(1)}, which stops directory validation")
     # Read contents from Git, as the directory does, not from the working tree.
-    plugin_files = [(mode, blob, path) for mode, blob, path in tracked if path.startswith(prefix + "/")]
+    plugin_files = [(mode, blob, path) for mode, blob, path in tracked if prefix == "." or path.startswith(prefix + "/")]
+    manifest = ".claude-plugin/plugin.json" if prefix == "." else prefix + "/.claude-plugin/plugin.json"
+    if not any(path == manifest and mode == "100644" for mode, _, path in plugin_files):
+        failures.append(f"missing tracked plugin manifest: {manifest}")
     if len(plugin_files) > MAX_PLUGIN_FILES:
         failures.append(f"plugin folder has {len(plugin_files)} files; the limit is {MAX_PLUGIN_FILES}")
     for mode, blob, path in plugin_files:

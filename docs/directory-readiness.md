@@ -17,7 +17,7 @@ Status values: **pass**, **blocks** (the portal refuses the submission), **held*
 | Blocks | 0 certain, 1 likely (see A-SEC-1) | 0 |
 | Expected reviewer holds | 2 likely (env credential reads, synthetic key) | 0 certain, 1 possible (see E-6) |
 | Warnings | 1 (`ICON_MISSING`) | 0 |
-| `claude plugin validate --profile directory --strict` | passed with 1 warning | passed, nothing to report |
+| `claude plugin validate --profile directory --strict` | failed strict mode: 1 warning | passed, nothing to report |
 | gitleaks findings inside the plugin folder | 15 (synthetic key, hashes, fixtures) | 0 |
 
 Validation in the portal is the final word. The local validator "checks a subset" of what the directory runs, and the security scan runs only after submission.

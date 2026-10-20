@@ -68,6 +68,7 @@ Claude runs these only when the skill calls for them. Each one uses only the Pyt
 | --- | --- | --- |
 | `scripts/run_demo.py` | Prints the offline billing walkthrough. | Nothing |
 | `scripts/release_integrity.py check` | Verifies the installed plugin files against the SHA-256 hashes in `RELEASE-MANIFEST.json` before the demo runs. | Nothing |
+| `scripts/release_integrity.py create` | Maintainer-only bundle manifest generation; never use it to bypass a failed integrity check. | The explicitly selected manifest output path |
 | `scripts/validate_event.py` | Checks a synthetic usage event file. | Nothing |
 | `scripts/validate_demo_target.py` | Refuses a live demo URL unless it is a local loopback Lago instance with an explicit port and a `lago-plugin-demo-*` Compose project. | Nothing |
 | `scripts/extract_actual.py` | Extracts the billed amount from a saved Lago API response. | Only the `--output` path you give it, otherwise stdout |
@@ -85,6 +86,8 @@ All paths are under `skills/implementation/` in this plugin.
   - Lago Cloud EU: `https://api.eu.getlago.com`
   - your self-hosted Lago URL
   - a loopback demo instance on your machine
+- **Migration source APIs, only for the exact approved action.** Stripe migration inspection or cutover can contact `api.stripe.com`; Chargebee migration work can contact the selected site's `<site>.chargebee.com` API. Requests carry the existing system's credentials and the approved customer/subscription selectors or changes. Reconciliation can instead use user-provided local exports without network access.
+- **Isolated self-hosted setup, only after approval.** Following the linked Lago Docker instructions can fetch the selected release from Lago's GitHub repositories (`github.com/getlago/` and GitHub-controlled download hosts) and pull container images from the registries named by the reviewed Compose file, including Docker Hub and its authentication/download hosts. Inspect and disclose the exact image registry destinations before approving a download; do not silently substitute registries or releases. Downloads send normal HTTP metadata, not billing credentials or customer records.
 - **Your existing tools, only if you already have them.** If the Lago CLI or a Lago MCP connection is already installed and configured, the skill may use it for the same live work under the same approval rule.
 
 The plugin never reads a credential from your environment and never asks for one at install time. Keep keys in your application's existing secret manager.
@@ -92,7 +95,8 @@ The plugin never reads a credential from your environment and never asks for one
 ### Files written
 
 - Code, tests, and documents that Claude writes in your project when you ask it to, such as an event contract or a validation report built from the bundled templates.
-- The `--output` file of `extract_actual.py`, when requested.
+- The `--output` file of `extract_actual.py`, when requested, and the explicitly selected manifest path when a maintainer runs `release_integrity.py create`.
+- An approved live demo creates a dedicated local directory, Compose configuration, container image cache, containers, network and persistent Docker volumes containing synthetic billing data. Report the exact paths and resources before creation. Teardown requires separate approval for those exact resources.
 
 The plugin keeps no state of its own and stores no personal data.
 

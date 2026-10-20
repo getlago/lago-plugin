@@ -10,6 +10,21 @@ Lago runs as [Lago Cloud](https://getlago.com/docs/guide/lago-cloud) or [self-ho
 
 **Responsibilities.** The application owns product identity, durable usage records, event delivery, and access enforcement. Lago owns metering, pricing, credits, and invoices. Do not build a parallel rating engine, credit ledger, or invoice engine in the application.
 
+## What an implementation must finish
+
+When asked to add billing, carry the work through the application wiring and offline tests; copying a client module is not a completed integration. Keep unknown region, credentials and commercial terms as required configuration rather than guessing them. No live request is needed for these repository changes.
+
+Before handing the task back:
+
+- Connect customer/subscription creation to the app's signup or billing-activation path; store separate customer and subscription IDs and the explicit activation time.
+- Persist usage and its delivery state atomically before sending it. Run a retry worker with leases, stable transaction IDs/timestamps, bounded retries and duplicate reconciliation. A best-effort call after a request is not the worker.
+- Wire the raw-body webhook route, a durable inbox keyed by `X-Lago-Unique-Key`, and an idempotent worker. Do not acknowledge before the inbox transaction commits or mark unimplemented handlers successful.
+- Use the app's persistent database. If the app only has an in-memory test double, replace it for the billing slice before calling the integration complete. For a local Node.js 22.13+ slice, the built-in [`node:sqlite`](https://nodejs.org/docs/latest-v24.x/api/sqlite.html) is an install-free option; keep file paths server-controlled and queries parameterized. Document its deployment and concurrency limits. An existing production database is preferable when available.
+- Connect the entitlement check before the expensive action. Do not treat a wallet balance snapshot as an atomic spend authorization.
+- Run tests for successful delivery, retry/replay, conflicting duplicates, invalid signatures, duplicate webhooks, worker recovery and persistence across process restarts. Use the project's pinned dependencies (`npm ci` when a lockfile exists), not an unrelated package downloaded by `npx tsc`. The offline demonstration below still needs no install.
+
+Do not end with unconnected helper functions or “I can add the webhook/worker next.” If an actual blocker prevents completion, identify it and mark the integration incomplete; never substitute an in-memory queue or an unverified client and describe the billing as implemented.
+
 ## 1. See it work offline (30 seconds)
 
 No account, key, Docker, or install is needed. Python 3.9 or later is enough.

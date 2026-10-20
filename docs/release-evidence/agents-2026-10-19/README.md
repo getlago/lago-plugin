@@ -24,6 +24,16 @@ The original Gemini check was insufficient: `.gemini-extension-install.json`, wr
 
 The corrected runner verifies the whole installed Gemini bundle, runs its offline demo only after integrity passes, and verifies Copilot’s enabled setting and marketplace source against the checkout before accepting its live-loaded bundle. Failure evidence is sanitized, and `--allow-dirty` cannot label a report complete.
 
+### Corrected clean-commit run
+
+[verify-installs-c4a210e.json](verify-installs-c4a210e.json) records a fresh run at clean commit `c4a210e02ddaf0c4e7bdc6dcf737e35c8791b346`, Node v25.5.0, with no source change during the checks. All three checks passed:
+
+- Gemini CLI 0.64.0: validation, install, enabled skill discovery, identical skill, full bundle integrity (230 files, only the CLI install record exempted), and the installed offline demo.
+- Copilot CLI 1.0.100: local marketplace install, enabled state and exact source binding from settings, identical skill, full bundle integrity and offline demo.
+- skills.sh 1.7.4: identical skill-only copy; no claim that the full bundle or root examples were installed.
+
+Command: `python3 evals/agent-installs/verify_installs.py`. No credentials or model session were used. The report has `complete: true`, `source_dirty: false` and `source_changed: false`. The subsequent evidence commit changes documentation and the release manifest, not the tested runtime or packaging code.
+
 ## What this does not show
 
 - Whether any of these agents selects the skill from a user prompt. That needs an authenticated model session per agent; triggering was measured only for Claude Code and Codex (see [evals/triggers](../../../evals/triggers/README.md)).

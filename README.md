@@ -56,7 +56,7 @@ This copies only `plugins/lago/skills/implementation/`. Without the full plugin 
 | --- | --- | --- |
 | Claude Code, Codex | Plugin `lago@lago-plugins` | Claude Code triggering evals and Codex smoke checks, see [evals/triggers](evals/triggers/README.md) |
 | GitHub Copilot CLI | Plugin `lago@lago-plugins` from `.claude-plugin/marketplace.json` | Local marketplace install, verified source binding, bundle integrity and offline demo, Copilot CLI 1.0.100 |
-| Gemini CLI | Extension from `plugins/lago/gemini-extension.json` | Validation, install, discovery, installed bundle integrity and offline demo, Gemini CLI 0.64.0, from the repository root before the move to `plugins/lago/`; not re-run since |
+| Gemini CLI | Extension from `plugins/lago/gemini-extension.json` | Validation, install from `plugins/lago`, discovery, installed bundle integrity and offline demo, Gemini CLI 0.64.0. The `gemini skills install --path` command is not verified. |
 | Cursor | `.cursor-plugin/` | Generated from Cursor's documented format; not tested in Cursor |
 | Goose, Devin | Read `plugins/lago/gemini-extension.json` or `.claude-plugin/` per their docs | Not tested |
 | skills.sh agents | Skill only | Install, skills 1.7.4 |

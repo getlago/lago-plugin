@@ -283,9 +283,14 @@ Installed plugin root: <codex_home>/plugins/cache/lago-plugins/lago/0.3.0
 
 `release_integrity.py check` on the installed copy returned PASS with 50 files. `codex exec --sandbox read-only '$lago:implementation show me what Lago can do; do not assume this workspace is my application'` loaded the skill, verified the bundle hashes, ran the bundled demo, and answered with the `$0.37` job and `$99.17` period total. A first attempt without `< /dev/null` waited on standard input until the 600 s timeout; that was a harness mistake, not a plugin failure.
 
-**Not run here:** Gemini CLI, GitHub Copilot CLI, and Cursor installs (`evals/agent-installs/verify_installs.py` was updated for the new layout but not re-run), and installation from the directory itself, which needs a listing. To re-run the other agents:
+**Other agents.** `python3 evals/agent-installs/verify_installs.py` on a clean tree at `2f4785f` reported `"complete": true`:
 
-```bash
-python3 evals/agent-installs/verify_installs.py
-```
+| Agent | CLI | Install | Skill byte-identical | Bundle integrity | Offline demo |
+| --- | --- | --- | --- | --- | --- |
+| Gemini CLI | 0.64.0 | `extensions validate` and `extensions install` of `plugins/lago` | yes | PASS | PASS |
+| GitHub Copilot CLI | 1.0.100 | local marketplace, `lago@lago-plugins` | yes | PASS | PASS |
+| skills.sh | 1.7.4 | `skills add <checkout> --skill implementation` (skill only) | yes | n/a | n/a |
 
+The first run of this verifier failed the Gemini demo because the path rewrite had pointed it at `plugins/lago/skills/...` inside the installed extension. That was fixed in `42f34f1`.
+
+**Not run here:** `gemini skills install https://github.com/getlago/lago-plugin.git --path plugins/lago/skills/implementation` (the GitHub one-liner in the root README), a Cursor import, and installation from the directory itself, which needs a listing.

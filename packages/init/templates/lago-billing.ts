@@ -25,20 +25,26 @@ async function lago(config: LagoConfig, method: string, path: string, body?: unk
   const attempts = (config.maxRetries ?? 4) + 1;
   for (let attempt = 1; ; attempt++) {
     let response: Response;
+    let text: string;
     try {
       response = await fetch(`${config.apiUrl}/api/v1${path}`, {
         method,
+        redirect: "manual", // Never forward credentials or repeat a mutation through a redirect.
         headers: { Authorization: `Bearer ${config.apiKey}`, "Content-Type": "application/json" },
         body: body === undefined ? undefined : JSON.stringify(body),
         signal: AbortSignal.timeout(config.timeoutMs ?? 10_000),
       });
+      text = await response.text();
     } catch (error) {
       if (attempt >= attempts) throw error;
       await sleep(Math.min(8_000, 250 * 2 ** attempt) * Math.random());
       continue;
     }
-    const text = await response.text();
-    const json = text ? JSON.parse(text) : null;
+    let json: any = null;
+    try { json = text ? JSON.parse(text) : null; } catch {
+      if (response.ok) throw new Error("Invalid JSON from Lago");
+      // Proxies can return HTML for transient failures. Classify by status below.
+    }
     if (response.ok) return json;
     const transient = response.status === 429 || response.status >= 500;
     if (!transient || attempt >= attempts) throw new LagoError(response.status, json);
@@ -54,9 +60,10 @@ export function upsertCustomer(config: LagoConfig, account: { id: string; name: 
 }
 
 // external_id is the subscription's own durable ID, never the customer ID.
-export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string }) {
+export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string; startsAt: Date }) {
   return lago(config, "POST", "/subscriptions", {
-    subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode },
+    subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode,
+      billing_time: "anniversary", subscription_at: s.startsAt.toISOString() },
   });
 }
 
@@ -103,10 +110,33 @@ export async function entitlement(config: LagoConfig, subscriptionId: string, fe
   return { enabled: true, privileges: Object.fromEntries(feature.privileges.map((p: any) => [p.code, p.value])) };
 }
 
-// Prepaid credits: ongoing_balance_cents already subtracts current usage.
-export async function prepaidBalanceCents(config: LagoConfig, customerId: string): Promise<number> {
-  const { wallets } = await lago(config, "GET", `/wallets?${new URLSearchParams({ external_customer_id: customerId })}`);
-  return (wallets as any[]).filter((w) => w.status === "active").reduce((sum, w) => sum + w.ongoing_balance_cents, 0);
+// Advisory snapshot, NOT a reservation or permission to spend. The caller supplies the charge context.
+export async function prepaidBalanceCents(config: LagoConfig, customerId: string,
+  context: { currency: string; feeType: "charge" | "subscription"; metricCode?: string }) {
+  if (!/^[A-Z]{3}$/.test(context.currency) || !["charge", "subscription"].includes(context.feeType) ||
+      (context.feeType === "charge" && !context.metricCode)) {
+    throw new Error("Explicit currency and charge metric are required");
+  }
+  let amountCents = 0;
+  for (let page = 1; ; page++) {
+    const query = new URLSearchParams({ external_customer_id: customerId, page: String(page), per_page: "100" });
+    const { wallets, meta } = await lago(config, "GET", `/wallets?${query}`);
+    if (!Number.isSafeInteger(meta?.total_pages) || meta.total_pages < 0 || meta.total_pages > 1000) {
+      throw new Error("Invalid wallet pagination; balance unavailable");
+    }
+    for (const w of wallets) {
+      if (w.status !== "active" || w.currency !== context.currency) continue;
+      const limits = w.applies_to ?? {};
+      if (limits.fee_types?.length && !limits.fee_types.includes(context.feeType)) continue;
+      if (limits.billable_metric_codes?.length &&
+          (context.feeType !== "charge" || !limits.billable_metric_codes.includes(context.metricCode))) continue;
+      if (!Number.isSafeInteger(w.ongoing_balance_cents)) throw new Error("Invalid wallet amount");
+      amountCents += w.ongoing_balance_cents;
+      if (!Number.isSafeInteger(amountCents)) throw new Error("Wallet total exceeds safe integer precision");
+    }
+    if (page >= meta.total_pages) break;
+  }
+  return { amountCents, currency: context.currency, advisory: true as const };
 }
 
 // The JWT public key is PEM, base64-encoded. Fetch it once and cache it.

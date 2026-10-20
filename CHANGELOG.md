@@ -12,6 +12,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Changed
 
+- Hardened install-free examples: refuse authenticated redirects, retry non-JSON transient responses, persist webhooks for durable polling, scope paginated wallet snapshots to eligible charges, and make subscription cadence and invoice reconciliation explicit.
+
 - `llms.txt` leads with `START_HERE.md` and lists tasks in developer wording, such as billing per token in a Next.js app, adding prepaid credits, and migrating from Stripe Billing.
 - Release integrity ignores `node_modules`.
 - Direct application implementation requests can start on the first turn without a prior demo or accepted solution brief; the blueprint remains a preview and money-changing decisions remain explicit.

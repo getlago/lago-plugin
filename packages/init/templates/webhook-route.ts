@@ -1,13 +1,15 @@
 import { configFromEnv, verifyWebhook, webhookPublicKey } from "./lago-billing";
 
-export type WebhookInbox = { insertIfNew(uniqueKey: string, payload: unknown): Promise<boolean> };
+export type WebhookInbox = { storePending(uniqueKey: string, payload: unknown): Promise<void> };
 
 let publicKeyPem: string | undefined;
 
-export function makeWebhookHandler(inbox: WebhookInbox, enqueue: (uniqueKey: string) => Promise<void>) {
+export function makeWebhookHandler(inbox: WebhookInbox) {
   return async function POST(request: Request): Promise<Response> {
     const config = configFromEnv();
-    publicKeyPem ??= await webhookPublicKey(config);
+    if (request.headers.get("x-lago-signature-algorithm") === "jwt") {
+      publicKeyPem ??= await webhookPublicKey(config);
+    }
     const rawBody = await request.text();
     let payload: unknown;
     try {
@@ -18,7 +20,7 @@ export function makeWebhookHandler(inbox: WebhookInbox, enqueue: (uniqueKey: str
     }
     const uniqueKey = request.headers.get("x-lago-unique-key");
     if (!uniqueKey) return new Response("missing unique key", { status: 400 });
-    if (await inbox.insertIfNew(uniqueKey, payload)) await enqueue(uniqueKey); // process asynchronously
+    await inbox.storePending(uniqueKey, payload); // worker polls pending rows, including after a crash
     return new Response(null, { status: 204 }); // only after durable storage
   };
 }

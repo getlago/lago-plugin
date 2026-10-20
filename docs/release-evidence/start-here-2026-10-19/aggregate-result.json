@@ -1,0 +1,463 @@
+{
+  "schemaVersion": 1,
+  "claudeVersion": "2.1.304",
+  "startedAt": "2026-10-19T23:51:51.903Z",
+  "durationSeconds": 415,
+  "costUsd": 3.2246353,
+  "partial": false,
+  "suite": {
+    "root": "[EVAL_ROOT]",
+    "ablation": "with-without",
+    "threshold": 0,
+    "concurrency": 2,
+    "plugins": [
+      {
+        "name": "lago",
+        "version": "0.2.0",
+        "path": "[PLUGIN_ROOT]"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "nextjs-start-here",
+      "dir": "evals/fresh-agent/nextjs-start-here",
+      "source": "mixed",
+      "promptMarkdown": "Add usage-based billing to this Next.js app. Use https://raw.githubusercontent.com/getlago/lago-plugin/feat/start-here/START_HERE.md",
+      "runsPerCase": 2,
+      "timeoutSeconds": 1500,
+      "maxTurns": 80,
+      "graders": [
+        {
+          "name": "correct-integration",
+          "type": "llm",
+          "weight": 1,
+          "graderMarkdown": "Judge the billing integration the agent wrote into the Next.js app. PASS only if all hold:\n1. Each usage event's `transaction_id` comes from the stored generation record (for example `generation.id`), not a value created at send time, and a retry would reuse it with the same `timestamp`.\n2. Events carry `external_subscription_id` from a subscription identifier distinct from the customer or workspace ID, or the agent adds a stored subscription ID.\n3. A webhook route reads the raw body (`request.text()` or equivalent) before verifying `X-Lago-Signature` (JWT or HMAC), deduplicates on `X-Lago-Unique-Key`, and returns 2xx only after storing the webhook.\n4. No API key or secret is hardcoded. Configuration comes from environment variables, and the region or base URL is not silently assumed.\n5. A 422 duplicate response is not counted as a plain success.\nFAIL if any item is missing or wrong. In the explanation, list which items failed.",
+          "config": {
+            "criteria": "Judge the billing integration the agent wrote into the Next.js app. PASS only if all hold:\n1. Each usage event's `transaction_id` comes from the stored generation record (for example `generation.id`), not a value created at send time, and a retry would reuse it with the same `timestamp`.\n2. Events carry `external_subscription_id` from a subscription identifier distinct from the customer or workspace ID, or the agent adds a stored subscription ID.\n3. A webhook route reads the raw body (`request.text()` or equivalent) before verifying `X-Lago-Signature` (JWT or HMAC), deduplicates on `X-Lago-Unique-Key`, and returns 2xx only after storing the webhook.\n4. No API key or secret is hardcoded. Configuration comes from environment variables, and the region or base URL is not silently assumed.\n5. A 422 duplicate response is not counted as a plain success.\nFAIL if any item is missing or wrong. In the explanation, list which items failed.",
+            "focus": "trace"
+          }
+        },
+        {
+          "name": "fetched-start-here",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "WebFetch",
+            "input_match": "START_HERE"
+          }
+        },
+        {
+          "name": "no-random-transaction-id-edit",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Edit",
+            "input_match": "transaction_id\\W{0,8}(crypto\\.)?(randomUUID|uuid|nanoid|Date\\.now)",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "no-random-transaction-id-write",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "transaction_id\\W{0,8}(crypto\\.)?(randomUUID|uuid|nanoid|Date\\.now)",
+            "min": 0,
+            "max": 0
+          }
+        },
+        {
+          "name": "writes-explicit-timestamp",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "timestamp\\W{0,8}[^,}]{0,80}(createdAt|occurredAt|getTime|toFixed)"
+          }
+        },
+        {
+          "name": "writes-subscription-id-on-events",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "external_subscription_id"
+          }
+        },
+        {
+          "name": "writes-webhook-dedupe",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "[Xx]-[Ll]ago-[Uu]nique-[Kk]ey"
+          }
+        },
+        {
+          "name": "writes-webhook-signature-check",
+          "type": "tool_used",
+          "weight": 1,
+          "config": {
+            "tool": "Write",
+            "input_match": "[Xx]-[Ll]ago-[Ss]ignature"
+          }
+        }
+      ],
+      "arms": {
+        "with": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 35,
+            "costUsd": 1.0940331,
+            "judgeCostUsd": 0.007258400000000002,
+            "durationSeconds": 236,
+            "startedAt": "2026-10-19T23:51:51.939Z",
+            "error": null,
+            "tracePath": "with-1.json",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "correct-integration",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ]
+              },
+              {
+                "name": "fetched-start-here",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-explicit-timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-subscription-id-on-events",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-dedupe",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 3x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-signature-check",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 0.875,
+            "passed": false,
+            "turns": 33,
+            "costUsd": 0.9872642000000001,
+            "judgeCostUsd": 0.0071012,
+            "durationSeconds": 221,
+            "startedAt": "2026-10-19T23:51:51.939Z",
+            "error": null,
+            "tracePath": "with-2.json",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "correct-integration",
+                "passed": false,
+                "weight": 1,
+                "explanation": "judge votes: FAIL FAIL FAIL",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  false,
+                  false,
+                  false
+                ]
+              },
+              {
+                "name": "fetched-start-here",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-explicit-timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-subscription-id-on-events",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-dedupe",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-signature-check",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ],
+        "without": [
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 21,
+            "costUsd": 0.5006921,
+            "judgeCostUsd": 0.007779900000000001,
+            "durationSeconds": 133,
+            "startedAt": "2026-10-19T23:55:33.092Z",
+            "error": null,
+            "tracePath": "without-1.json",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "correct-integration",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ]
+              },
+              {
+                "name": "fetched-start-here",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-explicit-timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-subscription-id-on-events",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-dedupe",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-signature-check",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          },
+          {
+            "score": 1,
+            "passed": true,
+            "turns": 20,
+            "costUsd": 0.6426459,
+            "judgeCostUsd": 0.006926000000000002,
+            "durationSeconds": 179,
+            "startedAt": "2026-10-19T23:55:48.412Z",
+            "error": null,
+            "tracePath": "without-2.json",
+            "skippedPaidGraders": false,
+            "graders": [
+              {
+                "name": "correct-integration",
+                "passed": true,
+                "weight": 1,
+                "explanation": "judge votes: PASS PASS PASS",
+                "withOnly": false,
+                "scored": true,
+                "judgeVotes": [
+                  true,
+                  true,
+                  true
+                ]
+              },
+              {
+                "name": "fetched-start-here",
+                "passed": true,
+                "weight": 1,
+                "explanation": "WebFetch called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-edit",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Edit called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "no-random-transaction-id-write",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 0x (expected 0..0)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-explicit-timestamp",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-subscription-id-on-events",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-dedupe",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 1x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              },
+              {
+                "name": "writes-webhook-signature-check",
+                "passed": true,
+                "weight": 1,
+                "explanation": "Write called 2x (expected 1..\u221e)",
+                "withOnly": false,
+                "scored": true
+              }
+            ]
+          }
+        ]
+      },
+      "aggregates": {
+        "score": 0.9375,
+        "passRate": 0.5,
+        "scoreWithout": 1,
+        "passRateWithout": 1,
+        "delta": -0.0625
+      }
+    }
+  ],
+  "aggregates": {
+    "casesTotal": 1,
+    "casesPassed": 1,
+    "overallScore": 0.9375,
+    "overallPassRate": 0.5,
+    "meanDelta": -0.0625
+  }
+}

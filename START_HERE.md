@@ -87,20 +87,26 @@ async function lago(config: LagoConfig, method: string, path: string, body?: unk
   const attempts = (config.maxRetries ?? 4) + 1;
   for (let attempt = 1; ; attempt++) {
     let response: Response;
+    let text: string;
     try {
       response = await fetch(`${config.apiUrl}/api/v1${path}`, {
         method,
+        redirect: "manual", // Never forward credentials or repeat a mutation through a redirect.
         headers: { Authorization: `Bearer ${config.apiKey}`, "Content-Type": "application/json" },
         body: body === undefined ? undefined : JSON.stringify(body),
         signal: AbortSignal.timeout(config.timeoutMs ?? 10_000),
       });
+      text = await response.text();
     } catch (error) {
       if (attempt >= attempts) throw error;
       await sleep(Math.min(8_000, 250 * 2 ** attempt) * Math.random());
       continue;
     }
-    const text = await response.text();
-    const json = text ? JSON.parse(text) : null;
+    let json: any = null;
+    try { json = text ? JSON.parse(text) : null; } catch {
+      if (response.ok) throw new Error("Invalid JSON from Lago");
+      // Proxies can return HTML for transient failures. Classify by status below.
+    }
     if (response.ok) return json;
     const transient = response.status === 429 || response.status >= 500;
     if (!transient || attempt >= attempts) throw new LagoError(response.status, json);
@@ -116,9 +122,10 @@ export function upsertCustomer(config: LagoConfig, account: { id: string; name: 
 }
 
 // external_id is the subscription's own durable ID, never the customer ID.
-export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string }) {
+export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string; startsAt: Date }) {
   return lago(config, "POST", "/subscriptions", {
-    subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode },
+    subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode,
+      billing_time: "anniversary", subscription_at: s.startsAt.toISOString() },
   });
 }
 
@@ -165,10 +172,33 @@ export async function entitlement(config: LagoConfig, subscriptionId: string, fe
   return { enabled: true, privileges: Object.fromEntries(feature.privileges.map((p: any) => [p.code, p.value])) };
 }
 
-// Prepaid credits: ongoing_balance_cents already subtracts current usage.
-export async function prepaidBalanceCents(config: LagoConfig, customerId: string): Promise<number> {
-  const { wallets } = await lago(config, "GET", `/wallets?${new URLSearchParams({ external_customer_id: customerId })}`);
-  return (wallets as any[]).filter((w) => w.status === "active").reduce((sum, w) => sum + w.ongoing_balance_cents, 0);
+// Advisory snapshot, NOT a reservation or permission to spend. The caller supplies the charge context.
+export async function prepaidBalanceCents(config: LagoConfig, customerId: string,
+  context: { currency: string; feeType: "charge" | "subscription"; metricCode?: string }) {
+  if (!/^[A-Z]{3}$/.test(context.currency) || !["charge", "subscription"].includes(context.feeType) ||
+      (context.feeType === "charge" && !context.metricCode)) {
+    throw new Error("Explicit currency and charge metric are required");
+  }
+  let amountCents = 0;
+  for (let page = 1; ; page++) {
+    const query = new URLSearchParams({ external_customer_id: customerId, page: String(page), per_page: "100" });
+    const { wallets, meta } = await lago(config, "GET", `/wallets?${query}`);
+    if (!Number.isSafeInteger(meta?.total_pages) || meta.total_pages < 0 || meta.total_pages > 1000) {
+      throw new Error("Invalid wallet pagination; balance unavailable");
+    }
+    for (const w of wallets) {
+      if (w.status !== "active" || w.currency !== context.currency) continue;
+      const limits = w.applies_to ?? {};
+      if (limits.fee_types?.length && !limits.fee_types.includes(context.feeType)) continue;
+      if (limits.billable_metric_codes?.length &&
+          (context.feeType !== "charge" || !limits.billable_metric_codes.includes(context.metricCode))) continue;
+      if (!Number.isSafeInteger(w.ongoing_balance_cents)) throw new Error("Invalid wallet amount");
+      amountCents += w.ongoing_balance_cents;
+      if (!Number.isSafeInteger(amountCents)) throw new Error("Wallet total exceeds safe integer precision");
+    }
+    if (page >= meta.total_pages) break;
+  }
+  return { amountCents, currency: context.currency, advisory: true as const };
 }
 
 // The JWT public key is PEM, base64-encoded. Fetch it once and cache it.
@@ -201,19 +231,21 @@ export function verifyWebhook(rawBody: string, headers: Headers, keys: WebhookKe
 }
 ```
 
-Webhook route for the Next.js App Router. Swap `inbox` for the application's own durable storage with a unique constraint on the key.
+Webhook route for the Next.js App Router. Implement `inbox.storePending` as a single committed database insert of the unique key, payload and `pending` state (`ON CONFLICT DO NOTHING`). It must resolve only after commit, and a duplicate must never reset a processed row. A worker polls this same durable inbox: there is no separate enqueue operation that can be lost after insertion.
 
 ```ts file=webhook-route.ts
 import { configFromEnv, verifyWebhook, webhookPublicKey } from "./lago-billing";
 
-export type WebhookInbox = { insertIfNew(uniqueKey: string, payload: unknown): Promise<boolean> };
+export type WebhookInbox = { storePending(uniqueKey: string, payload: unknown): Promise<void> };
 
 let publicKeyPem: string | undefined;
 
-export function makeWebhookHandler(inbox: WebhookInbox, enqueue: (uniqueKey: string) => Promise<void>) {
+export function makeWebhookHandler(inbox: WebhookInbox) {
   return async function POST(request: Request): Promise<Response> {
     const config = configFromEnv();
-    publicKeyPem ??= await webhookPublicKey(config);
+    if (request.headers.get("x-lago-signature-algorithm") === "jwt") {
+      publicKeyPem ??= await webhookPublicKey(config);
+    }
     const rawBody = await request.text();
     let payload: unknown;
     try {
@@ -224,13 +256,15 @@ export function makeWebhookHandler(inbox: WebhookInbox, enqueue: (uniqueKey: str
     }
     const uniqueKey = request.headers.get("x-lago-unique-key");
     if (!uniqueKey) return new Response("missing unique key", { status: 400 });
-    if (await inbox.insertIfNew(uniqueKey, payload)) await enqueue(uniqueKey); // process asynchronously
+    await inbox.storePending(uniqueKey, payload); // worker polls pending rows, including after a crash
     return new Response(null, { status: 204 }); // only after durable storage
   };
 }
 ```
 
-In `app/api/lago/webhooks/route.ts`: `export const POST = makeWebhookHandler(inbox, enqueue);`.
+In `app/api/lago/webhooks/route.ts`: `export const POST = makeWebhookHandler(inbox);`.
+
+The worker must atomically claim a pending row with an expiring lease, process it idempotently using the unique key (and the domain object ID for billing effects), and mark it processed only after success. Failed processing remains retryable; expired leases recover worker crashes. If processing succeeds but marking fails, replay must not repeat the effect. Persist the effect and completion in one transaction when they share a database; otherwise use the downstream system's idempotency support. Monitor and retry pending rows independently of incoming HTTP requests.
 
 ## 6. Python
 
@@ -256,11 +290,17 @@ class LagoError(Exception):
         self.status, self.body = status, body
 
 
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise urllib.error.HTTPError(req.full_url, code, "Redirect refused", headers, fp)
+
+
 class Lago:
     def __init__(self, api_url=None, api_key=None, timeout=10, max_retries=4):
         self.api_url = (api_url or os.environ["LAGO_API_URL"]).rstrip("/")
         self.api_key = api_key or os.environ["LAGO_API_KEY"]
         self.timeout, self.max_retries = timeout, max_retries
+        self.opener = urllib.request.build_opener(NoRedirect())
 
     def _request(self, method, path, body=None):
         data = None if body is None else json.dumps(body).encode()
@@ -270,12 +310,16 @@ class Lago:
                 headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
             )
             try:
-                with urllib.request.urlopen(request, timeout=self.timeout) as response:
+                with self.opener.open(request, timeout=self.timeout) as response:
                     text = response.read()
                     return json.loads(text) if text else None
             except urllib.error.HTTPError as error:
-                text = error.read()
-                payload = json.loads(text) if text else None
+                with error:
+                    text = error.read()
+                try:
+                    payload = json.loads(text) if text else None
+                except (ValueError, UnicodeDecodeError):
+                    payload = None  # HTML proxy errors must still use status-based retry rules.
                 if (error.code != 429 and error.code < 500) or attempt > self.max_retries:
                     raise LagoError(error.code, payload) from None
             except (urllib.error.URLError, TimeoutError):
@@ -288,10 +332,13 @@ class Lago:
         customer = {"external_id": account_id, "name": name, "email": email, "currency": currency}
         return self._request("POST", "/customers", {"customer": {k: v for k, v in customer.items() if v is not None}})
 
-    def create_subscription(self, subscription_id, customer_id, plan_code):
+    def create_subscription(self, subscription_id, customer_id, plan_code, starts_at: datetime):
         # external_id is the subscription's own durable ID, never the customer ID.
+        if starts_at.tzinfo is None or starts_at.utcoffset() is None:
+            raise ValueError("Subscription start must be timezone-aware")
         return self._request("POST", "/subscriptions", {"subscription": {
-            "external_id": subscription_id, "external_customer_id": customer_id, "plan_code": plan_code}})
+            "external_id": subscription_id, "external_customer_id": customer_id, "plan_code": plan_code,
+            "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}})
 
     def send_usage(self, record_id, subscription_id, metric_code, occurred_at: datetime, properties):
         """record_id and occurred_at come from the durable usage record and never change on retry."""
@@ -323,11 +370,35 @@ class Lago:
                 return {"enabled": True, "privileges": {p["code"]: p["value"] for p in feature["privileges"]}}
         return {"enabled": False, "privileges": {}}
 
-    def prepaid_balance_cents(self, customer_id):
-        """ongoing_balance_cents already subtracts current usage."""
-        query = urllib.parse.urlencode({"external_customer_id": customer_id})
-        wallets = self._request("GET", f"/wallets?{query}")["wallets"]
-        return sum(w["ongoing_balance_cents"] for w in wallets if w["status"] == "active")
+    def prepaid_balance_cents(self, customer_id, currency, fee_type, metric_code=None):
+        """Advisory snapshot only, not a reservation or permission to spend."""
+        if len(currency) != 3 or not currency.isascii() or not currency.isupper() or not currency.isalpha():
+            raise ValueError("Explicit ISO currency is required")
+        if fee_type not in ("charge", "subscription") or (fee_type == "charge" and not metric_code):
+            raise ValueError("Explicit fee type and charge metric are required")
+        amount_cents, page = 0, 1
+        while True:
+            query = urllib.parse.urlencode({"external_customer_id": customer_id, "page": page, "per_page": 100})
+            result = self._request("GET", f"/wallets?{query}")
+            pages = result.get("meta", {}).get("total_pages")
+            if type(pages) is not int or not 0 <= pages <= 1000:
+                raise ValueError("Invalid wallet pagination; balance unavailable")
+            for wallet in result["wallets"]:
+                if wallet["status"] != "active" or wallet["currency"] != currency:
+                    continue
+                limits = wallet.get("applies_to") or {}
+                if limits.get("fee_types") and fee_type not in limits["fee_types"]:
+                    continue
+                if limits.get("billable_metric_codes") and (
+                    fee_type != "charge" or metric_code not in limits["billable_metric_codes"]
+                ):
+                    continue
+                if type(wallet["ongoing_balance_cents"]) is not int:
+                    raise ValueError("Invalid wallet amount")
+                amount_cents += wallet["ongoing_balance_cents"]
+            if page >= pages:
+                return {"amount_cents": amount_cents, "currency": currency, "advisory": True}
+            page += 1
 
     def webhook_public_key(self):
         """The JWT public key is PEM, base64-encoded. Fetch it once and cache it."""
@@ -365,7 +436,8 @@ public_key_pem = None
 @app.post("/lago/webhooks")
 async def lago_webhook(request: Request):
     global public_key_pem
-    public_key_pem = public_key_pem or lago.webhook_public_key()
+    if request.headers.get("X-Lago-Signature-Algorithm") == "jwt":
+        public_key_pem = public_key_pem or lago.webhook_public_key()
     raw_body = await request.body()
     try:
         payload = verify_webhook(raw_body, request.headers, issuer=lago.api_url,
@@ -375,22 +447,21 @@ async def lago_webhook(request: Request):
     unique_key = request.headers.get("X-Lago-Unique-Key")
     if not unique_key:
         return Response(status_code=400)
-    if inbox.insert_if_new(unique_key, payload):  # your durable storage, unique constraint on the key
-        enqueue(unique_key)  # process asynchronously
+    await inbox.store_pending(unique_key, payload)  # committed insert; durable worker polls pending rows
     return Response(status_code=204)
 ```
 
 ## 7. Wire it into the application
 
-1. **Signup or billing activation:** `upsertCustomer`, then `createSubscription` with a subscription ID the application stores.
+1. **Signup or billing activation:** `upsertCustomer`, then `createSubscription` with a subscription ID and timezone-aware start time the application stores. This example explicitly uses anniversary billing; wait for activation before recording billable work. For calendar billing, deliberately select it and calculate first-period proration. Do not use this create-only example to implement upgrades, downgrades or termination without defining their effective times and invoice consequences.
 2. **Every billable action:** write the usage record to the application database first, then send it from a worker. Mark it delivered on `accepted`. Reconcile `duplicate` against the stored event.
-3. **Before an expensive action:** call `entitlement` or `prepaidBalanceCents` and cache the answer briefly. The application decides whether to allow the action.
+3. **Before an expensive action:** check the relevant entitlement and its privilege limits. For prepaid visibility, call `prepaidBalanceCents` with explicit currency, fee type and metric code. This paginated, restricted-wallet total is an advisory snapshot, not a hard spending cap: concurrent work and metering delay can overspend it. A strict prepaid cutoff requires a separately designed atomic authorization/reservation mechanism; do not approve spending solely from this value or a cached copy.
 4. **Webhooks:** handle `invoice.created`, `wallet.depleted_ongoing_balance`, and `subscription.terminated` asynchronously ([webhook types](https://getlago.com/docs/api-reference/webhooks/messages)).
 
 ## 8. Verify before calling it done
 
 - **Offline:** unit-test that retries reuse the same `transaction_id` and `timestamp`. Test that a 422 duplicate is not counted as success. Test that a tampered webhook body is rejected.
-- **Money:** calculate the expected amount by hand. For 120,000 tokens at `0.00002`, that is `$2.40` on top of the `$49` plan fee. Compare it with `currentUsage` on a dedicated test instance.
+- **Money:** calculate the expected amount by hand. For one full anniversary period with 120,000 tokens at `0.00002`, expect `$2.40` in metered usage and a separate `$49` subscription fee before tax, discounts or credits. The plan bills the subscription in advance and usage in arrears: verify the initial `$49` subscription invoice separately from the open period's `$2.40` current usage. At renewal, reconcile the closed period's usage fees and distinguish any next-period advance subscription fee on the same invoice. Do not expect `currentUsage` to prove the initial subscription invoice or promise a single `$51.40` invoice. Use a dedicated self-hosted instance; calendar billing or partial periods require independently calculated proration.
 - **Replay:** send the same record twice and confirm `units` did not increase.
 - **Stage the result:** an offline test, a live test on a dedicated instance, and production readiness are three different claims. State which one you reached.
 

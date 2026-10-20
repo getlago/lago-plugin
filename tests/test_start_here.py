@@ -15,6 +15,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -42,6 +43,8 @@ class FakeLago:
         self.requests: list[tuple[str, str, object]] = []
         self.events: dict[str, dict] = {}
         self.fail_next_event_with_503 = False
+        self.html_event_failures = 0
+        self.redirect_target = None
         handler = self._handler()
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
         self.url = f"http://127.0.0.1:{self.server.server_address[1]}"
@@ -73,11 +76,22 @@ class FakeLago:
                 body = json.loads(self.rfile.read(length)) if length else None
                 path = self.path
                 fake.requests.append((method, path, body))
+                if path == "/api/v1/redirect" or path.startswith("/api/v1/customers/redirect/current_usage"):
+                    self.send_response(302)
+                    self.send_header("Location", fake.redirect_target)
+                    self.end_headers()
+                    return
                 if method == "POST" and path == "/api/v1/customers":
                     return self._send(200, {"customer": body["customer"]})
                 if method == "POST" and path == "/api/v1/subscriptions":
                     return self._send(200, {"subscription": body["subscription"]})
                 if method == "POST" and path == "/api/v1/events":
+                    if fake.html_event_failures:
+                        fake.html_event_failures -= 1
+                        self.send_response(502)
+                        self.end_headers()
+                        self.wfile.write(b"<html>Bad Gateway</html>")
+                        return
                     if fake.fail_next_event_with_503:
                         fake.fail_next_event_with_503 = False
                         return self._send(503, {"status": 503, "error": "Service Unavailable"})
@@ -98,9 +112,21 @@ class FakeLago:
                     return self._send(200, {"entitlements": [{"code": "seats", "name": "Seats", "description": None,
                         "privileges": [{"code": "max", "name": "Max", "value_type": "integer", "config": {}, "value": 10,
                                         "plan_value": 10, "override_value": None}], "overrides": {}}]})
-                if method == "GET" and path == "/api/v1/wallets?external_customer_id=cus_1":
-                    return self._send(200, {"wallets": [{"status": "active", "ongoing_balance_cents": 750},
-                                                        {"status": "terminated", "ongoing_balance_cents": 999}], "meta": {}})
+                if method == "GET" and path.startswith("/api/v1/wallets?"):
+                    query = __import__("urllib.parse", fromlist=["parse_qs"]).parse_qs(path.split("?", 1)[1])
+                    if query.get("page") == ["2"]:
+                        wallets = [{"status": "active", "currency": "USD", "ongoing_balance_cents": 250}]
+                    else:
+                        wallets = [
+                            {"status": "active", "currency": "USD", "ongoing_balance_cents": 750},
+                            {"status": "terminated", "currency": "USD", "ongoing_balance_cents": 999},
+                            {"status": "active", "currency": "EUR", "ongoing_balance_cents": 999},
+                            {"status": "active", "currency": "USD", "ongoing_balance_cents": 900,
+                             "applies_to": {"billable_metric_codes": ["storage"], "fee_types": ["charge"]}},
+                            {"status": "active", "currency": "USD", "ongoing_balance_cents": 900,
+                             "applies_to": {"fee_types": ["subscription"]}},
+                        ]
+                    return self._send(200, {"wallets": wallets, "meta": {"total_pages": 2}})
                 if method == "GET" and path == "/api/v1/webhooks/json_public_key":
                     return self._send(200, {"webhook": {"public_key": base64.b64encode(fake.public_key_pem.encode()).decode()}})
                 return self._send(404, {"status": 404, "error": "Not Found", "path": path})
@@ -136,6 +162,8 @@ class StartHereTest(unittest.TestCase):
     def setUp(self):
         self.fake.events.clear()
         self.fake.requests.clear()
+        self.fake.html_event_failures = 0
+        self.fake.fail_next_event_with_503 = False
 
     def jwt(self, data: str, issuer: str, alg: str = "RS256") -> str:
         header = b64url(json.dumps({"alg": alg, "typ": "JWT"}).encode())
@@ -168,7 +196,11 @@ class StartHereTest(unittest.TestCase):
 
         lago.upsert_customer("cus_1", "Acme", "USD")
         self.assertNotIn("email", self.fake.requests[-1][2]["customer"])
-        lago.create_subscription("sub_1", "cus_1", "pro")
+        lago.create_subscription("sub_1", "cus_1", "pro", datetime(2026, 10, 15, 12, tzinfo=timezone.utc))
+        self.assertEqual(self.fake.requests[-1][2]["subscription"]["billing_time"], "anniversary")
+        self.assertEqual(self.fake.requests[-1][2]["subscription"]["subscription_at"], "2026-10-15T12:00:00+00:00")
+        with self.assertRaises(ValueError):
+            lago.create_subscription("sub_1", "cus_1", "pro", datetime(2026, 10, 15))
         self.assertEqual(self.fake.requests[-1][2]["subscription"]["external_customer_id"], "cus_1")
 
         occurred = datetime(2026, 10, 1, 12, 0, 0, 250000, tzinfo=timezone.utc)
@@ -184,7 +216,8 @@ class StartHereTest(unittest.TestCase):
 
         self.assertEqual(lago.entitlement("sub_1", "seats"), {"enabled": True, "privileges": {"max": 10}})
         self.assertEqual(lago.entitlement("sub_1", "sso"), {"enabled": False, "privileges": {}})
-        self.assertEqual(lago.prepaid_balance_cents("cus_1"), 750)
+        self.assertEqual(lago.prepaid_balance_cents("cus_1", "USD", "charge", "llm_tokens"),
+                         {"amount_cents": 1000, "currency": "USD", "advisory": True})
         self.assertEqual(lago.webhook_public_key(), self.public_pem)
 
         has_pyjwt = importlib.util.find_spec("jwt") is not None
@@ -203,6 +236,41 @@ class StartHereTest(unittest.TestCase):
                     with self.assertRaises(Exception):
                         call()
 
+    def test_python_redirects_and_non_json_retries(self):
+        module_path = self.tmp / "lago_billing.py"
+        module_path.write_text(self.blocks["lago_billing.py"])
+        spec = importlib.util.spec_from_file_location("retry_billing", module_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        lago = module.Lago(self.fake.url, API_KEY, max_retries=2)
+        target = FakeLago(self.public_pem)
+        try:
+            self.fake.redirect_target = target.url + "/api/v1/wallets"
+            with self.assertRaises(module.LagoError) as error:
+                lago._request("GET", "/redirect")
+            self.assertEqual(error.exception.status, 302)
+            self.assertEqual(target.requests, [], "no credentials or requests sent to redirect origin")
+            import urllib.request
+            for status in (301, 302, 303, 307, 308):
+                with self.subTest(status=status), self.assertRaises(module.urllib.error.HTTPError) as refused:
+                    module.NoRedirect().redirect_request(urllib.request.Request("https://api.example/"), None,
+                        status, "redirect", {}, "http://api.example/")
+                refused.exception.close()
+        finally:
+            target.close()
+        with patch.object(module.time, "sleep"):
+            self.fake.html_event_failures = 1
+            self.assertEqual(lago.send_usage("html-retry", "sub_1", "llm_tokens",
+                datetime(2026, 10, 15, tzinfo=timezone.utc), {"tokens": 1}), "accepted")
+            sent = [body for method, path, body in self.fake.requests if path == "/api/v1/events"]
+            self.assertEqual(len(sent), 2)
+            self.assertEqual(sent[0], sent[1])
+            self.fake.html_event_failures = 4
+            with self.assertRaises(module.LagoError) as error:
+                lago.send_usage("exhausted", "sub_1", "llm_tokens", datetime.now(timezone.utc), {"tokens": 1})
+            self.assertEqual(error.exception.status, 502)
+            self.assertEqual(self.fake.html_event_failures, 1, "exactly three bounded attempts")
+
     @unittest.skipUnless(shutil.which("node"), "node is required for the TypeScript example")
     def test_typescript_client_and_webhooks(self):
         version = subprocess.run(["node", "-p", "process.versions.node.split('.').map(Number)"], capture_output=True, text=True)
@@ -213,6 +281,8 @@ class StartHereTest(unittest.TestCase):
         route = self.blocks["webhook-route.ts"].replace('"./lago-billing"', '"./lago-billing.mts"')
         (self.tmp / "webhook-route.mts").write_text(route, encoding="utf-8")
         body, cases = self.webhook_cases()
+        self.fake.html_event_failures = 1
+        self.fake.redirect_target = self.fake.url + "/api/v1/should-not-reach"
         driver = self.tmp / "driver.mjs"
         driver.write_text(DRIVER, encoding="utf-8")
         env = {"PATH": os.environ["PATH"], "LAGO_API_URL": self.fake.url, "LAGO_API_KEY": API_KEY,
@@ -226,9 +296,17 @@ class StartHereTest(unittest.TestCase):
         self.assertEqual(report["contractError"], 422)
         self.assertEqual(report["usageCents"], 240)
         self.assertEqual(report["entitled"], {"enabled": True, "privileges": {"max": 10}})
-        self.assertEqual(report["balance"], 750)
+        self.assertEqual(report["balance"], {"amountCents": 1000, "currency": "USD", "advisory": True})
         self.assertEqual(report["routeStatuses"], {name: 204 if valid else 401 for name, _, _, valid in cases})
         self.assertEqual(report["inserted"], ["key-jwt-valid", "key-hmac-valid"])
+        self.assertEqual(report["recovered"], ["key-jwt-valid", "key-hmac-valid"])
+        self.assertEqual(report["storageFailure"], "database unavailable")
+        self.assertEqual(report["redirectStatus"], 302)
+        self.assertEqual(report["htmlRetry"], "accepted")
+        self.assertFalse(any("should-not-reach" in path for _, path, _ in self.fake.requests))
+        subscription = next(body["subscription"] for method, path, body in self.fake.requests if path == "/api/v1/subscriptions")
+        self.assertEqual(subscription["billing_time"], "anniversary")
+        self.assertEqual(subscription["subscription_at"], "2026-10-15T12:00:00.000Z")
         posted = [body["event"] for method, path, body in self.fake.requests if path == "/api/v1/events"]
         self.assertEqual({(e["transaction_id"], e["timestamp"]) for e in posted if e["code"] == "llm_tokens"},
                          {("usage_42", "1790856000.250")})
@@ -237,10 +315,11 @@ class StartHereTest(unittest.TestCase):
 DRIVER = r"""
 import { configFromEnv, sendUsage, currentUsage, entitlement, prepaidBalanceCents, upsertCustomer, createSubscription, LagoError } from "./lago-billing.mts";
 import { makeWebhookHandler } from "./webhook-route.mts";
+import { readFileSync, writeFileSync } from "node:fs";
 
 const config = { ...configFromEnv(), maxRetries: 2 };
 await upsertCustomer(config, { id: "cus_1", name: "Acme", currency: "USD" });
-await createSubscription(config, { id: "sub_1", customerId: "cus_1", planCode: "pro" });
+await createSubscription(config, { id: "sub_1", customerId: "cus_1", planCode: "pro", startsAt: new Date("2026-10-15T12:00:00Z") });
 const record = { id: "usage_42", subscriptionId: "sub_1", metricCode: "llm_tokens", occurredAt: new Date(Date.UTC(2026, 9, 1, 12, 0, 0, 250)), properties: { tokens: 120000 } };
 const first = await sendUsage(config, record);
 const replay = await sendUsage(config, record);
@@ -248,12 +327,19 @@ let contractError = null;
 try { await sendUsage(config, { ...record, id: "usage_43", metricCode: "__contract_error__" }); } catch (e) { contractError = e instanceof LagoError ? e.status : String(e); }
 const usage = await currentUsage(config, "cus_1", "sub_1");
 const entitled = await entitlement(config, "sub_1", "seats");
-const balance = await prepaidBalanceCents(config, "cus_1");
+const balance = await prepaidBalanceCents(config, "cus_1", {currency: "USD", feeType: "charge", metricCode: "llm_tokens"});
 
 const inserted = [];
-const seen = new Set();
-const inbox = { async insertIfNew(key) { if (seen.has(key)) return false; seen.add(key); return true; } };
-const handler = makeWebhookHandler(inbox, async (key) => { inserted.push(key); });
+// Durable inbox fixture. No queue is available while HTTP requests arrive.
+const disk = new URL('./inbox.json', import.meta.url);
+writeFileSync(disk, '{}');
+const inbox = { async storePending(key, payload) {
+  const rows = JSON.parse(readFileSync(disk));
+  if (rows[key]) return;
+  rows[key] = {payload, state: 'pending'};
+  writeFileSync(disk, JSON.stringify(rows)); inserted.push(key);
+} };
+const handler = makeWebhookHandler(inbox);
 const routeStatuses = {};
 for (const [name, body, headers] of JSON.parse(process.env.CASES)) {
   const request = new Request("http://app.test/api/lago/webhooks", { method: "POST", body, headers: { ...headers, "x-lago-unique-key": `key-${name}` } });
@@ -261,7 +347,24 @@ for (const [name, body, headers] of JSON.parse(process.env.CASES)) {
 }
 const [[, hb, hh]] = JSON.parse(process.env.CASES).filter(([n]) => n === "hmac-valid");
 await handler(new Request("http://app.test/api/lago/webhooks", { method: "POST", body: hb, headers: { ...hh, "x-lago-unique-key": "key-hmac-valid" } }));
-console.log(JSON.stringify({ first, replay, contractError, usageCents: usage.amount_cents, entitled, balance, routeStatuses, inserted }));
+// Worker restarts with only persisted data; all accepted deliveries remain discoverable.
+const recovered = Object.entries(JSON.parse(readFileSync(disk))).filter(([,row]) => row.state === 'pending').map(([key]) => key);
+const effects = new Set();
+for (const key of recovered) {
+  // Effect succeeds, then worker crashes before marking complete. Replaying is idempotent.
+  effects.add(key); effects.add(key);
+  const rows = JSON.parse(readFileSync(disk)); rows[key].state='processed'; writeFileSync(disk, JSON.stringify(rows));
+}
+if (effects.size !== recovered.length) throw Error('duplicate effect');
+await handler(new Request("http://app.test/hook", {method:"POST", body:hb, headers:{...hh,"x-lago-unique-key":"key-hmac-valid"}}));
+if (JSON.parse(readFileSync(disk))['key-hmac-valid'].state !== 'processed') throw Error('duplicate reset completion');
+let storageFailure;
+try { await makeWebhookHandler({async storePending(){throw Error('database unavailable');}})(new Request("http://app.test/hook", {method:"POST",body:hb,headers:{...hh,"x-lago-unique-key":"new"}})); }
+catch(e) {storageFailure=e.message;}
+let redirectStatus;
+try {await currentUsage(config, "redirect", "sub_1");} catch(e) {redirectStatus=e.status;}
+const htmlRetry=first;
+console.log(JSON.stringify({ first, replay, contractError, usageCents: usage.amount_cents, entitled, balance, routeStatuses, inserted, recovered, storageFailure, redirectStatus, htmlRetry }));
 """
 
 

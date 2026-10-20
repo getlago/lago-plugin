@@ -12,7 +12,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Changed
 
-- `START_HERE.md`, `llms.txt`, and the `@getlago/init` output show the exact Claude Code and Codex install commands for `lago@lago-plugins`; a test keeps them identical to the README.
+- `START_HERE.md`, `llms.txt`, and the `@getlago/init` output show the exact Claude Code and Codex install commands for `lago@lago-plugins`; tests check README consistency, command order, invocation, and the CLI's actual dry-run output.
 - Hardened install-free examples: refuse authenticated redirects, retry non-JSON transient responses, persist webhooks for durable polling, scope paginated wallet snapshots to eligible charges, and make subscription cadence and invoice reconciliation explicit.
 
 - `llms.txt` leads with `START_HERE.md` and lists tasks in developer wording, such as billing per token in a Next.js app, adding prepaid credits, and migrating from Stripe Billing.

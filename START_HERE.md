@@ -469,16 +469,16 @@ async def lago_webhook(request: Request):
 
 Install the Lago plugin for guided billing design, repository-specific implementation, migrations from Stripe Billing or Chargebee, reconciliation, and money tests.
 
-Claude Code:
+In an interactive Claude Code session, run each command separately:
 
 ```text
 /plugin marketplace add getlago/lago-plugin
 /plugin install lago@lago-plugins
 ```
 
-Then ask `/lago:implementation show me what Lago can do`.
+After installation, ask `/lago:implementation show me what Lago can do`.
 
-Codex:
+For Codex, run each command separately in your terminal:
 
 ```bash
 codex plugin marketplace add getlago/lago-plugin

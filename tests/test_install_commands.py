@@ -1,4 +1,4 @@
-"""Every agent entry point shows the same install commands as the README."""
+"""Every agent entry point shows the same install commands as the plugin README."""
 
 from __future__ import annotations
 
@@ -12,13 +12,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INSTALL = re.compile(r"^(?:/plugin|codex plugin) [^\n`]+$", re.M)
 ENTRY_POINTS = ("START_HERE.md", "llms.txt")
+# The plugin README is the listing text and the single source of install commands.
+README = ROOT / "plugins/lago/README.md"
+
+
+def install_section() -> str:
+    return README.read_text(encoding="utf-8").split("## Install", 1)[1].split("## Try the offline demo", 1)[0]
 
 
 class InstallCommandTests(unittest.TestCase):
     def test_readme_install_identity(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        install = readme.split("## Install", 1)[1].split("## Start here", 1)[0]
-        self.assertEqual(INSTALL.findall(install), [
+        self.assertEqual(INSTALL.findall(install_section()), [
             "/plugin marketplace add getlago/lago-plugin",
             "/plugin install lago@lago-plugins",
             "codex plugin marketplace add getlago/lago-plugin",
@@ -26,8 +30,7 @@ class InstallCommandTests(unittest.TestCase):
         ])
 
     def assert_install_flow(self, text):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        commands = INSTALL.findall(readme.split("## Install", 1)[1].split("## Start here", 1)[0])
+        commands = INSTALL.findall(install_section())
         for add, install, invocation in (
             (commands[0], commands[1], "/lago:implementation"),
             (commands[2], commands[3], "$lago:implementation"),

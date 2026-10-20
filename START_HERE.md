@@ -467,5 +467,26 @@ async def lago_webhook(request: Request):
 
 ## Go further
 
-- Install the Lago plugin for Claude Code or Codex for guided design, migrations from Stripe Billing or Chargebee, reconciliation, and money tests: [install](https://github.com/getlago/lago-plugin#install).
+Install the Lago plugin for guided billing design, repository-specific implementation, migrations from Stripe Billing or Chargebee, reconciliation, and money tests.
+
+In an interactive Claude Code session, run each command separately:
+
+```text
+/plugin marketplace add getlago/lago-plugin
+/plugin install lago@lago-plugins
+```
+
+After installation, ask `/lago:implementation show me what Lago can do`.
+
+For Codex, run each command separately in your terminal:
+
+```bash
+codex plugin marketplace add getlago/lago-plugin
+codex plugin add lago@lago-plugins
+```
+
+Start a new task, then ask `$lago:implementation show me what Lago can do`.
+
+References:
+
 - [Lago API reference](https://getlago.com/docs/api-reference/intro), [OpenAPI](https://swagger.getlago.com/openapi.yaml), [event ingestion](https://getlago.com/docs/guide/events/ingesting-usage), [webhook signatures](https://getlago.com/docs/api-reference/webhooks/format---signature), [entitlements](https://getlago.com/docs/guide/entitlements), [wallets](https://getlago.com/docs/guide/wallet-and-prepaid-credits/overview).

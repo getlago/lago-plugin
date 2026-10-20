@@ -44,7 +44,7 @@ The demo writes no files and contacts no network service. To run it yourself:
 python3 skills/implementation/scripts/run_demo.py
 ```
 
-The scenario is described in [the per-token example](examples/per-token-ai.md). Model names and prices are illustrative.
+The scenario is described in [the per-token example](examples/ai-usage-billing.md). Model names and prices are illustrative.
 
 More prompts:
 

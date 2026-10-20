@@ -10,7 +10,7 @@ Lago Cloud may be used only for explicitly approved validation of the user's rea
 
 ## Canonical demo
 
-Use the [OpenAI-style per-token demo](../../../examples/per-token-ai.md) unless the user asks for another scenario or explicitly asks to apply the walkthrough to the open application. Never personalize a first-run demo from an incidental workspace. The demo is based on Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai), adapted for isolated self-hosted Lago.
+Use the [OpenAI-style per-token demo](../../../examples/ai-usage-billing.md) unless the user asks for another scenario or explicitly asks to apply the walkthrough to the open application. Never personalize a first-run demo from an incidental workspace. The demo is based on Lago's [per-token pricing template](https://doc.getlago.com/templates/per-token/openai), adapted for isolated self-hosted Lago.
 
 For the instant offline experience, run `python3 scripts/run_demo.py` from the skill directory (or the equivalent resolved path). It uses only Python's standard library, writes no files, and needs no credentials. Atlas AI is the merchant; Acme Corp is its customer; an Acme employee is the end user. Atlas Pro costs an illustrative `$99` per month and includes `$10` of AI usage through a granted wallet restricted to the token charge. The walkthrough makes the metering problem visible, verifies a duplicate-safe `$0.37` job, consumes Acme's last `$0.20` of included usage, and calculates `$0.17` of overage and `$99.17` billed before tax across the period. Use `--json` when machine-readable evidence is useful.
 

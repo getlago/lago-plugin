@@ -674,7 +674,7 @@ class ScriptTests(unittest.TestCase):
         self.assertIn("product action → multiple durable usage records", demo)
         self.assertIn("Atlas AI is the merchant", demo)
         self.assertIn("integration-specific validation", demo)
-        canonical_demo = (ROOT / "plugins/lago/examples/per-token-ai.md").read_text(encoding="utf-8")
+        canonical_demo = (ROOT / "plugins/lago/examples/ai-usage-billing.md").read_text(encoding="utf-8")
         self.assertIn("The model names and prices are illustrative", canonical_demo)
         self.assertIn("$0.37", canonical_demo)
         guided = (ROOT / "plugins/lago/skills/implementation/references/guided-experience.md").read_text(encoding="utf-8")

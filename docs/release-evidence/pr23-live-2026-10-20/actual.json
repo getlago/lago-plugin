@@ -1,0 +1,21 @@
+{
+  "currency": "USD",
+  "quantity": "120000",
+  "unit_price": "0.00002",
+  "subtotal": "2.4",
+  "discounts": "0",
+  "credits": "0",
+  "tax": "0",
+  "total": "2.4",
+  "_basis": {
+    "quantity": "sum of current usage charge units",
+    "unit_price": "effective subtotal divided by quantity",
+    "item_code": "pr23_release_tokens"
+  },
+  "_evidence": {
+    "generated_by": "extract_actual.py",
+    "source_kind": "customer_usage",
+    "source_id": null,
+    "source_sha256": "4a7c2a7db97ec11c88ddbd5b62318fd1aae141e62ee565f665ea4a37d4140dc9"
+  }
+}

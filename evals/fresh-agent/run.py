@@ -58,21 +58,25 @@ def main() -> int:
         for case in data.get("cases", []):
             for index, run in enumerate(case.get("arms", {}).get("with", []), 1):
                 models = set()
+                lago_loaded = False
                 trace = Path(run.get("tracePath", ""))
                 if trace.is_file():
                     for line in trace.read_text().splitlines():
                         entry = json.loads(line)
                         if entry.get("type") == "system" and entry.get("subtype") == "init":
-                            models.add(entry.get("model"))
+                            if isinstance(entry.get("model"), str) and entry["model"]:
+                                models.add(entry["model"])
+                            lago_loaded |= any(p.get("name") == "lago" for p in entry.get("plugins", []))
                 summary["runs"].append({"attempt": index, "models": sorted(m for m in models if m),
-                    "complete": not run.get("error") and bool(models), "error": run.get("error"),
+                    "complete": not run.get("error") and bool(models) and not lago_loaded, "lago_loaded": lago_loaded, "error": run.get("error"),
                     "passed": bool(run.get("passed")) and not run.get("error"),
                     "failed_checks": [g["name"] for g in run.get("graders", []) if not g.get("passed")]})
+    summary["plugin_loaded"] = any(r["lago_loaded"] for r in summary["runs"])
     summary["complete"] = (len(summary["runs"]) == args.runs and not summary["source_changed"]
                            and all(r["complete"] for r in summary["runs"]))
     out.mkdir(parents=True, exist_ok=True)
     (out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
-    return result.returncode or (0 if summary["complete"] else 1)
+    return result.returncode or (0 if summary["complete"] and all(r["passed"] for r in summary["runs"]) else 1)
 
 
 if __name__ == "__main__":

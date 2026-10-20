@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Clarify literal credential-presence checks and the exact integrity-before-demo command; add tests rejecting incomplete or plugin-contaminated fresh-agent evidence.
+
 - Add a no-plugin fresh-agent runner pinned to the candidate commit, with explicit source/registry network grants and per-run provenance.
 
 - Count turn-capped trigger runs as incomplete, never as successful evidence.

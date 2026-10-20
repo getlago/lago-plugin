@@ -10,7 +10,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
-- Read-only application preflight that identifies stack and billing code candidates without reading credentials into output or contacting Lago; guided implementation uses it before the billing blueprint.
+- Read-only application preflight that identifies stack and billing code candidates, gives install commands for detected agents, and never prints credentials or contacts Lago; guided implementation uses it before the billing blueprint.
 
 - Automated safety evals (`evals/safety/`): nine release safety gates as `claude plugin eval` cases with deterministic graders for skill loading, conservative refusal-tool restrictions, credential exposure, file mutation, and a synthetic script execution marker, plus an LLM judge.
 - Billing-correctness benchmark: a Python usage-billing task, a fake Lago API, and a scorer for idempotent events, double billing, charges, and webhook verification, tested against a reference solution and six targeted defects. A runner compares the with-plugin and no-plugin arms. Method and empty results template in `docs/benchmark.md`. Results are written outside the repository and never published.

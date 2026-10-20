@@ -18,6 +18,12 @@ SIGNALS = {
     "billing": ("billing", "invoice", "payment", "stripe", "chargebee"),
 }
 AGENTS = {"claude_code": "claude", "codex": "codex", "copilot_cli": "copilot", "gemini_cli": "gemini"}
+INSTALL = {
+    "claude_code": ["/plugin marketplace add getlago/lago-plugin", "/plugin install lago@lago-plugins", "/lago:implementation map billing in this application"],
+    "codex": ["codex plugin marketplace add getlago/lago-plugin", "codex plugin add lago@lago-plugins", "$lago:implementation map billing in this application"],
+    "copilot_cli": ["copilot plugin marketplace add getlago/lago-plugin", "copilot plugin install lago@lago-plugins"],
+    "gemini_cli": ["gemini extensions install https://github.com/getlago/lago-plugin"],
+}
 
 
 def inspect(root):
@@ -52,12 +58,14 @@ def inspect(root):
         for kind, words in SIGNALS.items():
             if len(signals[kind]) < 12 and any(word in source for word in words):
                 signals[kind].append(name)
+    available_agents = [name for name, command in AGENTS.items() if shutil.which(command)]
     return {
         "repository": str(root),
         "git_repository": (root / ".git").exists(),
         "application_manifests": manifest,
         "candidate_source_files": signals,
-        "installed_agent_commands": [name for name, command in AGENTS.items() if shutil.which(command)],
+        "available_agent_commands": available_agents,
+        "install_guidance_for_available_agents": {name: INSTALL[name] for name in available_agents},
         "lago_cli_installed": bool(shutil.which("lago")),
         "lago_api_key_present": "LAGO_API_KEY" in os.environ,
         "lago_api_url_present": "LAGO_API_URL" in os.environ,

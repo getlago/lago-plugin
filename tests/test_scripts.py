@@ -33,6 +33,8 @@ class ScriptTests(unittest.TestCase):
             report = json.loads(result.stdout)
             self.assertEqual(report["application_manifests"], ["pyproject.toml"])
             self.assertEqual(report["candidate_source_files"]["usage"], ["store.py"])
+            for agent in report["available_agent_commands"]:
+                self.assertTrue(report["install_guidance_for_available_agents"][agent])
             self.assertFalse(report["target_organization_verified"])
             self.assertFalse(report["live_actions_taken"])
             self.assertNotIn("secret_marker_123", result.stdout)

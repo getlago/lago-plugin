@@ -499,6 +499,17 @@ async def lago_webhook(request: Request):
 3. **Before an expensive action:** check the relevant entitlement and its privilege limits. For prepaid visibility, call `prepaidBalanceCents` with explicit currency, fee type and metric code. This paginated, restricted-wallet total is an advisory snapshot, not a hard spending cap: concurrent work and metering delay can overspend it. A strict prepaid cutoff requires a separately designed atomic authorization/reservation mechanism; do not approve spending solely from this value or a cached copy.
 4. **Webhooks:** handle `invoice.created`, `wallet.depleted_ongoing_balance`, and `subscription.terminated` asynchronously ([webhook types](https://getlago.com/docs/api-reference/webhooks/messages)).
 
+Use the payload shape for each event; these objects do not share one customer-ID field:
+
+| Webhook | Customer mapping | Object identity and effect |
+| --- | --- | --- |
+| `invoice.created` | `payload.invoice.customer.external_id` | Store `payload.invoice.lago_id`; this means finalized, not paid. |
+| `wallet.depleted_ongoing_balance` | `payload.wallet.external_customer_id` | Store `payload.wallet.lago_id`; depletion is advisory, not atomic spend authorization. |
+| `subscription.terminated` | `payload.subscription.external_customer_id` | Match `payload.subscription.external_id` and stored `lago_id`; disable that enrollment's access. |
+
+These paths follow Lago's [OpenAPI webhook schemas](https://getlago.com/api/openapi.yaml) (`invoice_created`, `wallet_depleted_ongoing_balance`, `subscription_terminated`). Validate the signed payload against the expected event shape and stored account mapping in the worker. Do not read `invoice.external_customer_id`: invoices embed the customer object. Test handlers with synthetic payloads derived independently from those schemas, including an invoice with `customer.external_id` and **no** top-level `external_customer_id`; a mock shaped to match the implementation can conceal a broken handler.
+
+
 ## 8. Verify before calling it done
 
 - **Offline:** unit-test that retries reuse the same `transaction_id` and `timestamp`. Test that a 422 duplicate is not counted as success. Test that a tampered webhook body is rejected.

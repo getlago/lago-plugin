@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Specify event-specific webhook customer paths and independent schema fixtures so invoice handlers do not assume the wallet/subscription payload shape.
+
 - Pin trigger evidence to the source at startup, reject dirty or changed sources, and disable remote plugin synchronization and host skill discovery during isolated Codex evaluations.
 
 - Recognize complete Codex skill reads when shell startup diagnostics share the tool output; continue rejecting partial, failed or unrelated reads.

@@ -780,6 +780,7 @@
     "low-balance threshold",
     "application owns access control",
     "race and stale-balance handling",
+    "old top-up timestamp is not stale balance evidence",
     "recovery after top-up"
    ]
   },

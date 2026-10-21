@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Distinguish wallet top-up timestamps from balance freshness so healthy funded wallets are not blocked merely for having an old top-up.
+
 - Require installed-skill integrations to reject remote HTTP endpoints and authenticated redirects, with transport-boundary tests.
 
 - Refuse symlink destinations before scaffolding and use exclusive creation so a concurrent file cannot be overwritten.

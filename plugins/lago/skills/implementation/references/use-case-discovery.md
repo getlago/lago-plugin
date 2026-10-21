@@ -59,6 +59,8 @@ Never describe credits as “free” merely because the wallet transaction has n
 
 Do not conflate a custom pricing unit with a wallet. A pricing unit expresses a charge in units such as credits or tokens while preserving its fiat conversion; a wallet holds prepaid or granted value that offsets eligible charges. They can be used independently or together. Verify edition and version before recommending multiple wallets, recurring or threshold top-ups, real-time balances, or pricing units because availability can differ. Treat an ongoing balance as an estimate with documented refresh latency, not a synchronous authorization ledger.
 
+For balance-based access checks, distinguish a recent successful API read from the freshness of Lago's underlying usage calculation. The [wallet object](https://getlago.com/docs/api-reference/wallets/wallet-object) defines `last_balance_sync_at` as the last top-up time and `last_consumed_credit_at` as the last consumption time; neither is a refresh heartbeat. Never reject a funded wallet solely because those dates are old or null, or claim they prove ongoing-balance freshness. Record local observation/cache age separately, handle failed reads explicitly, and verify the target's refresh behavior before claiming a strict spending boundary. Test a healthy funded wallet whose last top-up was weeks ago, an expired local cache, a failed read, zero balance, and concurrent admissions.
+
 ## Coexistence and system boundaries
 
 Do not assume Lago must replace the full billing stack. A coherent first slice may use Lago for metering, rating, wallets, or invoice calculation while another system temporarily owns subscriptions, payments, tax, or finance posting.

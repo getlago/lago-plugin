@@ -1,3 +1,5 @@
+<img src="assets/lago-logo.svg" alt="Lago logo" width="64" height="64">
+
 # Lago
 
 Lago is the open-source billing engine for usage-based, subscription, and hybrid pricing. This plugin turns your coding agent into a Lago solution engineer: it shows how Lago meters and bills a product offline in under a minute, recommends a billing model for yours, and then implements and tests the integration in your codebase.

@@ -38,6 +38,8 @@
       "Map my product to the best first Lago billing model, explain why it wins, and define the smallest credible proof.",
       "Build billing on Lago in this app. Inspect code, implement a small slice, and verify money offline before live access."
     ],
-    "brandColor": "#19212E"
+    "brandColor": "#19212E",
+    "logo": "./assets/lago-logo.svg",
+    "composerIcon": "./assets/lago-logo.svg"
   }
 }

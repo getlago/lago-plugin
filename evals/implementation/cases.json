@@ -34,6 +34,7 @@
    "prompt": "Prepare a production Lago Kubernetes deployment.",
    "mode": "deploy",
    "signals": [
+    "existing output files and symlink targets preserved",
     "official Helm",
     "version pin",
     "backups",

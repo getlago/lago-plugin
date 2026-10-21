@@ -1,6 +1,6 @@
 # Anthropic plugin directory: submission handoff
 
-For the Lago Owner who submits the Lago plugin to Anthropic's plugin directory. See the [current follow-up status](release-readiness-2026-10-20.md). Submission remains blocked until every gate in RELEASING.md passes on the candidate commit, including the full behavioral scorecards, automated safety suite and live self-hosted money evidence. Local directory validation alone is insufficient. For packaging checks, see see [directory-readiness.md](directory-readiness.md) for the audit and verification output. Submission happens only in the developer portal at [claude.ai/directory/manage](https://claude.ai/directory/manage). Steps checked against [Submit a plugin](https://claude.com/docs/plugins/submit.md) and [Publish to the directory](https://claude.com/docs/directory/publish.md) on 2026-10-20. Re-read them before submitting, because the portal changes.
+For the Lago Owner who submits the Lago plugin to Anthropic's plugin directory. See the [current follow-up status](release-readiness-2026-10-20.md). Submission remains blocked until every gate in RELEASING.md passes on the candidate commit, including the full behavioral scorecards, automated safety suite and live self-hosted money evidence. Local directory validation alone is insufficient. For packaging checks, see [directory-readiness.md](directory-readiness.md) for the audit and verification output. Submission happens only in the developer portal at [claude.ai/directory/manage](https://claude.ai/directory/manage). Steps checked against [Submit a plugin](https://claude.com/docs/plugins/submit.md) and [Publish to the directory](https://claude.com/docs/directory/publish.md) on 2026-10-20. Re-read them before submitting, because the portal changes.
 
 ## Before submitting
 
@@ -37,9 +37,9 @@ Drafted from "What this plugin runs, sends and stores" in `plugins/lago/README.m
 
 | Question | Draft answer |
 | --- | --- |
-| Does the plugin read or store personal data? | No. It stores nothing. During implementation work, Claude reads the user's project files when the user asks. The plugin itself collects nothing. **Owner confirms.** |
-| Does it send data to services other than its declared connectors? | It declares no connector. On its own it sends nothing: offline work contacts no service. When the user starts live work, Claude sends API requests to the Lago endpoint the user provides: Lago Cloud US (`api.getlago.com`), Lago Cloud EU (`api.eu.getlago.com`), the user's self-hosted URL, or a local demo instance. It may also open public documentation pages. **Owner confirms** whether this counts as "other services" in the portal's wording. |
-| How long does it keep data? | It keeps no data. |
+| Does the plugin read or store personal data? | The plugin has no telemetry or private data store. Authorized work may read project files and billing exports, write local reports, and create an isolated demo with synthetic billing data. Imported Python helpers may create bytecode caches. **Owner confirms** the portal answer for these user-directed operations. |
+| Does it send data to services other than its declared connectors? | It declares no connector. Offline helpers send nothing. User-authorized live work can contact the selected Lago endpoint, approved Stripe or Chargebee migration APIs, and public documentation. Approved self-hosted setup can download Lago releases and the reviewed container images from GitHub and their registries. Use the complete [README disclosure](../plugins/lago/README.md#network-destinations) for the exact destinations and data sent. **Owner confirms** the portal classification. |
+| How long does it keep data? | There is no plugin-operated data store. User-controlled reports, generated files, caches and demo volumes remain locally until the user removes them; demo teardown needs approval for the named resources. |
 | Is it intended for people under 18? | No. It is a developer tool for implementing billing. **Owner confirms.** |
 | Contact email | **Owner provides** a monitored Lago address. |
 | Privacy policy | `https://getlago.com/legal/privacy-policy` (also set as `privacyPolicyUrl`) |
@@ -50,7 +50,7 @@ The **Compliance** step asks for the contact email and four acknowledgements. Re
 
 No blocks are expected. These are the review points a reviewer might raise, with an answer for each.
 
-**Python helper scripts.** "The skill bundles seven standard-library Python scripts under `skills/implementation/scripts/`. No hook, MCP server, or `` !`…` `` line runs them. `SKILL.md` tells Claude when to run them, and Claude's normal tool permissions apply. They make no network calls, read no environment variables, and write only the `--output` path of `extract_actual.py` when a user asks for it. Each one is listed with its inputs and outputs in the README section 'What this plugin runs, sends and stores'."
+**Python helper scripts.** "The skill bundles seven standard-library Python scripts under `skills/implementation/scripts/`. No hook, MCP server, or `` !`…` `` line runs them. `SKILL.md` tells Claude when to run them, and Claude's normal tool permissions apply. They make no network calls and read no environment variables. `extract_actual.py` can write its requested `--output`; maintainer-only `release_integrity.py create` writes its selected manifest. Python may cache imported helper bytecode; `python3 -B` suppresses that cache. Each one is listed with its inputs and outputs in the README section 'What this plugin runs, sends and stores'."
 
 **Plugin in a subfolder.** "The plugin lives in `plugins/lago/` so the scanned and installed folder holds only what users need. Evals, tests with synthetic credentials, release evidence, and maintainer tooling stay at the repository root. The plugin has no hooks, MCP servers, or `` !`…` `` lines, so the subfolder rules about `${CLAUDE_PLUGIN_ROOT}` paths and shell-only scripts do not apply."
 

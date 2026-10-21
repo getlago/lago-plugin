@@ -101,17 +101,17 @@ Validation in the portal is the final word. The local validator "checks a subset
 
 | Check | Before | After | Evidence |
 | --- | --- | --- | --- |
-| H-1 Every network destination described in the README | partial | pass | `plugins/lago/README.md`, "What this plugin runs, sends and stores": no network when offline; documentation hosts; the Lago Cloud US and EU API, a self-hosted URL, or a loopback demo only for live work the user starts |
-| H-2 Every file written described | partial | pass | Same section: project files written on request, and the `--output` of `extract_actual.py`. `run_demo.py` writes nothing. |
+| H-1 Every network destination described in the README | partial | pass | `plugins/lago/README.md`, "What this plugin runs, sends and stores": no network from offline helpers; documentation hosts; the selected Lago endpoint; approved Stripe/Chargebee migration APIs; GitHub release downloads and reviewed container registry destinations for approved self-hosted setup |
+| H-2 Every file written described | partial | pass | Same section: requested project files and extraction output, selected maintainer manifest output, Python bytecode caches, and approved local demo directories/configuration/container resources and volumes. `run_demo.py` writes nothing. |
 | H-3 Readable source only | pass | pass | Markdown, JSON, CSV, YAML, and standard-library Python. Nothing minified or compiled. |
-| H-4 Hosts referenced inside the plugin | n/a | listed | `docs.getlago.com`, `getlago.com`, `www.getlago.com`, `doc.getlago.com`, `swagger.getlago.com`, `api.getlago.com`, `api.eu.getlago.com`, `github.com`, `docs.stripe.com`, `www.chargebee.com`, `apidocs.chargebee.com`, `learn.microsoft.com`, `docs.aws.amazon.com`. All are documentation links except the two API base URLs. |
+| H-4 Hosts referenced inside the plugin | n/a | listed | `docs.getlago.com`, `getlago.com`, `www.getlago.com`, `doc.getlago.com`, `swagger.getlago.com`, `api.getlago.com`, `api.eu.getlago.com`, `github.com`, `docs.stripe.com`, `www.chargebee.com`, `apidocs.chargebee.com`, `learn.microsoft.com`, `docs.aws.amazon.com`. These literal links are supplemented by the approved migration API and self-hosted download destinations disclosed in the README; this list is not the complete live-network inventory. |
 | H-5 Secret-scanner false positives inside the plugin | 15 | 0 | `RELEASE-MANIFEST.json` paired the key `examples/per-token-ai.md` with a 64-character SHA-256, which matched gitleaks' `generic-api-key` rule. The example is now `examples/ai-usage-billing.md`. |
 
 ## Policy items relevant to review
 
 | Policy | Status | Note |
 | --- | --- | --- |
-| 1D Collect only necessary data | pass | The plugin stores nothing and sends nothing on its own. |
+| 1D Collect only necessary data | pass | No telemetry or plugin-operated data store. User-directed outputs, Python caches, live calls and local demo resources are disclosed in the README. |
 | 2A, 2B Accurate, narrow description | pass | The description and README match the skill. |
 | 2C, 2D No confusion with or coercion of other software | pass | MCP and the Lago CLI are optional and used only when already present. |
 | 2F No behavior pulled from external sources | review point | The skill tells Claude to check version-sensitive API facts in official Lago documentation instead of trained memory. That is reference data, not behavioral instructions. |

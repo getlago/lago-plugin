@@ -21,6 +21,7 @@ Example prompts:
 
 ```text
 /lago:implementation show me what Lago can do
+/lago:implementation wizard — start with my pricing and current stack before scanning this app
 /lago:implementation use this pricing page to show how Lago would model the product
 /lago:implementation implement the smallest Lago Cloud integration
 /lago:implementation migrate this Chargebee implementation to Lago
@@ -44,12 +45,17 @@ Start a new Codex task after installation. Example prompts:
 
 ```text
 $lago:implementation show me what Lago can do; do not assume this workspace is my application
+$lago:implementation wizard — start with my pricing and current stack before scanning this app
 $lago:implementation use my product description to recommend one Lago billing model
 $lago:implementation design usage-based billing for this application
 $lago:implementation prepare a self-hosted Kubernetes deployment
 ```
 
 Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
+
+### Pricing-first wizard
+
+Invoke the existing implementation skill with `wizard` when you want a guided path. It accepts a public pricing URL, a pricing grid or text export, a natural-language description, an existing Lago plan summary, or `help me decide`. If you are undecided, it asks a few product questions and proposes one editable structure without choosing a monetary price. It then asks who owns billing, payments, CRM, and accounting, confirms that brief, and only then runs the read-only repository preflight. The normal billing blueprint, application work, and money tests follow. No separate `lago wizard` binary or Lago credentials are needed for the intake.
 
 ### GitHub Copilot CLI
 

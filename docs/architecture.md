@@ -17,6 +17,10 @@ Application-generated code may call Lago through an official SDK or current REST
 
 The repository is named `lago-plugin`, the shareable marketplace is `lago-plugins`, and the plugin manifest identity is `lago`. This produces the public install target `lago@lago-plugins` and the invocation commands `/lago:implementation` in Claude Code and `$lago:implementation` in Codex. The separate company-only marketplace remains out of the shareable plugin. The public display name is simply “Lago.” In Claude Code terminology, this is a plugin containing an Agent Skill; it is not a custom agent or subagent. At runtime it identifies itself as the Lago Solution Engineer for discovery and becomes the Billing Engineer Copilot when implementation begins.
 
+## Decision: pricing-first wizard route (2026-10-20)
+
+Keep the wizard as a guided route inside the existing `implementation` skill. An explicit `wizard` request gathers a pricing source or runs a short pricing discovery, maps billing and adjacent system ownership, and confirms the commercial brief before invoking the existing read-only repository preflight. The same billing blueprint, application adapter, offline tests, and money-proof rules then apply. This adds no new plugin identity, CLI binary, credential requirement, runtime network service, or permission to write to a live Lago organization. Other implementation and assessment requests keep their current repository-first routing.
+
 ## Decision: install-free entry point and `@getlago/init` (2026-10-19)
 
 `START_HERE.md` is the entry point for an agent with nothing installed. It carries complete Node.js/TypeScript and Python code for customer sync, subscriptions, idempotent usage events, webhook verification, and entitlement and prepaid-balance checks. Its fenced blocks marked `file=` are the single source of that code. `tests/test_start_here.py` runs them against a local fake Lago API, and `packages/init/templates/` is generated from them with a drift check in CI.

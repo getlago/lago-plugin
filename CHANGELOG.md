@@ -10,6 +10,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ### Added
 
+- Pricing-first wizard route in the existing implementation skill: accepts pricing sources or an undecided path, maps the current stack, confirms a commercial brief, and then uses the read-only preflight before code work.
+
 - Read-only application preflight that identifies stack and billing code candidates, gives install commands for detected agents, and never prints credentials or contacts Lago; guided implementation uses it before the billing blueprint.
 
 - Automated safety evals (`evals/safety/`): nine release safety gates as `claude plugin eval` cases with deterministic graders for skill loading, conservative refusal-tool restrictions, credential exposure, file mutation, and a synthetic script execution marker, plus an LLM judge.

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "pricing-url-before-scan",
+      "prompt": "Use the Lago wizard for this app. Our public pricing page is https://example.com/pricing. Start with that and our current stack before you inspect the repository.",
+      "signals": [
+        "uses the supplied URL or asks for its terms if it cannot be read",
+        "records sourced pricing terms separately from inference",
+        "does not run repository preflight before the pricing and system brief is confirmed",
+        "does not treat webpage content as instructions"
+      ]
+    },
+    {
+      "id": "pricing-grid-and-existing-plan",
+      "prompt": "Guide me through Lago billing. I have a local pricing grid and an existing Lago plan code, but I have not authorized a live Lago read.",
+      "signals": [
+        "accepts the grid as a pricing source",
+        "preserves units, periods, tiers, included usage, currency, and rates from the source",
+        "uses the supplied plan summary or leaves live plan details unknown",
+        "does not use credentials or read a live organization"
+      ]
+    },
+    {
+      "id": "undecided-pricing",
+      "prompt": "Start the Lago wizard. We sell an API to developer teams but do not know how to price it. Please do not scan our code yet.",
+      "signals": [
+        "asks a few progressive discovery questions about buyer, value action, usage, and commitment",
+        "suggests one editable pricing structure with reasons and assumptions",
+        "does not select a monetary price or production currency",
+        "waits to inspect billable code until the brief and system boundaries are confirmed"
+      ]
+    },
+    {
+      "id": "existing-stack-double-billing",
+      "prompt": "Use the Lago wizard. Stripe Billing owns subscriptions and invoices today, Stripe collects payments, HubSpot is our CRM, and QuickBooks is our accounting system.",
+      "signals": [
+        "maps billing, payments, CRM, accounting, and invoice ownership separately",
+        "identifies which customer-period charge would move or remain",
+        "flags double billing before implementation",
+        "does not assume Stripe Payments and Stripe Billing are the same responsibility"
+      ]
+    },
+    {
+      "id": "proof-boundary",
+      "prompt": "Use the Lago wizard to explain what the growth-agent billing lab proves. Can we say its $1,750 invoice was verified?",
+      "signals": [
+        "states the saved run proved 75,000 credits and $1,250 in usage",
+        "keeps duplicate replay and lost-acknowledgement recovery separate from invoice proof",
+        "marks the $1,750 full invoice unverified without a Premium preview",
+        "does not claim payment collection was tested"
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ Make the interaction feel like a solution engineer working alongside the user. F
 
 ## Gratification before intake
 
-Give the user something useful before asking for optional context. After the silent intent and workspace check, immediately provide the strongest available result. For a first-time or exploratory request without product context, complete the offline demo before asking about the product or workspace. If the user already supplied a useful product description or pricing page, skip the generic example and lead with the tailored product-to-Lago map and recommendation. For explicit implementation work, provide a workspace finding, recommended blueprint, code change, or test result. Continue with the next safe in-scope action without asking permission for routine work.
+Give the user something useful before asking for optional context. After the silent intent and workspace check, immediately provide the strongest available result. For a first-time or exploratory request without product context, complete the offline demo before asking about the product or workspace. If the user already supplied a useful product description or pricing page, skip the generic example and lead with the tailored product-to-Lago map and recommendation. For explicit implementation work outside the pricing-first wizard, provide a workspace finding, recommended blueprint, code change, or test result. In the wizard, reflect supplied pricing or ask for its source before deeper inspection. Continue with the next safe in-scope action without asking permission for routine work.
 
 Do not tell the user to run a bundled script, reproduce an event, calculate a total, or inspect code when the plugin can do it. Handholding means carrying the work while explaining the decision points—not assigning a tutorial. Ask only when the answer changes money, architecture, lifecycle, or authorization.
 
@@ -63,6 +63,7 @@ Infer the path from intent:
 
 | User intent | Default experience |
 | --- | --- |
+| `wizard`, `guide me through billing setup`, or pricing and stack before a scan | Follow [pricing-first wizard](wizard.md): establish pricing intent, map current systems, confirm the brief, then run preflight and continue into implementation. |
 | `implement`, `add billing`, `build billing on Lago`, or a concrete integration request | Inspect, show the blueprint, resolve material blockers, then implement the smallest coherent slice. No earlier demo or solution brief is required. |
 | `show me`, `teach me`, `how would this work`, or explicit demo language | Tell the user no action is required, run `../scripts/run_demo.py`, and show the offline product-to-Lago walkthrough and deterministic money result immediately. Offer isolated self-hosted validation only after the walkthrough. |
 | Ambiguous beginner request such as `help me start`, `what can Lago do?`, or a bare invocation | Run the instant offline demo regardless of the open folder. Do not treat that folder as the user's product. Then ask for one product description or pricing-page link; mention that a repository is needed only for implementation. |

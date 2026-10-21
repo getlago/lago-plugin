@@ -21,7 +21,7 @@ def load(name, path):
 class InstallVerificationTests(unittest.TestCase):
     def setUp(self):
         self.runner = load("verify_installs", ROOT / "evals/agent-installs/verify_installs.py")
-        self.integrity = load("release_integrity", ROOT / "plugins/lago/skills/implementation/scripts/release_integrity.py")
+        self.integrity = load("release_integrity", ROOT / "tools/release/release_integrity.py")
 
     def test_gemini_metadata_exception_keeps_code_and_extra_files_checked(self):
         with tempfile.TemporaryDirectory() as directory:

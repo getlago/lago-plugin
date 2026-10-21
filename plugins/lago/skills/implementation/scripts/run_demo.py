@@ -127,6 +127,10 @@ def run_demo() -> dict[str, object]:
     }
 
 
+def usd(value: object) -> str:
+    return "$" + str(value)
+
+
 def render(result: dict[str, object]) -> str:
     lines = [
         "Lago in 30 seconds (offline)",
@@ -150,15 +154,15 @@ def render(result: dict[str, object]) -> str:
     for item in result["lines"]:
         lines.append(
             f"{item['tokens']:>6,} {item['model']} {item['type']} tokens "
-            f"at ${item['price_per_thousand']}/1,000 = ${item['amount']}"
+            f"at {usd(item['price_per_thousand'])}/1,000 = {usd(item['amount'])}"
         )
     lines.extend(
         [
-            f"New job: ${result['gross_usage_charge']} (expected ${result['expected_total']})",
-            f"Included usage left: ${result['included_value_before_job']} - ${result['included_credit_applied']} = ${result['included_value_after_job']}",
-            f"Overage: ${result['overage']}",
-            f"Acme billed before tax for the period: ${result['monthly_subscription']} subscription + ${result['overage']} overage = ${result['period_total_before_tax']}",
-            f"Safety checks: duplicate ignored = {str(result['duplicate_retry_ignored']).lower()}; reconciliation difference = ${result['reconciliation_discrepancy']}",
+            f"New job: {usd(result['gross_usage_charge'])} (expected {usd(result['expected_total'])})",
+            f"Included usage left: {usd(result['included_value_before_job'])} - {usd(result['included_credit_applied'])} = {usd(result['included_value_after_job'])}",
+            f"Overage: {usd(result['overage'])}",
+            f"Acme billed before tax for the period: {usd(result['monthly_subscription'])} subscription + {usd(result['overage'])} overage = {usd(result['period_total_before_tax'])}",
+            f"Safety checks: duplicate ignored = {str(result['duplicate_retry_ignored']).lower()}; reconciliation difference = {usd(result['reconciliation_discrepancy'])}",
             "",
             "WHAT ATLAS DID NOT BUILD",
             "A tenant-aware usage ledger, retry protection, pricing engine, included-credit tracking, invoice calculation, and reconciliation tooling.",

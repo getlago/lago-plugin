@@ -38,3 +38,14 @@ The shipped plugin moves from the repository root to `plugins/lago/`, so it can 
 - The plugin has no hooks, MCP server, `userConfig`, package launchers, or `!` command lines, so the directory's stricter rules for plugins in a subfolder do not apply. Adding any of them needs a new entry here.
 
 This changes packaging only. No MCP, telemetry, runtime credential, production action, or new skill is added, and the approval gate is unchanged. `scripts/check_directory_limits.py` and ordinary strict manifest validation run in CI. The directory profile runs locally on Claude Code 2.1.305; the older pinned CI version does not support it yet.
+
+## Decision: run-time files only in the plugin folder, optional API URL setting (2026-10-21)
+
+Anthropic's directory validation held the plugin folder for three findings: a script that could reach the bundled icon, a credential presence check, and command-shaped prose. This entry supersedes the `RELEASE-MANIFEST.json` and `userConfig` bullets of the 2026-10-20 entry.
+
+- `release_integrity.py` and `RELEASE-MANIFEST.json` move to `tools/release/`. The manifest still hashes every file in `plugins/lago/`, and CI checks it on every pull request. The skill no longer verifies its own bundle before the demo. A verifier shipped inside the bundle it checks proves no origin, and marketplace installs pin the reviewed commit. The demo guard that remains is the one that matters at run time: run only the plugin's own `run_demo.py`, never a same-named script from the inspected application, and fall back to the reviewed walkthrough if the bundled script is missing or fails. `scripts/validate_repo.py` rejects either file inside the plugin folder.
+- The plugin declares one `userConfig` field, `lago_api_url`, non-sensitive, defaulting to Lago Cloud US. Skill content receives it as `${user_config.lago_api_url}`. No API key field is declared. Claude Code never substitutes a sensitive value into skill content and exports `CLAUDE_PLUGIN_OPTION_*` only to hooks, so a declared key could never reach the skill ([manifest reference](https://code.claude.com/docs/en/plugins/manifest-reference)).
+- The plugin never reads, tests, or sources a credential from the environment or from files. Live work uses a Lago CLI profile or Lago MCP connection that the user configured. Credential presence is reported by name only, from non-secret sources.
+- Codex install steps and the `$lago:implementation` invocation move from the plugin README to the repository README. `.codex-plugin/` and `agents/openai.yaml` stay in the plugin folder, because Codex installs from `./plugins/lago` and reads its manifest there.
+
+No MCP server, hook, telemetry, runtime credential, production action, or new skill is added. The production approval gate is unchanged.

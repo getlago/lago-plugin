@@ -1,4 +1,4 @@
-<img src="assets/lago-logo.svg" alt="Lago logo" width="64" height="64">
+![Lago logo](assets/lago-logo.svg)
 
 # Lago
 
@@ -15,20 +15,13 @@ No application repository, Lago account, credentials, Docker, or billing knowled
 /plugin install lago@lago-plugins
 ```
 
-### Codex
-
-```bash
-codex plugin marketplace add getlago/lago-plugin
-codex plugin add lago@lago-plugins
-```
-
 Start a new task after installing.
 
 ### claude.ai, Cowork, and Claude Code from the directory (once listed)
 
 Once the plugin is listed in Anthropic's plugin directory, add **Lago** from the directory in claude.ai. It is then available in chat, Cowork, and Claude Code.
 
-GitHub Copilot CLI, Gemini CLI, Cursor, and other agents with Agent Skills: see [installing on other agents](https://github.com/getlago/lago-plugin#other-agents).
+Codex, GitHub Copilot CLI, Gemini CLI, Cursor, and other agents with Agent Skills: see the [repository README](https://github.com/getlago/lago-plugin#install).
 
 ## Try the offline demo
 
@@ -38,7 +31,7 @@ After installing, from any folder, ask:
 /lago:implementation show me what Lago can do
 ```
 
-In Codex, use `$lago:implementation`. The plugin runs a dependency-free walkthrough. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model usage and a retry. The walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and bills `$0.17` of overage. Then it asks what your product does and what customers pay for today. It does not assume the open folder is your application.
+The plugin runs a dependency-free walkthrough. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model usage and a retry. The walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and bills `$0.17` of overage. Then it asks what your product does and what customers pay for today. It does not assume the open folder is your application.
 
 The demo writes no files and contacts no network service. To run it yourself:
 
@@ -56,11 +49,11 @@ More prompts:
 /lago:implementation migrate this Chargebee implementation to Lago
 ```
 
-Claude and Codex may also pick the skill on their own when a request involves designing, implementing, or operating usage-based billing.
+Claude may also pick the skill on its own when a request involves designing, implementing, or operating usage-based billing.
 
 ## What this plugin runs, sends and stores
 
-The plugin is one Agent Skill made of Markdown instructions, templates, and standard-library Python helpers. It has no hooks, no MCP server, no package installs, no telemetry, and no settings to configure. Nothing runs when it loads.
+The plugin is one Agent Skill made of Markdown instructions, templates, and standard-library Python helpers. It has no hooks, no MCP server, no package installs, and no telemetry. Nothing runs when it loads. Its one setting is optional: **Lago API URL** (`lago_api_url`), the endpoint for live work you start. It defaults to Lago Cloud US, `https://api.getlago.com`. The URL is not a secret and is stored in your Claude Code settings.
 
 ### Scripts
 
@@ -69,8 +62,6 @@ Claude runs these only when the skill calls for them. Each one uses only the Pyt
 | Script | What it does | Writes |
 | --- | --- | --- |
 | `scripts/run_demo.py` | Prints the offline billing walkthrough. | Nothing |
-| `scripts/release_integrity.py check` | Verifies the installed plugin files against the SHA-256 hashes in `RELEASE-MANIFEST.json` before the demo runs. | Nothing |
-| `scripts/release_integrity.py create` | Maintainer-only bundle manifest generation; never use it to bypass a failed integrity check. | The explicitly selected manifest output path |
 | `scripts/validate_event.py` | Checks a synthetic usage event file. | Nothing |
 | `scripts/validate_demo_target.py` | Refuses a live demo URL unless it is a local loopback Lago instance with an explicit port and a `lago-plugin-demo-*` Compose project. | Nothing |
 | `scripts/extract_actual.py` | Extracts the billed amount from a saved Lago API response. | Only the `--output` path you give it, otherwise stdout |
@@ -83,7 +74,7 @@ All paths are under `skills/implementation/` in this plugin.
 
 - **Offline work contacts nothing.** That covers discovery, the demo, design, code changes, fixtures, and money calculations.
 - **Documentation.** Claude may open official documentation links listed in the skill, mainly `docs.getlago.com`, `getlago.com`, and `swagger.getlago.com`. Migration work may also open Stripe or Chargebee API documentation.
-- **Your Lago instance, only for live work you start.** Live validation needs a Lago API key and endpoint that you provide. Requests then go only to the endpoint you choose:
+- **Your Lago instance, only for live work you start.** Live work goes through a Lago CLI or Lago MCP connection that you have already configured with your own key. Requests go only to the endpoint you choose, by default the configured Lago API URL:
   - Lago Cloud US: `https://api.getlago.com`
   - Lago Cloud EU: `https://api.eu.getlago.com`
   - your self-hosted Lago URL
@@ -92,13 +83,13 @@ All paths are under `skills/implementation/` in this plugin.
 - **Isolated self-hosted setup, only after approval.** Following the linked Lago Docker instructions can fetch the selected release from Lago's GitHub repositories (`github.com/getlago/` and GitHub-controlled download hosts) and pull container images from the registries named by the reviewed Compose file, including Docker Hub and its authentication/download hosts. Inspect and disclose the exact image registry destinations before approving a download; do not silently substitute registries or releases. Downloads send normal HTTP metadata, not billing credentials or customer records.
 - **Your existing tools, only if you already have them.** If the Lago CLI or a Lago MCP connection is already installed and configured, the skill may use it for the same live work under the same approval rule.
 
-The plugin never reads a credential from your environment and never asks for one at install time. Keep keys in your application's existing secret manager.
+The plugin never asks for, reads, or stores a Lago API key. It does not read credentials from your environment or open files that hold secrets, and it never prints or logs a secret. Keep keys in your Lago CLI or MCP configuration and in your application's existing secret manager.
 
 ### Files written
 
 - Python may cache imported helper bytecode under `skills/implementation/scripts/__pycache__/`; run with `python3 -B` to suppress this runtime cache.
 - Code, tests, and documents that Claude writes in your project when you ask it to, such as an event contract or a validation report built from the bundled templates.
-- The `--output` file of `extract_actual.py`, when requested, and the explicitly selected manifest path when a maintainer runs `release_integrity.py create`.
+- The `--output` file of `extract_actual.py`, when requested.
 - An approved live demo creates a dedicated local directory, Compose configuration, container image cache, containers, network and persistent Docker volumes containing synthetic billing data. Report the exact paths and resources before creation. Teardown requires separate approval for those exact resources.
 
 The plugin stores no billing records, credentials or personal data of its own. Python bytecode caches are derived from the shipped source.
@@ -131,11 +122,6 @@ Say `expert mode` for concise execution or `guided mode` for explanations.
 ```bash
 claude plugin update lago@lago-plugins
 claude plugin uninstall lago@lago-plugins
-```
-
-```bash
-codex plugin marketplace upgrade lago-plugins
-codex plugin remove lago@lago-plugins
 ```
 
 Removing the plugin does not change your application code or any Lago environment.

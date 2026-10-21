@@ -31,11 +31,11 @@ jobs:
       - name: Run deterministic tests
         run: python -m unittest discover -s tests -v
       - name: Compile helpers
-        run: python -m compileall -q plugins/lago/skills/implementation/scripts scripts tests
+        run: python -m compileall -q plugins/lago/skills/implementation/scripts scripts tools tests
       - name: Validate public plugin source
         run: python scripts/validate_repo.py .
       - name: Verify release bundle integrity
-        run: python plugins/lago/skills/implementation/scripts/release_integrity.py check plugins/lago --manifest plugins/lago/RELEASE-MANIFEST.json
+        run: python tools/release/release_integrity.py check plugins/lago --manifest tools/release/RELEASE-MANIFEST.json
 
   start-here:
     runs-on: ubuntu-latest

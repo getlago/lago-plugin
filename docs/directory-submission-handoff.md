@@ -50,11 +50,11 @@ The **Compliance** step asks for the contact email and four acknowledgements. Re
 
 No blocks are expected. These are the review points a reviewer might raise, with an answer for each.
 
-**Python helper scripts.** "The skill bundles seven standard-library Python scripts under `skills/implementation/scripts/`. No hook, MCP server, or `` !`…` `` line runs them. `SKILL.md` tells Claude when to run them, and Claude's normal tool permissions apply. They make no network calls and read no environment variables. `extract_actual.py` can write its requested `--output`; maintainer-only `release_integrity.py create` writes its selected manifest. Python may cache imported helper bytecode; `python3 -B` suppresses that cache. Each one is listed with its inputs and outputs in the README section 'What this plugin runs, sends and stores'."
+**Python helper scripts.** "The skill bundles six standard-library Python scripts under `skills/implementation/scripts/`, each one a step the skill tells Claude to run. No hook, MCP server, or `` !`…` `` line runs them, and Claude's normal tool permissions apply. They make no network calls, start no other programs, and read no environment variables. Only `extract_actual.py` writes a file: the `--output` it is given. Release tooling lives in the repository's `tools/release/`, outside the plugin. Python may cache imported helper bytecode; `python3 -B` suppresses that cache. Each one is listed with its inputs and outputs in the README section 'What this plugin runs, sends and stores'."
 
 **Plugin in a subfolder.** "The plugin lives in `plugins/lago/` so the scanned and installed folder holds only what users need. Evals, tests with synthetic credentials, release evidence, and maintainer tooling stay at the repository root. The plugin has no hooks, MCP servers, or `` !`…` `` lines, so the subfolder rules about `${CLAUDE_PLUGIN_ROOT}` paths and shell-only scripts do not apply."
 
-**`RELEASE-MANIFEST.json` with SHA-256 hashes.** "Before running its bundled demo, the skill verifies the installed files against these hashes and refuses to run them if anything changed. The values are file digests, not secrets."
+**Optional `lago_api_url` setting.** "The plugin declares one `userConfig` field, a non-sensitive API URL that defaults to Lago Cloud US. It declares no API key and never reads one from the environment or from files. Live work goes through a Lago CLI or MCP connection the user configured."
 
 **Documentation lookups (policy 2F).** "For version-sensitive API details, the skill tells Claude to check Lago's official documentation instead of trained memory. That is reference data about the Lago API, not instructions that change the plugin's behavior. All behavior is in the bundled Markdown."
 

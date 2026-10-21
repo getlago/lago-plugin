@@ -8,7 +8,7 @@ For explicit repository work, inspect without asking first: root instructions; l
 
 Use targeted searches for `billing`, `subscription`, `invoice`, `usage`, `meter`, `stripe`, `chargebee`, `webhook`, `tenant`, `customer`, `wallet`, `credit`, `tax`, and environment URL/key names. For a new or unclear integration, also inspect product behavior that may be monetized: AI/model calls, tokens, agents, tool runs, generated media, API calls, jobs, transactions, storage, seats, outcomes, quotas, grants, limits, and third-party cost records.
 
-Inspect credential configuration through filenames, variable names, secret-manager references, or presence-only checks that return a boolean. Never dump the environment, print shell exports, enable shell tracing, open `.env` values into model context, interpolate a secret into a command, or use a credential merely because it exists. If source contains a real credential, stop, do not repeat it, and recommend rotation.
+Inspect credential configuration only through file names, variable names declared in example files, and secret-manager references. Never read environment variables or secret-bearing files, enable shell tracing, interpolate a secret into a command, or use a credential merely because it exists. If source contains a real credential, stop, do not repeat it, and recommend rotation.
 
 Classify the workspace before choosing work:
 

@@ -1,4 +1,4 @@
-"""Every agent entry point shows the same install commands as the plugin README."""
+"""Every agent entry point shows the same install commands as the repository README."""
 
 from __future__ import annotations
 
@@ -12,12 +12,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INSTALL = re.compile(r"^(?:/plugin|codex plugin) [^\n`]+$", re.M)
 ENTRY_POINTS = ("START_HERE.md", "llms.txt")
-# The plugin README is the listing text and the single source of install commands.
-README = ROOT / "plugins/lago/README.md"
+# The repository README is the single source of install commands for every agent.
+README = ROOT / "README.md"
+# The plugin README is the directory listing text, so it covers Claude only.
+PLUGIN_README = ROOT / "plugins/lago/README.md"
 
 
-def install_section() -> str:
-    return README.read_text(encoding="utf-8").split("## Install", 1)[1].split("## Try the offline demo", 1)[0]
+def install_section(path: Path = README) -> str:
+    return path.read_text(encoding="utf-8").split("\n## Install\n", 1)[1].split("\n## ", 1)[0]
 
 
 class InstallCommandTests(unittest.TestCase):
@@ -28,6 +30,15 @@ class InstallCommandTests(unittest.TestCase):
             "codex plugin marketplace add getlago/lago-plugin",
             "codex plugin add lago@lago-plugins",
         ])
+
+    def test_plugin_readme_covers_claude_only(self):
+        self.assertEqual(INSTALL.findall(install_section(PLUGIN_README)), [
+            "/plugin marketplace add getlago/lago-plugin",
+            "/plugin install lago@lago-plugins",
+        ])
+        text = PLUGIN_README.read_text(encoding="utf-8")
+        self.assertNotIn("$lago:implementation", text)
+        self.assertNotIn("codex plugin", text)
 
     def assert_install_flow(self, text):
         commands = INSTALL.findall(install_section())

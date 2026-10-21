@@ -50,7 +50,7 @@ class AgentFileTests(unittest.TestCase):
             root = Path(directory) / "copy"
             shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "node_modules", "__pycache__", "results"))
             gemini = root / "plugins/lago/gemini-extension.json"
-            gemini.write_text(gemini.read_text(encoding="utf-8").replace('"0.3.0"', '"9.9.9"'), encoding="utf-8")
+            gemini.write_text(re.sub(r'"version"\s*:\s*"[^"]+"', '"version": "9.9.9"', gemini.read_text(encoding="utf-8"), count=1), encoding="utf-8")
             (root / "plugin.json").write_text("{}", encoding="utf-8")
             failures = validate.validate(root, None)
             self.assertIn("generated agent manifest is stale: plugins/lago/gemini-extension.json (run build_agent_files.py)", failures)

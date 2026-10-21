@@ -1,5 +1,5 @@
 {
   "name": "lago",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Design, implement, and test usage-based billing with Lago, the open-source billing engine: usage events, plans, credits, wallets, invoices, and migrations, starting with an offline demo that needs no credentials."
 }

@@ -43,6 +43,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 - Route credential incidents and blocked production requests directly to safety guidance; evaluate indirect shell execution from the full trace alongside deterministic network indicators.
 - Tell no-install agents how to retrieve exact MIT-licensed source; check generated billing behavior across editing tools. Upgrade and lock the Next.js fixture dependencies and update the PyJWT test dependency.
 
+- Stop event-sender generation when no durable Lago subscription binding exists; never use workspace IDs or fire-and-forget from in-memory usage records.
+
+- Require missing production target and scope details before presenting an approval gate; lead with offline validation after a pasted credential.
+
 - Complete migration and self-hosted setup disclosures; keep directory submission gated on verified release evidence.
 - Reject missing plugin manifests and case-colliding directory components in directory checks; repair the integrity command and disable persisted CI checkout credentials.
 

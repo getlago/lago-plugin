@@ -155,6 +155,7 @@ An unrelated, empty, or documentation-only workspace does not block discovery. A
 | --- | --- |
 | Deployment | Lago Cloud US/EU and self-hosted Docker or Kubernetes guidance |
 | Pricing | Subscriptions, usage, hybrid pricing, wallets, prepaid credits, and minimum commitments |
+| Commercial terms | Review-first extraction from contracts and order forms into auditable Lago billing configuration |
 | Use-case discovery | AI tokens and model calls, value credits, prepaid access, outcome pricing, pricing backtests, and enterprise overrides |
 | Application shape | Greenfield, existing billing integrations, and multi-tenant applications |
 | Migrations | Stripe Billing, Chargebee, and custom billing systems |

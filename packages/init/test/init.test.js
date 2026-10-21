@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -81,4 +81,38 @@ test("unknown directory exits 2 without writing", () => {
 test("templates match START_HERE.md", () => {
   const result = spawnSync("node", [join(pkg, "scripts/sync-templates.js"), "--check"], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
+});
+
+
+test("refuses linked outputs before writing any files", () => {
+  for (const link of ["lib", ".env.example", "lib/lago-billing.ts"]) {
+    const dir = fixture({ "package.json": "{}", "tsconfig.json": "{}" });
+    const outside = fixture({ "keep": "unchanged" });
+    try {
+      mkdirSync(dirname(join(dir, link)), { recursive: true });
+      // Test both directory links and a dangling file link.
+      symlinkSync(link === "lib" ? outside : join(outside, "missing"), join(dir, link));
+      const result = spawnSync("node", [cli, dir, "--write"], { encoding: "utf8" });
+      assert.notEqual(result.status, 0);
+      assert.match(result.stderr, /Refusing symlink destination/);
+      assert.equal(existsSync(join(outside, "missing")), false);
+      assert.equal(existsSync(join(outside, "lago-billing.ts")), false);
+      assert.equal(readFileSync(join(outside, "keep"), "utf8"), "unchanged");
+      if (link === ".env.example") assert.equal(existsSync(join(dir, "lib")), false);
+    } finally { rmSync(dir, { recursive: true }); rmSync(outside, { recursive: true }); }
+  }
+});
+
+test("exclusive creation preserves a file appearing after the existence check", () => {
+  const dir = fixture({ "requirements.txt": "fastapi\n", "lago_billing.py": "# concurrent user file\n" });
+  const preload = join(dir, "race.cjs");
+  writeFileSync(preload, `const fs = require('node:fs');
+const original = fs.existsSync;
+fs.existsSync = path => path === ${JSON.stringify(join(dir, "lago_billing.py"))} ? false : original(path);
+require('node:module').syncBuiltinESMExports();`);
+  try {
+    const result = JSON.parse(execFileSync("node", ["--require", preload, cli, dir, "--write", "--json"], { encoding: "utf8" }));
+    assert.equal(result.actions[0].action, "skip (exists)");
+    assert.equal(readFileSync(join(dir, "lago_billing.py"), "utf8"), "# concurrent user file\n");
+  } finally { rmSync(dir, { recursive: true }); }
 });

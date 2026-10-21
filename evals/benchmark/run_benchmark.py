@@ -37,7 +37,9 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
 TASKS = HERE / "tasks"
 sys.path.insert(0, str(HERE / "checks"))
+sys.path.insert(0, str(REPO / "scripts"))
 from score import CRITERIA, score  # noqa: E402
+from plugin_eval import staged  # noqa: E402
 
 SPEND_KEYS = {"costUsd", "judgeCostUsd", "cost_usd", "total_cost_usd"}
 
@@ -120,13 +122,16 @@ def main() -> int:
     source_commit, source_dirty = git("rev-parse", "HEAD"), bool(git("status", "--porcelain"))
     claude_version = subprocess.check_output(["claude", "--version"], text=True).strip()
     eval_json = out / "eval-result.json"
-    command = ["claude", "plugin", "eval", str(REPO), "--eval-dir", "evals/benchmark/tasks", "--case", args.case,
+    command = ["claude", "plugin", "eval", None, "--eval-dir", "evals/benchmark/tasks", "--case", args.case,
                "--scaffold", "--allow-tools", "Write", "Edit", "Bash", "--keep-temp", "--trust-plugin",
                "--no-publish", "--threshold", "0", "--runs", str(args.runs), "-j", str(args.concurrency),
                "--output-dir", str(out / "eval"), "--json", str(eval_json)]
     if args.model:
         command += ["--model", args.model]
-    completed = subprocess.run(command, cwd=REPO, capture_output=True, text=True)
+    # Cases must sit inside the plugin folder; stage the shipped plugin with the tasks.
+    with staged("evals/benchmark/tasks") as plugin:
+        command[3] = str(plugin)
+        completed = subprocess.run(command, cwd=REPO, capture_output=True, text=True)
     (out / "eval.log").write_text(completed.stdout + completed.stderr, encoding="utf-8")
     if not eval_json.is_file():
         print(json.dumps({"complete": False, "reason": "claude plugin eval produced no result", "exit_code": completed.returncode}))

@@ -25,7 +25,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
-SKILL = REPO / "skills/implementation/SKILL.md"
+PLUGIN = REPO / "plugins/lago"
+SKILL = PLUGIN / "skills/implementation/SKILL.md"
 GEMINI = "@google/gemini-cli@0.64.0"
 COPILOT = "@github/copilot@1.0.100"
 SKILLS = "skills@1.7.4"
@@ -45,7 +46,7 @@ def sanitize(text: str, home: Path) -> str:
 
 def verify_bundle(root: Path) -> dict:
     # Use the reviewed checkout's verifier, not unverified installed code.
-    spec = importlib.util.spec_from_file_location("install_integrity", REPO / "skills/implementation/scripts/release_integrity.py")
+    spec = importlib.util.spec_from_file_location("install_integrity", PLUGIN / "skills/implementation/scripts/release_integrity.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     try:
@@ -79,8 +80,8 @@ def installed_skill(home: Path, root: Path) -> dict:
 
 def check_gemini(home: Path) -> dict:
     steps = [
-        run(["npx", "-y", GEMINI, "extensions", "validate", str(REPO)], home, REPO),
-        run(["npx", "-y", GEMINI, "extensions", "install", str(REPO), "--consent"], home, home, stdin="y\n"),
+        run(["npx", "-y", GEMINI, "extensions", "validate", str(PLUGIN)], home, REPO),
+        run(["npx", "-y", GEMINI, "extensions", "install", str(PLUGIN), "--consent"], home, home, stdin="y\n"),
         run(["npx", "-y", GEMINI, "skills", "list"], home, home),
     ]
     skill = installed_skill(home, home / ".gemini/extensions")
@@ -110,9 +111,9 @@ def check_copilot(home: Path) -> dict:
     source_matches = (source.get("source") == "directory" and isinstance(source_path, str)
                       and Path(source_path).is_absolute() and Path(source_path).resolve() == REPO.resolve())
     enabled = settings.get("enabledPlugins", {}).get("lago@lago-plugins") is True
-    skill = installed_skill(home, REPO / "skills")
-    integrity = verify_bundle(REPO)
-    demo = verify_demo(REPO, home, integrity)
+    skill = installed_skill(home, PLUGIN / "skills")
+    integrity = verify_bundle(PLUGIN)
+    demo = verify_demo(PLUGIN, home, integrity)
     passed = (all(s["exit_code"] == 0 for s in steps) and installed and listed
               and source_matches and enabled and skill["identical"] == 1
               and integrity["status"] == "PASS" and demo["passed"])

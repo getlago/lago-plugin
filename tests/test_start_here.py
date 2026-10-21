@@ -85,7 +85,17 @@ class FakeLago:
                 if method == "POST" and path == "/api/v1/customers":
                     return self._send(200, {"customer": body["customer"]})
                 if method == "POST" and path == "/api/v1/subscriptions":
+                    if body["subscription"]["external_id"] == "ambiguous-create":
+                        return self._send(503, {"error": "Response lost after commit"})
                     return self._send(200, {"subscription": body["subscription"]})
+                if method == "GET" and path.startswith("/api/v1/subscriptions/lifecycle-"):
+                    from urllib.parse import parse_qs, urlsplit
+                    parsed = urlsplit(path)
+                    actual_status = parsed.path.rsplit("lifecycle-", 1)[1]
+                    requested_status = parse_qs(parsed.query).get("status", ["active"])[0]
+                    if requested_status != actual_status:
+                        return self._send(404, {"error": "Not Found"})
+                    return self._send(200, {"subscription": {"status": actual_status}})
                 if method == "POST" and path == "/api/v1/events":
                     if fake.html_event_failures:
                         fake.html_event_failures -= 1
@@ -202,7 +212,26 @@ class StartHereTest(unittest.TestCase):
         self.assertEqual(self.fake.requests[-1][2]["subscription"]["subscription_at"], "2026-10-15T12:00:00+00:00")
         with self.assertRaises(ValueError):
             lago.create_subscription("sub_1", "cus_1", "pro", datetime(2026, 10, 15))
+        requests_before = len(self.fake.requests)
+        with self.assertRaisesRegex(ValueError, "whole-second"):
+            lago.create_subscription("sub_1", "cus_1", "pro",
+                                     datetime(2026, 10, 15, microsecond=967000, tzinfo=timezone.utc))
+        self.assertEqual(len(self.fake.requests), requests_before, "invalid starts must not create subscriptions")
         self.assertEqual(self.fake.requests[-1][2]["subscription"]["external_customer_id"], "cus_1")
+
+        for status in ("active", "pending", "incomplete", "terminated", "canceled"):
+            self.assertEqual(lago.get_subscription("lifecycle-" + status, status)["subscription"]["status"], status)
+        with self.assertRaises(module.LagoError) as missing:
+            lago.get_subscription("lifecycle-terminated", "active")
+        self.assertEqual(missing.exception.status, 404)
+        with self.assertRaises(ValueError):
+            lago.get_subscription("lifecycle-terminated", "unknown")
+        with self.assertRaises(module.LagoError):
+            lago.create_subscription("ambiguous-create", "cus_1", "pro", datetime(2026, 10, 15, tzinfo=timezone.utc))
+        ambiguous = [body for method, path, body in self.fake.requests
+                     if method == "POST" and path == "/api/v1/subscriptions"
+                     and body["subscription"]["external_id"] == "ambiguous-create"]
+        self.assertEqual(len(ambiguous), 1, "ambiguous activation must return to worker reconciliation without blind retries")
 
         occurred = datetime(2026, 10, 1, 12, 0, 0, 250000, tzinfo=timezone.utc)
         self.fake.fail_next_event_with_503 = True
@@ -314,13 +343,29 @@ class StartHereTest(unittest.TestCase):
 
 
 DRIVER = r"""
-import { configFromEnv, sendUsage, currentUsage, entitlement, prepaidBalanceCents, upsertCustomer, createSubscription, LagoError } from "./lago-billing.mts";
+import { configFromEnv, sendUsage, currentUsage, entitlement, prepaidBalanceCents, upsertCustomer, createSubscription, getSubscription, LagoError } from "./lago-billing.mts";
 import { makeWebhookHandler } from "./webhook-route.mts";
 import { readFileSync, writeFileSync } from "node:fs";
+import assert from "node:assert/strict";
 
 const config = { ...configFromEnv(), maxRetries: 2 };
+for (const start of ["2026-10-15T12:00:00.967Z", "invalid"]) {
+  assert.throws(() => createSubscription(config, { id: "must-not-create", customerId: "cus_1", planCode: "pro", startsAt: new Date(start) }), /whole-second/);
+}
 await upsertCustomer(config, { id: "cus_1", name: "Acme", currency: "USD" });
 await createSubscription(config, { id: "sub_1", customerId: "cus_1", planCode: "pro", startsAt: new Date("2026-10-15T12:00:00Z") });
+for (const status of ["active", "pending", "incomplete", "terminated", "canceled"]) {
+  assert.equal((await getSubscription(config, `lifecycle-${status}`, status)).subscription.status, status);
+}
+await assert.rejects(getSubscription(config, "lifecycle-terminated", "active"), e => e.status === 404);
+assert.throws(() => getSubscription(config, "lifecycle-terminated", "unknown"), /Explicit subscription status/);
+let creationAttempts = 0;
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async () => { creationAttempts++; throw new TypeError("Response lost after commit"); };
+try {
+  await assert.rejects(createSubscription(config, { id: "ambiguous-create", customerId: "cus_1", planCode: "pro", startsAt: new Date("2026-10-15T12:00:00Z") }));
+} finally { globalThis.fetch = originalFetch; }
+assert.equal(creationAttempts, 1, "activation retries require worker reconciliation");
 const record = { id: "usage_42", subscriptionId: "sub_1", metricCode: "llm_tokens", occurredAt: new Date(Date.UTC(2026, 9, 1, 12, 0, 0, 250)), properties: { tokens: 120000 } };
 const first = await sendUsage(config, record);
 const replay = await sendUsage(config, record);

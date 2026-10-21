@@ -1,0 +1,25 @@
+{
+  "source_commit": "9b7ce803b14fb047baf69e955b5410cb5a97801b",
+  "image": "getlago/lago@sha256:60ecc02cdb2854c918e28a6436ccb4033d8f4a0447bc0b5150936596ebe2a290",
+  "version": "v1.55.0",
+  "compose_project": "lago-plugin-demo-pr23-review",
+  "container": "lago-plugin-demo-pr23-review",
+  "network": "lago-plugin-demo-pr23-review_default",
+  "volume": "lago-plugin-demo-pr23-review_data",
+  "network_internal": true,
+  "request_target": "http://127.0.0.1:3000/api/v1 inside the named container",
+  "host_bindings": [
+    "127.0.0.1:50672:3000",
+    "127.0.0.1:50673:80"
+  ],
+  "host_port_reachable": false,
+  "credentials": "generated in memory for this disposable synthetic organization; never archived",
+  "duplicate_status": 422,
+  "seed_to_finalized_invoice_seconds": 2,
+  "invoice_amount_cents": 240,
+  "currency": "USD",
+  "new_usage_events": 1,
+  "synthetic_only": true,
+  "external_integrations_enabled": false,
+  "teardown": "not performed"
+}

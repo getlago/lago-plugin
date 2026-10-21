@@ -1,0 +1,43 @@
+{
+  "name": "lago",
+  "version": "0.3.1",
+  "description": "Design, implement, and test usage-based billing with Lago, the open-source billing engine: usage events, plans, credits, wallets, invoices, and migrations, starting with an offline demo that needs no credentials.",
+  "author": {
+    "name": "Lago",
+    "url": "https://getlago.com"
+  },
+  "homepage": "https://github.com/getlago/lago-plugin/tree/main/plugins/lago#readme",
+  "repository": "https://github.com/getlago/lago-plugin",
+  "license": "MIT",
+  "keywords": [
+    "lago",
+    "billing",
+    "metering",
+    "subscriptions",
+    "migration",
+    "credits",
+    "wallets",
+    "ai"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Lago",
+    "shortDescription": "See, design, and implement billing with Lago.",
+    "longDescription": "Understand Lago in under a minute, see the billing opportunity for your product, and turn it into a testable implementation. Start anywhere: no codebase, Lago account, credentials, or billing expertise is needed. The Lago Solution Engineer shows a concrete source-to-money story, maps who pays and what creates value, recommends one model, and defines a focused proof. When you bring an application repository, it becomes a Billing Engineer Copilot and carries the same commercial intent into event contracts, code, money tests, reconciliation, and Product, Engineering, or Finance handoff. It covers AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence. Live seeded demos use only isolated self-hosted Lago; production actions require separate approval.",
+    "developerName": "Lago",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://www.getlago.com",
+    "privacyPolicyURL": "https://getlago.com/legal/privacy-policy",
+    "termsOfServiceURL": "https://getlago.com/legal",
+    "defaultPrompt": [
+      "Show me Lago in 30 seconds, then ask about my product and pricing. Do not assume this workspace is my application.",
+      "Map my product to the best first Lago billing model, explain why it wins, and define the smallest credible proof.",
+      "Build billing on Lago in this app. Inspect code, implement a small slice, and verify money offline before live access."
+    ],
+    "brandColor": "#19212E"
+  }
+}

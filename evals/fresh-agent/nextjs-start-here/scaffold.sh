@@ -2,11 +2,8 @@
 # Minimal Next.js App Router app with one billable LLM action and no billing.
 set -euo pipefail
 mkdir -p app/api/generate lib
-cat > package.json <<'JSON'
-{"name": "acme-ai", "private": true, "scripts": {"dev": "next dev"},
- "dependencies": {"next": "15.5.4", "react": "19.1.1", "react-dom": "19.1.1"},
- "devDependencies": {"typescript": "5.9.3", "@types/node": "24.6.0", "@types/react": "19.1.15"}}
-JSON
+FIXTURE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/fixture" && pwd)"
+cp "$FIXTURE_DIR/package.json" "$FIXTURE_DIR/package-lock.json" .
 cat > tsconfig.json <<'JSON'
 {"compilerOptions": {"strict": true, "module": "esnext", "moduleResolution": "bundler", "jsx": "preserve", "target": "es2022",
  "paths": {"@/*": ["./*"]}}}

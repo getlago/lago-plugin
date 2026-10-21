@@ -21,7 +21,7 @@ def load(name, path):
 class InstallVerificationTests(unittest.TestCase):
     def setUp(self):
         self.runner = load("verify_installs", ROOT / "evals/agent-installs/verify_installs.py")
-        self.integrity = load("release_integrity", ROOT / "skills/implementation/scripts/release_integrity.py")
+        self.integrity = load("release_integrity", ROOT / "plugins/lago/skills/implementation/scripts/release_integrity.py")
 
     def test_gemini_metadata_exception_keeps_code_and_extra_files_checked(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -51,6 +51,42 @@ class InstallVerificationTests(unittest.TestCase):
             metadata.symlink_to(code)
             with self.assertRaises(self.integrity.IntegrityError):
                 self.integrity.check(root, manifest)
+
+    def test_claude_code_liveness_records_are_exempt_only_in_their_exact_shape(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / ".claude-plugin").mkdir()
+            (root / ".claude-plugin/plugin.json").write_text('{"name":"lago"}')
+            code = root / "demo.py"
+            code.write_text("original")
+            manifest = root / "RELEASE-MANIFEST.json"
+            self.integrity.create(root, manifest)
+            in_use = root / ".in_use"
+            in_use.mkdir()
+            (in_use / "10778").write_text('{"pid":10778,"procStart":"synthetic"}')
+            result = self.integrity.check(root, manifest)
+            self.assertEqual(result["status"], "PASS")
+            self.assertEqual(result["install_metadata"], [".in_use/10778"])
+            code.write_text("changed")
+            self.assertEqual(self.integrity.check(root, manifest)["changed"], ["demo.py"])
+            code.write_text("original")
+            (in_use / "payload.py").write_text("not a pid")
+            (in_use / "20000").write_text("x" * 1025)
+            nested = in_use / "30000"
+            nested.mkdir()
+            (nested / "1").write_text("{}")
+            self.assertEqual(self.integrity.check(root, manifest)["unexpected"],
+                             [".in_use/20000", ".in_use/30000/1", ".in_use/payload.py"])
+
+    def test_claude_code_liveness_records_need_a_claude_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "code.py").write_text("synthetic")
+            manifest = root / "RELEASE-MANIFEST.json"
+            self.integrity.create(root, manifest)
+            (root / ".in_use").mkdir()
+            (root / ".in_use/10778").write_text("{}")
+            self.assertEqual(self.integrity.check(root, manifest)["unexpected"], [".in_use/10778"])
 
     def test_metadata_is_not_exempt_without_gemini_or_when_manifested(self):
         with tempfile.TemporaryDirectory() as directory:

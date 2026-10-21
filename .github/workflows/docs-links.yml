@@ -14,9 +14,11 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: List official links
         run: >-
-          python3 skills/implementation/scripts/list_external_links.py .
+          python3 scripts/list_external_links.py .
           --domain docs.getlago.com
           --domain doc.getlago.com
           --domain getlago.com

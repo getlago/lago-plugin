@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "lago",
-      "source": "./",
+      "source": "./plugins/lago",
       "description": "Shows how Lago works, assesses product fit honestly, tells one tailored billing story, defines a small proof, and implements it only when a codebase is explicitly in scope."
     }
   ]

@@ -1,0 +1,27 @@
+{
+  "name": "lago",
+  "displayName": "Lago",
+  "version": "0.3.1",
+  "description": "Design, implement, and test usage-based billing with Lago, the open-source billing engine: usage events, plans, credits, wallets, invoices, and migrations, starting with an offline demo that needs no credentials.",
+  "author": {
+    "name": "Lago",
+    "url": "https://getlago.com"
+  },
+  "homepage": "https://github.com/getlago/lago-plugin/tree/main/plugins/lago#readme",
+  "repository": "https://github.com/getlago/lago-plugin",
+  "license": "MIT",
+  "keywords": [
+    "lago",
+    "billing",
+    "metering",
+    "subscriptions",
+    "credits",
+    "wallets",
+    "ai"
+  ],
+  "icon": "./assets/icon.png",
+  "skills": "./skills/",
+  "documentationUrl": "https://getlago.com/docs",
+  "privacyPolicyUrl": "https://getlago.com/legal/privacy-policy",
+  "termsOfServiceUrl": "https://getlago.com/legal"
+}

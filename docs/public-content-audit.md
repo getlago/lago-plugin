@@ -2,7 +2,7 @@
 
 The repository contains only public-source workflow guidance, synthetic examples, and original implementation/eval scaffolding. General process concepts were informed by a read-only internal review; no internal text was copied.
 
-Checked by `skills/implementation/scripts/validate_repo.py` and a private denylist during release:
+Checked by `scripts/validate_repo.py` and a private denylist during release:
 
 - No customer or prospect data
 - No employee-specific roles or names

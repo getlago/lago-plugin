@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,8 +22,21 @@ export function planFiles(stack) {
 }
 
 export function apply(dir, stack, { write }) {
+  const files = planFiles(stack);
+  // Refuse linked destinations before creating anything, including dangling links.
+  for (const path of [...files.map(file => file.path), ...(stack.language === "unknown" ? [] : [".env.example"])]) {
+    let target = dir;
+    for (const part of path.split("/")) {
+      target = join(target, part);
+      try {
+        if (lstatSync(target).isSymbolicLink()) throw new Error(`Refusing symlink destination: ${path}`);
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
+    }
+  }
   const actions = [];
-  for (const file of planFiles(stack)) {
+  for (const file of files) {
     const target = join(dir, file.path);
     if (existsSync(target)) {
       actions.push({ path: file.path, action: "skip (exists)" });
@@ -32,7 +45,12 @@ export function apply(dir, stack, { write }) {
     actions.push({ path: file.path, action: write ? "created" : "would create" });
     if (write) {
       mkdirSync(dirname(target), { recursive: true });
-      writeFileSync(target, readFileSync(join(templates, file.template), "utf8"));
+      try {
+        writeFileSync(target, readFileSync(join(templates, file.template), "utf8"), { flag: "wx" });
+      } catch (error) {
+        if (error.code !== "EEXIST") throw error;
+        actions[actions.length - 1].action = "skip (exists)";
+      }
     }
   }
   if (stack.language !== "unknown") {

@@ -35,7 +35,7 @@ from pathlib import Path
 
 CASES = Path(__file__).resolve().parent
 REPO = CASES.parents[1]
-SKILL = REPO / "skills/implementation"
+SKILL = REPO / "plugins/lago/skills/implementation"
 FRONTMATTER = re.compile(r"\A---\n.*?\n---\n", re.S)
 
 
@@ -58,10 +58,11 @@ def install_plugin(codex_home: Path) -> None:
 
 
 def observed_read(event: dict, skill_path: Path) -> bool:
-    """Conservative evidence: completed standalone cat of our file and its contents.
+    """Conservative evidence: completed standalone cat and the complete file text.
 
     Other read forms are unclassified attempts, never a claimed successful load.
     This intentionally measures loading, not merely mentioning or attempting a read.
+    The host may merge shell diagnostics with stdout; those do not erase a full read.
     """
     item = event.get("item") or {}
     if (event.get("type") != "item.completed"
@@ -76,10 +77,12 @@ def observed_read(event: dict, skill_path: Path) -> bool:
         return False
     if len(words) == 3 and words[1] == "--":
         words.pop(1)
+    expected = skill_path.read_text().strip()
+    output = (item.get("aggregated_output") or "").strip()
     return (len(words) == 2 and words[0] in ("cat", "/bin/cat", "/usr/bin/cat")
             and Path(words[1]).is_absolute()
             and Path(words[1]).resolve() == skill_path.resolve()
-            and (item.get("aggregated_output") or "").strip() == skill_path.read_text().strip())
+            and bool(expected) and f"\n{expected}\n" in f"\n{output}\n")
 
 
 def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | None) -> dict:
@@ -95,7 +98,9 @@ def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | No
                 return {"outcome": "error", "reason": "installed skill path is ambiguous or missing"}
             skill_path = candidates[0]
         subprocess.run(["git", "init", "-q"], cwd=root, check=True)
-        command = ["codex", "exec", "--json", "--ephemeral", "--sandbox", "read-only", "-C", workspace]
+        command = ["codex", "exec", "--json", "--ephemeral", "--disable", "remote_plugin",
+                   "--disable", "apps", "--enable", "skip_host_skill_discovery",
+                   "--sandbox", "read-only", "-C", workspace]
         if codex_home is None:
             command.append("--ignore-user-config")
         env = {**os.environ, "CODEX_HOME": str(codex_home)} if codex_home else None
@@ -116,7 +121,7 @@ def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | No
                 except json.JSONDecodeError:
                     continue
                 item = event.get("item") or {}
-                attempted |= "SKILL.md" in (item.get("command") or "")
+                attempted |= str(skill_path) in (item.get("command") or "")
                 if observed_read(event, skill_path):
                     return {"outcome": "loaded", "evidence": {
                         "command": item["command"], "exit_code": item["exit_code"],
@@ -154,6 +159,16 @@ def summarize_runs(runs: list[dict]) -> dict:
             "false_trigger_rate": "{loaded}/{completed}".format(**totals["negative"]), "runs": runs}
 
 
+
+def source_metadata() -> dict:
+    return {
+        "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip(),
+        "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO, text=True).strip()),
+        "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "skill_sha256": hashlib.sha256((SKILL / "SKILL.md").read_bytes()).hexdigest(),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--case", default="*", help="case directory glob")
@@ -169,6 +184,8 @@ def main() -> int:
     jobs = [(kind, name, prompt, attempt) for kind, name, prompt in load_cases(args.case) for attempt in range(1, args.runs + 1)]
     if not jobs:
         parser.error("no cases matched")
+    provenance = source_metadata()
+    codex_version = subprocess.check_output(["codex", "--version"], text=True).strip()
     with tempfile.TemporaryDirectory(prefix="lago-codex-home-") as home:
         codex_home = None if args.project_skill else Path(home)
         if codex_home:
@@ -178,14 +195,14 @@ def main() -> int:
     runs = [{"kind": kind, "case": name, "attempt": attempt, **outcome}
             for (kind, name, _, attempt), outcome in zip(jobs, outcomes)]
     summary = summarize_runs(runs)
+    source_changed = source_metadata() != provenance
+    summary["complete"] &= not source_changed and not provenance["source_dirty"]
     summary.update({
+        **provenance,
         "started_at": started_at,
-        "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "source_changed": source_changed,
         "mode": "project-skill" if args.project_skill else "plugin lago@lago-plugins",
-        "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO, text=True).strip(),
-        "source_dirty": bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=REPO, text=True).strip()),
-        "skill_sha256": hashlib.sha256((SKILL / "SKILL.md").read_bytes()).hexdigest(),
-        "codex_version": subprocess.check_output(["codex", "--version"], text=True).strip(),
+        "codex_version": codex_version,
         "requested_model": args.model or "CLI default (not pinned)",
         "command": sys.argv,
     })

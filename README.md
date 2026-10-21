@@ -1,55 +1,16 @@
-# Lago
+# Lago plugin for coding agents
 
-Meet a Lago Solution Engineer to explore billing, or ask it to build directly in your application repository. It makes [Lago](https://www.getlago.com) tangible in under a minute, maps the strongest billing opportunity for your product, and builds a testable integration from Claude Code or Codex.
+This repository holds the Lago plugin for Claude Code and Codex. It turns your coding agent into a Lago solution engineer: it shows how [Lago](https://www.getlago.com), the open-source billing engine, meters and bills a product offline in under a minute, recommends a billing model for yours, and implements and tests the integration in your codebase.
 
-You can start anywhere. No application repository, Lago account, credentials, Docker, or billing knowledge is required to explore Lago. Describe a product, share a pricing page, or run the built-in example; open a codebase only when you want repository-specific implementation.
+The shipped plugin lives in [`plugins/lago/`](plugins/lago). Its [README](plugins/lago/README.md) is the user guide: install steps for Claude Code, Codex, and the Anthropic plugin directory, the offline demo, and exactly what the plugin runs, sends, and stores. Everything else in this repository is tests, evals, documentation, and release tooling.
 
 No plugin support in your agent, or nothing installed yet? Follow [START_HERE.md](START_HERE.md): one page with the offline demo and complete Node.js/TypeScript and Python integration code.
 
-Install this Lago-maintained plugin directly from this repository. Official OpenAI or Anthropic marketplace listings are separate from making the source public. The plugin works without Lago credentials for discovery, design, and local implementation. Any seeded live demo must use an isolated self-hosted Lago instance, and production actions always require explicit approval.
-
 ## Install
 
-### Claude Code
+Claude Code and Codex: see [plugins/lago/README.md](plugins/lago/README.md#install).
 
-```text
-/plugin marketplace add getlago/lago-plugin
-/plugin install lago@lago-plugins
-```
-
-Example prompts:
-
-```text
-/lago:implementation show me what Lago can do
-/lago:implementation use this pricing page to show how Lago would model the product
-/lago:implementation implement the smallest Lago Cloud integration
-/lago:implementation migrate this Chargebee implementation to Lago
-```
-
-For local plugin development:
-
-```bash
-git clone https://github.com/getlago/lago-plugin.git
-claude --plugin-dir ./lago-plugin
-```
-
-### Codex
-
-```bash
-codex plugin marketplace add getlago/lago-plugin
-codex plugin add lago@lago-plugins
-```
-
-Start a new Codex task after installation. Example prompts:
-
-```text
-$lago:implementation show me what Lago can do; do not assume this workspace is my application
-$lago:implementation use my product description to recommend one Lago billing model
-$lago:implementation design usage-based billing for this application
-$lago:implementation prepare a self-hosted Kubernetes deployment
-```
-
-Claude and Codex may also select the skill automatically when a request involves discovering, designing, implementing, or operating Lago billing.
+## Other agents
 
 ### GitHub Copilot CLI
 
@@ -62,15 +23,24 @@ copilot plugin install lago@lago-plugins
 
 ### Gemini CLI
 
+Gemini CLI installs extensions only from a repository root, and the plugin now lives in `plugins/lago/`. Install the skill from the subfolder:
+
 ```bash
-gemini extensions install https://github.com/getlago/lago-plugin
+gemini skills install https://github.com/getlago/lago-plugin.git --path plugins/lago/skills/implementation
 ```
 
-The extension exposes the same `implementation` skill. The integrity check permits only Gemini’s root `.gemini-extension-install.json` bookkeeping file as an extra file; bundled code remains hash-checked. Goose documents support for the same `gemini-extension.json` format, but has not been tested here.
+For the full extension with the bundled demo and integrity check, install from a clone:
+
+```bash
+git clone https://github.com/getlago/lago-plugin.git
+gemini extensions install ./lago-plugin/plugins/lago
+```
+
+The integrity check permits only Gemini's root `.gemini-extension-install.json` bookkeeping file as an extra file; bundled code remains hash-checked. Goose documents support for the same `gemini-extension.json` format, but has not been tested here.
 
 ### Cursor
 
-In Cursor, open **Customize**, choose **From GitHub Repository**, and enter `getlago/lago-plugin`. The repository ships `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+In Cursor, open **Customize**, choose **From GitHub Repository**, and enter `getlago/lago-plugin`. The repository ships `.cursor-plugin/marketplace.json`, which points at `plugins/lago/.cursor-plugin/plugin.json`.
 
 ### Other agents with Agent Skills
 
@@ -80,88 +50,20 @@ Any agent that reads `SKILL.md` from `.agents/skills/` can install the skill alo
 npx skills add getlago/lago-plugin --skill implementation
 ```
 
-This copies only `skills/implementation/`. Without the full plugin bundle, the skill cannot verify `RELEASE-MANIFEST.json`, so it shows the offline walkthrough from its reference instead of running the bundled demo script. Links to repository-level `examples/` are also unavailable in a skill-only install; read those examples in this repository. Prefer a plugin or extension install when your agent supports one.
+This copies only `plugins/lago/skills/implementation/`. Without the full plugin bundle, the skill cannot verify `RELEASE-MANIFEST.json`, so it shows the offline walkthrough from its reference instead of running the bundled demo script. Links to the plugin's `examples/` are also unavailable in a skill-only install; read those examples in this repository. Prefer a plugin or extension install when your agent supports one.
 
 | Agent | Install path | Verified |
 | --- | --- | --- |
 | Claude Code, Codex | Plugin `lago@lago-plugins` | Claude Code triggering evals and Codex smoke checks, see [evals/triggers](evals/triggers/README.md) |
-| GitHub Copilot CLI | Plugin `lago@lago-plugins` from `.claude-plugin/` | Local marketplace install, verified source binding, bundle integrity and offline demo, Copilot CLI 1.0.100 |
-| Gemini CLI | Extension from `gemini-extension.json` | Validation, install, discovery, installed bundle integrity and offline demo, Gemini CLI 0.64.0 |
+| GitHub Copilot CLI | Plugin `lago@lago-plugins` from `.claude-plugin/marketplace.json` | Local marketplace install, verified source binding, bundle integrity and offline demo, Copilot CLI 1.0.100 |
+| Gemini CLI | Extension from `plugins/lago/gemini-extension.json` | Validation, install from `plugins/lago`, discovery, installed bundle integrity and offline demo, Gemini CLI 0.64.0. The `gemini skills install --path` command is not verified. |
 | Cursor | `.cursor-plugin/` | Generated from Cursor's documented format; not tested in Cursor |
-| Goose, Devin | Read `gemini-extension.json` or `.claude-plugin/` per their docs | Not tested |
+| Goose, Devin | Read `plugins/lago/gemini-extension.json` or `.claude-plugin/` per their docs | Not tested |
 | skills.sh agents | Skill only | Install, skills 1.7.4 |
 
 [docs/release-evidence/agents-2026-10-19](docs/release-evidence/agents-2026-10-19/README.md) records the commands and results. These installation checks do not demonstrate automatic selection or integration correctness on the new agents.
 
 Format and installation references: [Copilot CLI](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference), [Gemini CLI](https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/extensions/reference.md), [Cursor manifests](https://cursor.com/docs/reference/plugins.md), [Cursor repository import](https://cursor.com/docs/rules), [Goose formats](https://raw.githubusercontent.com/aaif-goose/goose/main/documentation/docs/guides/context-engineering/plugins.md), and [Devin compatibility](https://docs.devin.ai/cli/extensibility/plugins).
-
-## Start here
-
-After installation, from any task or folder, ask:
-
-```text
-show me what Lago can do
-```
-
-The plugin immediately runs a dependency-free offline example. Atlas AI sells Acme Corp a `$99/month` subscription with `$10` of included AI usage. One Acme employee action fans out into multi-model, input/output usage and a retry; the walkthrough produces a duplicate-safe `$0.37` charge, consumes the last `$0.20` of included usage, and calculates `$0.17` of overage. It shows the complete source-to-money path and what Atlas avoids building, then asks one question: `What does your product do, and what do customers pay for today?` It does not assume the open folder is your application.
-
-To make the next walkthrough relevant, describe your product in one sentence or share its pricing page. You can also start with an implementation request. Open your application repository and ask:
-
-```text
-Build billing on Lago in this app. Inspect the code, implement the smallest useful slice, and test the money offline.
-```
-
-The plugin inspects the codebase, shows a short billing blueprint, and builds the smallest coherent slice without requiring an earlier demo or solution brief. It asks about decisions that materially change money, architecture, lifecycle behavior, or authorization. The application keeps product events and customer experience; Lago handles the selected billing functions.
-
-### Guided or concise
-
-The default experience is hands-on and guided. Lago concepts are explained only when they become relevant, and every response ends with one clear next step.
-
-Say `expert mode`, `skip the walkthrough`, or `just do it` for concise execution. The plugin will omit primers and routine narration while preserving material decisions, diffs, tests, risks, approvals, and money evidence. Say `guided mode` to restore explanations.
-
-## What it does
-
-- **Shows the metering problem before the terminology:** Atlas AI—the merchant—turns one Acme employee action into multi-model usage, a duplicate-safe charge, included-credit consumption, and overage. The plugin shows what the merchant avoids building before revealing Lago's model.
-- **Understands a product at any depth:** starts from a product description or pricing page, and inspects customer, tenant, subscription, usage, and billing code only when a repository is explicitly in scope.
-- **Assesses fit honestly:** reflects the desired outcome and current constraints, then says whether Lago is a strong fit, a conditional fit, or not the right owner for the job.
-- **Turns demos into evidence:** tailors one product story and defines a focused proof with business, technical, and exit criteria when live validation is needed.
-- **Produces a billing blueprint:** shows who pays, what they buy, what activity affects the bill, how the amount is calculated, and the first implementation slice.
-- **Finds monetization opportunities:** identifies a recommended first model from real product behavior, with special guidance for AI usage, value credits, prepaid wallets, hybrid pricing, and existing-provider coexistence.
-- **Implements the integration:** keeps Lago behind a billing adapter and adds validated events, stable identifiers, retry behavior, webhook handling, configuration, and tests that fit the repository.
-- **Speaks to every buyer from one source of truth:** translates the same design and money evidence for Product, Engineering, and Finance without changing assumptions between teams.
-- **Proves the money:** derives the actual result from a preserved Lago payload, hash-links the evidence, and compares it with an independently calculated expectation. Compilation, a successful API response, or two hand-written matching files are not treated as billing correctness.
-- **Handles the full lifecycle:** supports design, implementation, deployment guidance, validation, migration, reconciliation, and evidence-led troubleshooting.
-- **Uses the official Lago CLI when it helps:** an already-installed CLI can power agent-led inspection, diagnostics, configuration, validation, and repeatable operator workflows without becoming a plugin dependency or an application runtime integration.
-
-No prior Lago or billing expertise is required.
-
-## Access and support
-
-Report a defect, documentation problem, or unsafe behavior through [GitHub Issues](https://github.com/getlago/lago-plugin/issues). Do not include credentials, customer data, production payloads, or other confidential information in an issue.
-
-## What happens after a prompt
-
-1. **Discovery first:** without product context, completes the offline example without treating the current folder as the user's product; with useful context, goes straight to a tailored result.
-2. **Progressive discovery:** asks one useful question at a time, reflects facts and assumptions, and stops as soon as it can assess fit.
-3. **Opportunity map and solution brief:** maps who pays, what they buy, what behavior creates value, and Lago's billing job; recommends one model; and identifies the riskiest assumption.
-4. **Smallest proof:** defines business, technical, evidence, and exit criteria for a live validation. A direct repository implementation can start from a provisional blueprint.
-5. **Implementation and handoff, when requested:** switches into Billing Engineer Copilot mode, inspects the explicitly scoped application, reuses any existing decision trail, validates behavior, and translates the result for Product, Engineering, and Finance.
-
-An unrelated, empty, or documentation-only workspace does not block discovery. A repository becomes necessary only for a concrete code assessment or implementation; if it is missing then, the plugin explains why and gives one recovery action.
-
-## Supported work
-
-| Area | Support |
-| --- | --- |
-| Deployment | Lago Cloud US/EU and self-hosted Docker or Kubernetes guidance |
-| Pricing | Subscriptions, usage, hybrid pricing, wallets, prepaid credits, and minimum commitments |
-| Use-case discovery | AI tokens and model calls, value credits, prepaid access, outcome pricing, pricing backtests, and enterprise overrides |
-| Application shape | Greenfield, existing billing integrations, and multi-tenant applications |
-| Migrations | Stripe Billing, Chargebee, and custom billing systems |
-| Reliability | Stable event identity, duplicate protection, retries, late events, replay, webhooks, and reconciliation |
-| Operations | Validation, production-readiness gates, diagnosis, and rollback planning |
-
-Version 1 does not claim migration support for providers other than Stripe Billing, Chargebee, and custom systems.
 
 ## Why MCP is optional
 
@@ -177,6 +79,9 @@ Application code still uses an official Lago SDK or the REST API; it never shell
 
 ## Credentials, environments, and safety
 
+The user-facing disclosure is in [What this plugin runs, sends and stores](plugins/lago/README.md#what-this-plugin-runs-sends-and-stores).
+
+
 No API key, Lago CLI, MCP server, Docker runtime, package install, or custom telemetry is required to load the plugin or perform repository inspection, architecture work, code changes, fixtures, calculations, and offline tests.
 
 Production contact or mutation always requires separate approval for the exact environment, action, affected objects, billing impact, infrastructure impact, and recovery plan. Reconciliation is read-only by default and never repairs discrepancies automatically.
@@ -187,12 +92,12 @@ Validation of a user’s real Lago environment is separate from a demo and requi
 
 ## Canonical offline demo
 
-The bundled [OpenAI-style per-token example](examples/per-token-ai.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. Against Atlas Pro's illustrative `$99` subscription and charge-restricted `$10` wallet grant, the job consumes Acme's last `$0.20` and produces `$0.17` of overage, for `$99.17` billed before tax across the period. Archived live self-hosted evidence validates the complete one-period result: a `$99.00` subscription invoice plus a `$0.17` usage invoice after `$10.00` of eligible wallet credit. Invoice count depends on billing cadence. Automated monthly wallet renewal is edition-dependent and is not claimed by this proof. No payment or tax behavior is simulated.
+The bundled [OpenAI-style per-token example](plugins/lago/examples/ai-usage-billing.md) uses illustrative model names and prices. It follows one AI research action through four deterministic token records, replays a duplicate, reconciles 21,000 tokens, and verifies a `$0.37` gross usage charge. Against Atlas Pro's illustrative `$99` subscription and charge-restricted `$10` wallet grant, the job consumes Acme's last `$0.20` and produces `$0.17` of overage, for `$99.17` billed before tax across the period. Archived live self-hosted evidence validates the complete one-period result: a `$99.00` subscription invoice plus a `$0.17` usage invoice after `$10.00` of eligible wallet credit. Invoice count depends on billing cadence. Automated monthly wallet renewal is edition-dependent and is not claimed by this proof. No payment or tax behavior is simulated.
 
 Run it directly while developing the plugin:
 
 ```bash
-python3 skills/implementation/scripts/run_demo.py
+python3 plugins/lago/skills/implementation/scripts/run_demo.py
 ```
 
 This writes no files and contacts no external service. Optional live validation follows the isolated self-hosted policy above and must not claim to reproduce current OpenAI pricing.
@@ -202,32 +107,14 @@ This writes no files and contacts no external service. Optional live validation 
 Python 3.9+ is required only for the deterministic helpers. The skill itself is Markdown.
 
 ```bash
-python3 skills/implementation/scripts/validate_repo.py .
+python3 scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
-python3 skills/implementation/scripts/release_integrity.py check . --manifest RELEASE-MANIFEST.json
-claude plugin validate .
+python3 plugins/lago/skills/implementation/scripts/release_integrity.py check plugins/lago --manifest plugins/lago/RELEASE-MANIFEST.json
+claude plugin validate plugins/lago
+python3 scripts/check_directory_limits.py plugins/lago
 ```
 
 Live money validation preserves the Lago payload, generates `actual.json` with `extract_actual.py`, and verifies the source hash with `money_test.py --actual-source`. The repository includes 100 synthetic behavioral cases and deterministic tests for event validation, evidence-derived money calculations, reconciliation, first-run guidance, product-to-Lago opportunity mapping, stage transition, buyer-specific handoff, visible customer-to-money transformation, balanced fit assessment, controlled vendor positioning, rejection recovery, solution discovery, tailored demonstrations, proof planning, optional CLI execution, the offline demo, and environment safety. See the [eval suite](evals/implementation), [architecture decision](docs/architecture.md).
-
-## Update or uninstall
-
-Claude Code:
-
-```bash
-claude plugin update lago@lago-plugins
-claude plugin uninstall lago@lago-plugins
-```
-
-Codex:
-
-```bash
-codex plugin marketplace upgrade lago-plugins
-codex plugin add lago@lago-plugins
-codex plugin remove lago@lago-plugins
-```
-
-Start a new task after an update. Removing the plugin does not change application code or a Lago environment.
 
 ## Troubleshooting
 
@@ -241,4 +128,4 @@ Authoritative sources: [Lago documentation](https://docs.getlago.com), [Lago API
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Releases follow [RELEASING.md](RELEASING.md). Licensed under the [MIT License](LICENSE).
+Report defects in [GitHub Issues](https://github.com/getlago/lago-plugin/issues), without credentials, customer data, or production payloads. See [CONTRIBUTING.md](CONTRIBUTING.md). Releases follow [RELEASING.md](RELEASING.md). Licensed under the [MIT License](LICENSE).

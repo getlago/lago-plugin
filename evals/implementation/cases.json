@@ -740,6 +740,7 @@
    "signals": [
     "model or modality filters",
     "one durable event contract",
+    "file-backed runtime storage preserves unrelated files and symlink targets",
     "filter coverage",
     "independent line calculations",
     "unknown prices not invented"

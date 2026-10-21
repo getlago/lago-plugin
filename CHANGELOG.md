@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Require generated file-backed usage stores to use safe temporary files and preserve unrelated files and symlink targets.
+
 - Require generated scaffold, report and manifest-rendering helpers to preserve existing files and reject symlink destinations.
 
 - Distinguish wallet top-up timestamps from balance freshness so healthy funded wallets are not blocked merely for having an old top-up.

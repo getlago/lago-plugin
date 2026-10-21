@@ -15,6 +15,8 @@ Validate required keys, types, finite numeric values, allowed dimensions, tenant
 
 Keep the customer identity and subscription identity distinct. If the application has no subscription entity yet, add a durable billing-enrollment or subscription-binding record that links the billable account to its Lago plan/subscription and lifecycle. Do not reuse the customer external ID as the subscription external ID unless the application already has an explicit, documented one-subscription-per-customer identity contract.
 
+Persist new subscription starts at whole-second precision before enqueueing activation. In an isolated self-hosted v1.55.0 check, a requested start ending in `.967Z` returned `subscription_at` without fractional seconds, while `started_at` retained them. Comparing that response with an unrounded local millisecond value incorrectly rejects successful activation. Use the verified active state and actual start to gate usage; keep usage-event timestamps at their original precision. Test activation recovery against a second-precision response, not just a mock that echoes the request. See the [subscription response](https://getlago.com/docs/api-reference/subscriptions/get-specific).
+
 Run `validate_event.py` with `--numeric-property <name>` for custom aggregation fields. The common fields `amount`, `quantity`, `tokens`, `units`, and `value` are numeric by default. They must be finite numbers and non-negative. Use `--allow-negative-property <name>` only when the reviewed event contract and target event-store correction mechanism explicitly permit negative corrections.
 
 ## Delivery cases

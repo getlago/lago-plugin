@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Refuse symlink destinations before scaffolding and use exclusive creation so a concurrent file cannot be overwritten.
+
 - Align submission handoff answers and the directory audit with the full network, local-output and demo-resource disclosures.
 
 - Specify event-specific webhook customer paths and independent schema fixtures so invoice handlers do not assume the wallet/subscription payload shape.

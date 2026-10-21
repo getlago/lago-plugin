@@ -1,3 +1,5 @@
+<img src="plugins/lago/assets/lago-logo.svg" alt="Lago logo" width="64" height="64">
+
 # Lago plugin for coding agents
 
 This repository holds the Lago plugin for Claude Code and Codex. It turns your coding agent into a Lago solution engineer: it shows how [Lago](https://www.getlago.com), the open-source billing engine, meters and bills a product offline in under a minute, recommends a billing model for yours, and implements and tests the integration in your codebase.

@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Require installed-skill integrations to reject remote HTTP endpoints and authenticated redirects, with transport-boundary tests.
+
 - Refuse symlink destinations before scaffolding and use exclusive creation so a concurrent file cannot be overwritten.
 
 - Align submission handoff answers and the directory audit with the full network, local-output and demo-resource disclosures.

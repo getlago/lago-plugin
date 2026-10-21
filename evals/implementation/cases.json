@@ -113,7 +113,8 @@
    "signals": [
     "stable transaction ID",
     "timestamp",
-    "duplicate test"
+    "duplicate test",
+    "remote HTTP endpoints rejected before credentials are sent; authenticated redirects refused"
    ]
   },
   {
@@ -1179,7 +1180,7 @@
   },
   {
    "id": "solution-to-implementation-role-transition",
-   "prompt": "The recommended hybrid model looks right. I have now opened the application repository—implement it.",
+   "prompt": "The recommended hybrid model looks right. I have now opened the application repository\u2014implement it.",
    "mode": "implement",
    "signals": [
     "explicit transition from solution design to implementation",

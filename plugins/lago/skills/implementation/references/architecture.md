@@ -32,4 +32,6 @@ Define authority explicitly:
 
 Prefer the official SDK only after checking it fits the language and required endpoints; otherwise use the documented REST API. Follow repository conventions. Use environment-based base URLs, typed config when available, request timeouts, bounded retries with jitter, input validation, structured redacted logs, unit/integration tests, and synthetic fixtures.
 
+Validate the configured API URL before the first authenticated request: require HTTPS, allowing HTTP only for literal loopback hosts (`localhost`, `127.0.0.1`, `[::1]`). Reject embedded username/password, query strings and fragments. Refuse redirects on authenticated requests so credentials cannot reach another destination. Test rejection of a remote HTTP URL before the mocked transport is called, and test redirect refusal.
+
 Do not retry authentication or semantic validation errors blindly. Reuse the exact idempotency inputs on safe retries. Do not generate provider calls from a browser/client with secret credentials.

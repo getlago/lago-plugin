@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Pin trigger evidence to the source at startup, reject dirty or changed sources, and disable remote plugin synchronization and host skill discovery during isolated Codex evaluations.
+
 - Recognize complete Codex skill reads when shell startup diagnostics share the tool output; continue rejecting partial, failed or unrelated reads.
 
 - Add explicit-status subscription lookup helpers and stop blind creation retries; explain activation recovery across all statuses and correct termination reconciliation.

@@ -111,6 +111,17 @@ class TriggerSuiteTests(unittest.TestCase):
         with patch.object(sys, "argv", ["codex_triggers.py", "--project-skill"]), patch.object(runner, "load_cases", return_value=[("positive", "synthetic", "prompt")]), patch.object(runner, "run_once", return_value={"outcome": "error", "reason": "timeout"}), patch.object(runner.subprocess, "check_output", return_value="test"), patch("builtins.print"):
             self.assertEqual(runner.main(), 1)
 
+    def test_codex_rejects_changed_or_dirty_source(self):
+        runner = load("codex_triggers", TRIGGERS / "codex_triggers.py")
+        for dirty, changed in ((False, False), (True, False), (False, True)):
+            before = {"source_commit": "before", "source_dirty": dirty}
+            after = {**before, "source_commit": "after"} if changed else before
+            with self.subTest(dirty=dirty, changed=changed), patch.object(sys, "argv", ["runner", "--project-skill"]), patch.object(runner, "load_cases", return_value=[("positive", "synthetic", "prompt")]), patch.object(runner, "run_once", return_value={"outcome": "loaded"}), patch.object(runner, "source_metadata", side_effect=[before, after]), patch.object(runner.subprocess, "check_output", return_value="test"), patch("builtins.print") as output:
+                self.assertEqual(runner.main(), int(dirty or changed))
+                result = json.loads(output.call_args.args[0])
+                self.assertEqual(result["source_commit"], "before")
+                self.assertEqual(result["source_changed"], changed)
+
     def test_codex_coverage_preserves_each_error(self):
         runner = load("codex_triggers", TRIGGERS / "codex_triggers.py")
         runs = [{"kind": "positive", "outcome": outcome} for outcome in ("loaded", "error", "error")]

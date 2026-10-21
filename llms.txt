@@ -19,6 +19,7 @@
 - [Make usage events idempotent](https://getlago.com/docs/guide/events/ingesting-usage): Stable `transaction_id` from a durable record, unchanged timestamp on retry, and why a 422 duplicate is not a success.
 - [Verify Lago webhooks](https://getlago.com/docs/api-reference/webhooks/format---signature): Raw-body JWT (RS256) or HMAC verification, then deduplicate on `X-Lago-Unique-Key`.
 - [Check entitlements before an action](https://getlago.com/docs/guide/entitlements): Read a subscription's features and limits. The application enforces access.
+- [Turn a contract into reviewed billing configuration](https://github.com/getlago/lago-plugin/blob/main/skills/implementation/references/contract-to-billing.md): Extract commercial terms with source evidence, map them to Lago primitives, surface ambiguity, and require human approval before any live change.
 - [Migrate from Stripe Billing](https://github.com/getlago/lago-plugin/blob/main/examples/migration-stripe.md): Mapping ledger, restartable migration, and cutover controls that prevent double billing.
 - [Migrate from Chargebee](https://github.com/getlago/lago-plugin/blob/main/examples/migration-chargebee.md): Same controls for Chargebee subscriptions, usage, coupons, and credits.
 - [Self-host Lago](https://getlago.com/docs/guide/lago-self-hosted/docker): Docker deployment for a dedicated test instance or production.

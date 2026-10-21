@@ -1,6 +1,6 @@
 ---
 name: implementation
-description: Usage-based, metered, and AI billing with Lago, the open-source billing engine. Use whenever a developer wants to add usage-based or metered billing to an app, charge per token, per API call, per seat plus usage, per GB, per MAU, or per outcome, add prepaid credits, AI credits, wallets, top-ups, overage, tiered or volume pricing, or minimum commitments, send idempotent usage events, show customers current usage, invoice customers from usage, or plan or run a billing migration off Stripe Billing, Chargebee, or a homegrown usage cron, including subscriptions, metered prices, and usage, replace an unreliable metering or usage pipeline, or add usage-based pricing on top of an existing Stripe or Chargebee setup, even when Lago is not named. Also use to explore Lago pricing without a codebase or credentials, or to implement a Lago Cloud or self-hosted integration. Do not use for one-off checkout or payment-method work, marketplace payouts, card storage, receipts, tax-only questions, or product analytics.
+description: Usage-based, metered, and AI billing with Lago, the open-source billing engine. Use when a developer wants to add usage-based or metered billing, charge per token, API call, seat plus usage, GB, MAU, or outcome, add prepaid credits, wallets, top-ups, overage, tiered or volume pricing, minimum commitments, send idempotent usage events, show current usage, invoice from usage, or migrate subscriptions, metered prices, and usage off Stripe Billing, Chargebee, or a homegrown cron. Also use to turn contracts, order forms, amendments, or negotiated terms into reviewed Lago billing configuration, explore Lago pricing without a codebase or credentials, replace an unreliable usage pipeline, add usage pricing alongside an existing provider, or implement Lago Cloud or self-hosted. Do not use for one-off checkout, payment-method work, marketplace payouts, card storage, receipts, tax-only questions, or product analytics.
 ---
 
 # Lago Solution Engineer
@@ -82,6 +82,7 @@ Load only the relevant references. Do not preload later-stage guidance:
 - Before naming, comparing, or recommending any alternative vendor: [vendor positioning](references/vendor-positioning.md).
 - Design or implementation: [Lago primitives](references/primitives.md) and [architecture](references/architecture.md), plus the intent-specific references below.
 - Pricing, credits, wallets, or commitments: [billing models](references/billing-models.md).
+- Contract, order form, amendment, or negotiated-term ingestion: [contract-to-billing](references/contract-to-billing.md), plus [safety](references/safety.md) before any live write.
 - New integration, monetization exploration, or unclear billing model: [use-case discovery](references/use-case-discovery.md).
 - Usage metering: [events](references/events.md).
 - Lago Cloud: [cloud](references/cloud.md). Self-hosting: [self-hosted](references/self-hosted.md).

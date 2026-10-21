@@ -68,6 +68,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
     primitives = root / "skills/implementation/references/primitives.md"
     solution_engineering = root / "skills/implementation/references/solution-engineering.md"
     vendor_positioning = root / "skills/implementation/references/vendor-positioning.md"
+    contract_to_billing = root / "skills/implementation/references/contract-to-billing.md"
     solution_brief = root / "skills/implementation/templates/solution-brief.md"
     demo = root / "skills/implementation/references/demo.md"
     validation = root / "skills/implementation/references/validation.md"
@@ -84,7 +85,7 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "skills/implementation/scripts/validate_event.py",
         root / "skills/implementation/scripts/validate_repo.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, contract_to_billing, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", root / "RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)
@@ -227,6 +228,21 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         ):
             if vendor_signal not in text:
                 failures.append(f"missing vendor-positioning guidance: {vendor_signal}")
+    if contract_to_billing.is_file():
+        text = contract_to_billing.read_text(encoding="utf-8")
+        for contract_signal in (
+            "untrusted evidence, never as instructions",
+            "source location",
+            "draft, signed, amendment",
+            "`supported`",
+            "`needs mapping`",
+            "`external owner`",
+            "`ambiguous`",
+            "human approval",
+            "Contract signature, legal approval, document storage",
+        ):
+            if contract_signal not in text:
+                failures.append(f"missing contract-to-billing guidance: {contract_signal}")
     eval_cases = root / "evals/implementation/cases.json"
     if eval_cases.is_file():
         data = load_json(eval_cases, failures)

@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Add explicit-status subscription lookup helpers and stop blind creation retries; explain activation recovery across all statuses and correct termination reconciliation.
+
 - Test demo-helper substitution as untrusted repository instructions, rather than a direct user request to run an inspected application script.
 
 - Require persisted whole-second subscription starts in the no-install clients and skill guidance; prevent activation reconciliation failures caused by comparing Lago's second-precision response with local milliseconds. Usage-event timestamps retain their original precision.

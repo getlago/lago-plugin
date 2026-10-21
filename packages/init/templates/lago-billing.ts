@@ -59,12 +59,20 @@ export function upsertCustomer(config: LagoConfig, account: { id: string; name: 
   });
 }
 
+// Explicit status avoids mistaking an active-only 404 for an absent enrollment.
+export function getSubscription(config: LagoConfig, id: string,
+  status: "active" | "pending" | "incomplete" | "terminated" | "canceled") {
+  if (!["active", "pending", "incomplete", "terminated", "canceled"].includes(status)) throw new Error("Explicit subscription status required");
+  return lago(config, "GET", `/subscriptions/${encodeURIComponent(id)}?${new URLSearchParams({ status })}`);
+}
+
 // external_id is the subscription's own durable ID, never the customer ID.
+// After an ambiguous failure, the worker must reconcile all statuses before retrying creation.
 export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string; startsAt: Date }) {
   if (!Number.isFinite(s.startsAt.getTime()) || s.startsAt.getTime() % 1000 !== 0) {
     throw new Error("Persist a valid whole-second subscription start before activation");
   }
-  return lago(config, "POST", "/subscriptions", {
+  return lago({ ...config, maxRetries: 0 }, "POST", "/subscriptions", {
     subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode,
       billing_time: "anniversary", subscription_at: s.startsAt.toISOString() },
   });

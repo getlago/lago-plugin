@@ -29,9 +29,10 @@ class Lago:
         self.timeout, self.max_retries = timeout, max_retries
         self.opener = urllib.request.build_opener(NoRedirect())
 
-    def _request(self, method, path, body=None):
+    def _request(self, method, path, body=None, max_retries=None):
+        retries = self.max_retries if max_retries is None else max_retries
         data = None if body is None else json.dumps(body).encode()
-        for attempt in range(1, self.max_retries + 2):
+        for attempt in range(1, retries + 2):
             request = urllib.request.Request(
                 f"{self.api_url}/api/v1{path}", data=data, method=method,
                 headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
@@ -47,10 +48,10 @@ class Lago:
                     payload = json.loads(text) if text else None
                 except (ValueError, UnicodeDecodeError):
                     payload = None  # HTML proxy errors must still use status-based retry rules.
-                if (error.code != 429 and error.code < 500) or attempt > self.max_retries:
+                if (error.code != 429 and error.code < 500) or attempt > retries:
                     raise LagoError(error.code, payload) from None
             except (urllib.error.URLError, TimeoutError):
-                if attempt > self.max_retries:
+                if attempt > retries:
                     raise
             time.sleep(random.uniform(0, min(8, 0.25 * 2 ** attempt)))
 
@@ -58,6 +59,13 @@ class Lago:
         # Upsert: Lago updates the customer when external_id already exists.
         customer = {"external_id": account_id, "name": name, "email": email, "currency": currency}
         return self._request("POST", "/customers", {"customer": {k: v for k, v in customer.items() if v is not None}})
+
+    def get_subscription(self, subscription_id, status):
+        # An active-only 404 does not establish that an enrollment is absent.
+        if status not in ("active", "pending", "incomplete", "terminated", "canceled"):
+            raise ValueError("Explicit subscription status required")
+        path = f"/subscriptions/{urllib.parse.quote(subscription_id, safe='')}"
+        return self._request("GET", f"{path}?{urllib.parse.urlencode({'status': status})}")
 
     def create_subscription(self, subscription_id, customer_id, plan_code, starts_at: datetime):
         # external_id is the subscription's own durable ID, never the customer ID.
@@ -67,7 +75,7 @@ class Lago:
             raise ValueError("Persist a whole-second subscription start before activation")
         return self._request("POST", "/subscriptions", {"subscription": {
             "external_id": subscription_id, "external_customer_id": customer_id, "plan_code": plan_code,
-            "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}})
+            "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}}, max_retries=0)
 
     def send_usage(self, record_id, subscription_id, metric_code, occurred_at: datetime, properties):
         """record_id and occurred_at come from the durable usage record and never change on retry."""

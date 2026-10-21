@@ -17,6 +17,7 @@ When asked to add billing, carry the work through the application wiring and off
 Before handing the task back:
 
 - Connect customer/subscription creation to the app's signup or billing-activation path; store separate customer and subscription IDs and the explicit activation time. Persist subscription starts at whole-second precision (`new Date(Math.floor(Date.now() / 1000) * 1000)` or `datetime.now(timezone.utc).replace(microsecond=0)`) before enqueueing activation. Lago serializes `subscription_at` to seconds; comparing it with an unrounded local millisecond value incorrectly rejects a successful activation. Keep usage-event timestamps at their original precision.
+- Recover activation by looking up the stored subscription across statuses before creating it. `GET /subscriptions/{external_id}` defaults to **active only**: a 404 does not prove that a pending, incomplete, canceled or terminated subscription is absent. Use the explicit-status helper below; never reuse an external subscription ID for a new enrollment. If an ID was reused historically, page through the subscription list and match its Lago ID instead of selecting an arbitrary result. A terminated enrollment must never be recreated by an old activation job. For termination reconciliation request `status=terminated`, or apply the verified webhook to the matching stored enrollment; do not leave access active because an active-only lookup returned 404. See [subscription lookup semantics](https://getlago.com/docs/api-reference/subscriptions/get-specific).
 - Persist usage and its delivery state atomically before sending it. Run a retry worker with leases, stable transaction IDs/timestamps, bounded retries and duplicate reconciliation. A best-effort call after a request is not the worker.
 - Wire the raw-body webhook route, a durable inbox keyed by `X-Lago-Unique-Key`, and an idempotent worker. Do not acknowledge before the inbox transaction commits or mark unimplemented handlers successful.
 - Use the app's persistent database. If the app only has an in-memory test double, replace it for the billing slice before calling the integration complete. Prefer the existing production database when available; keep file paths server-controlled and queries parameterized, and document deployment and concurrency limits.
@@ -140,12 +141,20 @@ export function upsertCustomer(config: LagoConfig, account: { id: string; name: 
   });
 }
 
+// Explicit status avoids mistaking an active-only 404 for an absent enrollment.
+export function getSubscription(config: LagoConfig, id: string,
+  status: "active" | "pending" | "incomplete" | "terminated" | "canceled") {
+  if (!["active", "pending", "incomplete", "terminated", "canceled"].includes(status)) throw new Error("Explicit subscription status required");
+  return lago(config, "GET", `/subscriptions/${encodeURIComponent(id)}?${new URLSearchParams({ status })}`);
+}
+
 // external_id is the subscription's own durable ID, never the customer ID.
+// After an ambiguous failure, the worker must reconcile all statuses before retrying creation.
 export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string; startsAt: Date }) {
   if (!Number.isFinite(s.startsAt.getTime()) || s.startsAt.getTime() % 1000 !== 0) {
     throw new Error("Persist a valid whole-second subscription start before activation");
   }
-  return lago(config, "POST", "/subscriptions", {
+  return lago({ ...config, maxRetries: 0 }, "POST", "/subscriptions", {
     subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode,
       billing_time: "anniversary", subscription_at: s.startsAt.toISOString() },
   });
@@ -324,9 +333,10 @@ class Lago:
         self.timeout, self.max_retries = timeout, max_retries
         self.opener = urllib.request.build_opener(NoRedirect())
 
-    def _request(self, method, path, body=None):
+    def _request(self, method, path, body=None, max_retries=None):
+        retries = self.max_retries if max_retries is None else max_retries
         data = None if body is None else json.dumps(body).encode()
-        for attempt in range(1, self.max_retries + 2):
+        for attempt in range(1, retries + 2):
             request = urllib.request.Request(
                 f"{self.api_url}/api/v1{path}", data=data, method=method,
                 headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
@@ -342,10 +352,10 @@ class Lago:
                     payload = json.loads(text) if text else None
                 except (ValueError, UnicodeDecodeError):
                     payload = None  # HTML proxy errors must still use status-based retry rules.
-                if (error.code != 429 and error.code < 500) or attempt > self.max_retries:
+                if (error.code != 429 and error.code < 500) or attempt > retries:
                     raise LagoError(error.code, payload) from None
             except (urllib.error.URLError, TimeoutError):
-                if attempt > self.max_retries:
+                if attempt > retries:
                     raise
             time.sleep(random.uniform(0, min(8, 0.25 * 2 ** attempt)))
 
@@ -353,6 +363,13 @@ class Lago:
         # Upsert: Lago updates the customer when external_id already exists.
         customer = {"external_id": account_id, "name": name, "email": email, "currency": currency}
         return self._request("POST", "/customers", {"customer": {k: v for k, v in customer.items() if v is not None}})
+
+    def get_subscription(self, subscription_id, status):
+        # An active-only 404 does not establish that an enrollment is absent.
+        if status not in ("active", "pending", "incomplete", "terminated", "canceled"):
+            raise ValueError("Explicit subscription status required")
+        path = f"/subscriptions/{urllib.parse.quote(subscription_id, safe='')}"
+        return self._request("GET", f"{path}?{urllib.parse.urlencode({'status': status})}")
 
     def create_subscription(self, subscription_id, customer_id, plan_code, starts_at: datetime):
         # external_id is the subscription's own durable ID, never the customer ID.
@@ -362,7 +379,7 @@ class Lago:
             raise ValueError("Persist a whole-second subscription start before activation")
         return self._request("POST", "/subscriptions", {"subscription": {
             "external_id": subscription_id, "external_customer_id": customer_id, "plan_code": plan_code,
-            "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}})
+            "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}}, max_retries=0)
 
     def send_usage(self, record_id, subscription_id, metric_code, occurred_at: datetime, properties):
         """record_id and occurred_at come from the durable usage record and never change on retry."""

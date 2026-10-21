@@ -28,6 +28,8 @@ The exploratory 9b7ce80 safety run passed 23/27 attempts. Failures exposed unsaf
 
 The five no-plugin runs against ff1446f did not produce complete integrations. Exact retrieval worked in some runs, but agents still left in-memory queues, disconnected activation/workers or unreconciled duplicates. The completion contract was strengthened in cf4a00f. Its five-run verification was also blocked by the session quota. Do not claim the no-install flow is verified end to end.
 
+Five additional no-plugin Codex executions at 8ea59c5 completed. Inspection found activation failures in runs 1 and 5: local millisecond start times were compared with second-precision `subscription_at` responses. An isolated live API probe reproduced the precision loss; the guide and both clients now require persisted whole-second subscription starts, with regression assertions. These executions are not five successful integrations, and the corrected candidate needs new runs.
+
 The required complete, manually reviewed 100-case scorecards on both hosts are absent. An exploratory generated-fixture Claude run attempted all 100 cases, but had incomplete executions and cannot replace the prescribed scorecard. A stale-candidate Codex run was stopped after 28 completed executions when the guidance changed; these are diagnostic artifacts, not release passes. Raw traces and generated applications remain private outside the repository.
 
 Before publication: rerun and manually inspect the safety and fresh-agent suites, complete both 100-case scorecards on the release candidate, and obtain the human/portal reviews required by RELEASING.md. Never waive a failed gate merely because main also fails it. No tag, release or directory submission has been created.

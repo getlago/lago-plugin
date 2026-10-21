@@ -202,6 +202,11 @@ class StartHereTest(unittest.TestCase):
         self.assertEqual(self.fake.requests[-1][2]["subscription"]["subscription_at"], "2026-10-15T12:00:00+00:00")
         with self.assertRaises(ValueError):
             lago.create_subscription("sub_1", "cus_1", "pro", datetime(2026, 10, 15))
+        requests_before = len(self.fake.requests)
+        with self.assertRaisesRegex(ValueError, "whole-second"):
+            lago.create_subscription("sub_1", "cus_1", "pro",
+                                     datetime(2026, 10, 15, microsecond=967000, tzinfo=timezone.utc))
+        self.assertEqual(len(self.fake.requests), requests_before, "invalid starts must not create subscriptions")
         self.assertEqual(self.fake.requests[-1][2]["subscription"]["external_customer_id"], "cus_1")
 
         occurred = datetime(2026, 10, 1, 12, 0, 0, 250000, tzinfo=timezone.utc)
@@ -317,8 +322,12 @@ DRIVER = r"""
 import { configFromEnv, sendUsage, currentUsage, entitlement, prepaidBalanceCents, upsertCustomer, createSubscription, LagoError } from "./lago-billing.mts";
 import { makeWebhookHandler } from "./webhook-route.mts";
 import { readFileSync, writeFileSync } from "node:fs";
+import assert from "node:assert/strict";
 
 const config = { ...configFromEnv(), maxRetries: 2 };
+for (const start of ["2026-10-15T12:00:00.967Z", "invalid"]) {
+  assert.throws(() => createSubscription(config, { id: "must-not-create", customerId: "cus_1", planCode: "pro", startsAt: new Date(start) }), /whole-second/);
+}
 await upsertCustomer(config, { id: "cus_1", name: "Acme", currency: "USD" });
 await createSubscription(config, { id: "sub_1", customerId: "cus_1", planCode: "pro", startsAt: new Date("2026-10-15T12:00:00Z") });
 const record = { id: "usage_42", subscriptionId: "sub_1", metricCode: "llm_tokens", occurredAt: new Date(Date.UTC(2026, 9, 1, 12, 0, 0, 250)), properties: { tokens: 120000 } };

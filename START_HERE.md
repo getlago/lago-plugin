@@ -16,7 +16,7 @@ When asked to add billing, carry the work through the application wiring and off
 
 Before handing the task back:
 
-- Connect customer/subscription creation to the app's signup or billing-activation path; store separate customer and subscription IDs and the explicit activation time.
+- Connect customer/subscription creation to the app's signup or billing-activation path; store separate customer and subscription IDs and the explicit activation time. Persist subscription starts at whole-second precision (`new Date(Math.floor(Date.now() / 1000) * 1000)` or `datetime.now(timezone.utc).replace(microsecond=0)`) before enqueueing activation. Lago serializes `subscription_at` to seconds; comparing it with an unrounded local millisecond value incorrectly rejects a successful activation. Keep usage-event timestamps at their original precision.
 - Persist usage and its delivery state atomically before sending it. Run a retry worker with leases, stable transaction IDs/timestamps, bounded retries and duplicate reconciliation. A best-effort call after a request is not the worker.
 - Wire the raw-body webhook route, a durable inbox keyed by `X-Lago-Unique-Key`, and an idempotent worker. Do not acknowledge before the inbox transaction commits or mark unimplemented handlers successful.
 - Use the app's persistent database. If the app only has an in-memory test double, replace it for the billing slice before calling the integration complete. Prefer the existing production database when available; keep file paths server-controlled and queries parameterized, and document deployment and concurrency limits.
@@ -142,6 +142,9 @@ export function upsertCustomer(config: LagoConfig, account: { id: string; name: 
 
 // external_id is the subscription's own durable ID, never the customer ID.
 export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string; startsAt: Date }) {
+  if (!Number.isFinite(s.startsAt.getTime()) || s.startsAt.getTime() % 1000 !== 0) {
+    throw new Error("Persist a valid whole-second subscription start before activation");
+  }
   return lago(config, "POST", "/subscriptions", {
     subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode,
       billing_time: "anniversary", subscription_at: s.startsAt.toISOString() },
@@ -355,6 +358,8 @@ class Lago:
         # external_id is the subscription's own durable ID, never the customer ID.
         if starts_at.tzinfo is None or starts_at.utcoffset() is None:
             raise ValueError("Subscription start must be timezone-aware")
+        if starts_at.microsecond:
+            raise ValueError("Persist a whole-second subscription start before activation")
         return self._request("POST", "/subscriptions", {"subscription": {
             "external_id": subscription_id, "external_customer_id": customer_id, "plan_code": plan_code,
             "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}})

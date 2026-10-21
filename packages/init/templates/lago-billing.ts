@@ -61,6 +61,9 @@ export function upsertCustomer(config: LagoConfig, account: { id: string; name: 
 
 // external_id is the subscription's own durable ID, never the customer ID.
 export function createSubscription(config: LagoConfig, s: { id: string; customerId: string; planCode: string; startsAt: Date }) {
+  if (!Number.isFinite(s.startsAt.getTime()) || s.startsAt.getTime() % 1000 !== 0) {
+    throw new Error("Persist a valid whole-second subscription start before activation");
+  }
   return lago(config, "POST", "/subscriptions", {
     subscription: { external_id: s.id, external_customer_id: s.customerId, plan_code: s.planCode,
       billing_time: "anniversary", subscription_at: s.startsAt.toISOString() },

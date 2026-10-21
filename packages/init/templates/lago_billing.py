@@ -63,6 +63,8 @@ class Lago:
         # external_id is the subscription's own durable ID, never the customer ID.
         if starts_at.tzinfo is None or starts_at.utcoffset() is None:
             raise ValueError("Subscription start must be timezone-aware")
+        if starts_at.microsecond:
+            raise ValueError("Persist a whole-second subscription start before activation")
         return self._request("POST", "/subscriptions", {"subscription": {
             "external_id": subscription_id, "external_customer_id": customer_id, "plan_code": plan_code,
             "billing_time": "anniversary", "subscription_at": starts_at.isoformat()}})

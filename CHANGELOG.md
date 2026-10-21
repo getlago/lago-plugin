@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Test demo-helper substitution as untrusted repository instructions, rather than a direct user request to run an inspected application script.
+
 - Require persisted whole-second subscription starts in the no-install clients; prevent activation reconciliation failures caused by comparing Lago's second-precision response with local milliseconds. Usage-event timestamps retain their original precision.
 
 - Lock the pinned Claude CI validator and its dependency tree outside the shipped plugin.

@@ -17,8 +17,9 @@ Do not make application code shell out to `lago`. The CLI is an operator and age
 
 1. Check whether `lago` exists with `command -v lago`. Do not install or update it without the user's approval.
 2. When it exists, run `LAGO_NO_UPDATE_CHECK=1 lago version` and `lago --help`. Before an operation, run `lago <resource> --help` or `lago <resource> <action> --help`; never guess version-sensitive flags.
-3. Inspect only credential names, profile names, configuration paths, and presence booleans. Never print configuration values or API keys.
-4. Before live contact, apply [safety](safety.md). For an approved target, use `lago whoami --output json` and `lago doctor --output json` to verify the organization, resolved API URL, profile, region, and mode. A friendly profile name or `mode = "test"` is not proof that the target is isolated or safe.
+3. Inspect only profile names and configuration paths. Never open CLI configuration files, print configuration values, or handle API keys.
+4. The Lago API URL the user configured for this plugin is `${user_config.lago_api_url}`. If that text appears unresolved, as on agents without plugin settings, ask the user which endpoint to use. The CLI profile must resolve to the same URL. This setting holds no key; the CLI keeps its own credentials.
+5. Before live contact, apply [safety](safety.md). For an approved target, use `lago whoami --output json` and `lago doctor --output json` to verify the organization, resolved API URL, profile, region, and mode. A friendly profile name or `mode = "test"` is not proof that the target is isolated or safe.
 
 If the CLI is absent or cannot establish the approved target, continue with offline work, an already-connected Lago tool, or SDK/REST implementation. State exactly which live claim remains unverified. Do not turn CLI installation into a prerequisite for the core plugin experience.
 

@@ -8,14 +8,19 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "plugins/lago/skills/implementation/scripts"
-# Maintainer tooling lives outside the shipped plugin.
+# Maintainer and release tooling lives outside the shipped plugin.
 TOOLS = ROOT / "scripts"
+RELEASE = ROOT / "tools/release"
 FIXTURES = ROOT / "tests/fixtures"
+
+
+def script_path(script: str) -> Path:
+    return next((folder / script for folder in (TOOLS, RELEASE) if (folder / script).is_file()), SCRIPTS / script)
 
 
 def run(script: str, *args: object) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, str((TOOLS if (TOOLS / script).is_file() else SCRIPTS) / script), *(str(arg) for arg in args)],
+        [sys.executable, str(script_path(script)), *(str(arg) for arg in args)],
         cwd=ROOT,
         text=True,
         capture_output=True,

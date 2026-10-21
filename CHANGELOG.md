@@ -4,6 +4,14 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+### 0.3.2: directory validation holds
+
+- Move `release_integrity.py` and `RELEASE-MANIFEST.json` from the plugin folder to `tools/release/`. CI still verifies every plugin file hash. The skill no longer runs a bundle self-check before the demo; it runs only the plugin's own `run_demo.py` and never a same-named application script.
+- Stop reading or testing Lago API keys from the environment or from files. Credential presence is reported by name only, from non-secret sources. Live work uses a Lago CLI or MCP connection the user configured.
+- Add one optional, non-sensitive setting, `lago_api_url`, defaulting to Lago Cloud US. The plugin declares no API key field.
+- Move Codex install, invocation, and update steps from the plugin README to the repository README. The plugin README covers Claude only and uses Markdown image syntax for the logo.
+- Reword safety prose so it names no shell command for building or evaluating code at run time.
+
 - Add the Lago SVG logo to the READMEs and Codex plugin listing and composer.
 
 - Require generated file-backed usage stores to use safe temporary files and preserve unrelated files and symlink targets.

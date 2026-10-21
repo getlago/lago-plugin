@@ -1,16 +1,43 @@
-<img src="plugins/lago/assets/lago-logo.svg" alt="Lago logo" width="64" height="64">
+![Lago logo](plugins/lago/assets/lago-logo.svg)
 
 # Lago plugin for coding agents
 
 This repository holds the Lago plugin for Claude Code and Codex. It turns your coding agent into a Lago solution engineer: it shows how [Lago](https://www.getlago.com), the open-source billing engine, meters and bills a product offline in under a minute, recommends a billing model for yours, and implements and tests the integration in your codebase.
 
-The shipped plugin lives in [`plugins/lago/`](plugins/lago). Its [README](plugins/lago/README.md) is the user guide: install steps for Claude Code, Codex, and the Anthropic plugin directory, the offline demo, and exactly what the plugin runs, sends, and stores. Everything else in this repository is tests, evals, documentation, and release tooling.
+The shipped plugin lives in [`plugins/lago/`](plugins/lago). Its [README](plugins/lago/README.md) is the Claude user guide: install steps for Claude Code and the Anthropic plugin directory, the offline demo, and exactly what the plugin runs, sends, and stores. Codex and other agents are covered below. Everything else in this repository is tests, evals, documentation, and release tooling.
 
 No plugin support in your agent, or nothing installed yet? Follow [START_HERE.md](START_HERE.md): one page with the offline demo and complete Node.js/TypeScript and Python integration code.
 
 ## Install
 
-Claude Code and Codex: see [plugins/lago/README.md](plugins/lago/README.md#install).
+### Claude Code
+
+```text
+/plugin marketplace add getlago/lago-plugin
+/plugin install lago@lago-plugins
+```
+
+Start a new task, then ask `/lago:implementation show me what Lago can do`. The [plugin README](plugins/lago/README.md#install) covers the Anthropic plugin directory, the offline demo, and the run/send/store disclosure.
+
+### Codex
+
+Codex reads `plugins/lago/.codex-plugin/plugin.json` through the repository marketplace in `.agents/plugins/marketplace.json`:
+
+```bash
+codex plugin marketplace add getlago/lago-plugin
+codex plugin add lago@lago-plugins
+```
+
+Start a new Codex task, then ask `$lago:implementation show me what Lago can do`. Codex may also pick the skill on its own when a request involves designing, implementing, or operating usage-based billing.
+
+## Update or uninstall in Codex
+
+Claude Code steps are in the [plugin README](plugins/lago/README.md#update-or-uninstall).
+
+```bash
+codex plugin marketplace upgrade lago-plugins
+codex plugin remove lago@lago-plugins
+```
 
 ## Other agents
 
@@ -31,14 +58,14 @@ Gemini CLI installs extensions only from a repository root, and the plugin now l
 gemini skills install https://github.com/getlago/lago-plugin.git --path plugins/lago/skills/implementation
 ```
 
-For the full extension with the bundled demo and integrity check, install from a clone:
+For the full extension with the bundled demo, install from a clone:
 
 ```bash
 git clone https://github.com/getlago/lago-plugin.git
 gemini extensions install ./lago-plugin/plugins/lago
 ```
 
-The integrity check permits only Gemini's root `.gemini-extension-install.json` bookkeeping file as an extra file; bundled code remains hash-checked. Goose documents support for the same `gemini-extension.json` format, but has not been tested here.
+The release verifier in `tools/release/` permits only Gemini's root `.gemini-extension-install.json` bookkeeping file as an extra file when it checks an installed copy; bundled code remains hash-checked. Goose documents support for the same `gemini-extension.json` format, but has not been tested here.
 
 ### Cursor
 
@@ -52,7 +79,7 @@ Any agent that reads `SKILL.md` from `.agents/skills/` can install the skill alo
 npx skills add getlago/lago-plugin --skill implementation
 ```
 
-This copies only `plugins/lago/skills/implementation/`. Without the full plugin bundle, the skill cannot verify `RELEASE-MANIFEST.json`, so it shows the offline walkthrough from its reference instead of running the bundled demo script. Links to the plugin's `examples/` are also unavailable in a skill-only install; read those examples in this repository. Prefer a plugin or extension install when your agent supports one.
+This copies only `plugins/lago/skills/implementation/`. Links to the plugin's `examples/` are also unavailable in a skill-only install; read those examples in this repository. Prefer a plugin or extension install when your agent supports one.
 
 | Agent | Install path | Verified |
 | --- | --- | --- |
@@ -111,7 +138,7 @@ Python 3.9+ is required only for the deterministic helpers. The skill itself is 
 ```bash
 python3 scripts/validate_repo.py .
 python3 -m unittest discover -s tests -v
-python3 plugins/lago/skills/implementation/scripts/release_integrity.py check plugins/lago --manifest plugins/lago/RELEASE-MANIFEST.json
+python3 tools/release/release_integrity.py check plugins/lago --manifest tools/release/RELEASE-MANIFEST.json
 claude plugin validate plugins/lago
 python3 scripts/check_directory_limits.py plugins/lago
 ```
@@ -124,7 +151,7 @@ Live money validation preserves the Lago payload, generates `actual.json` with `
 - **No credentials:** continue with repository implementation, fixtures, calculations, and offline tests. Live runtime behavior remains unverified.
 - **Wrong Lago Cloud endpoint:** confirm the region. Current documented bases are `https://api.getlago.com` for US and `https://api.eu.getlago.com` for EU.
 - **Validation failure:** run the repository validator, then platform validators, and fix the first structural error.
-- **Bundle-integrity failure:** do not run bundled helpers. Reinstall from the verified Lago release or inspect the unexpected file change before regenerating the manifest.
+- **Bundle-integrity failure (maintainers):** `tools/release/release_integrity.py check` failed in CI or before a release. Inspect the unexpected file change before regenerating `tools/release/RELEASE-MANIFEST.json`.
 
 Authoritative sources: [Lago documentation](https://docs.getlago.com), [Lago API reference](https://docs.getlago.com/api-reference/intro), [Lago OpenAPI](https://swagger.getlago.com/openapi.yaml), [Claude Code plugins](https://code.claude.com/docs/en/plugins), and official OpenAI Codex documentation plus the installed `codex plugin --help` for current CLI behavior.
 

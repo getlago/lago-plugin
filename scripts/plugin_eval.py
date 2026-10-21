@@ -3,9 +3,7 @@
 
 `claude plugin eval` reads cases only from inside the plugin folder, and the eval
 suites stay outside `plugins/lago/` so they never ship. This stages a temporary
-copy of the plugin with one suite at the same relative path, regenerates the staged
-copy's RELEASE-MANIFEST.json so the skill's integrity check sees a consistent
-bundle (as it did when the suites lived inside the plugin), runs the eval there,
+copy of the plugin with one suite at the same relative path, runs the eval there,
 and removes the copy. Standard library only.
 
 Usage: plugin_eval.py SUITE [claude plugin eval options...]
@@ -18,7 +16,6 @@ Without --output-dir, results go to SUITE/results/<timestamp>/, which is gitigno
 from __future__ import annotations
 
 import contextlib
-import importlib.util
 import shutil
 import subprocess
 import sys
@@ -29,14 +26,6 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 PLUGIN = REPO / "plugins/lago"
 IGNORED = shutil.ignore_patterns("__pycache__", "results", ".DS_Store")
-
-
-def integrity_module():
-    spec = importlib.util.spec_from_file_location(
-        "release_integrity", PLUGIN / "skills/implementation/scripts/release_integrity.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 @contextlib.contextmanager
@@ -50,7 +39,6 @@ def staged(suite: str):
         plugin = Path(directory) / "lago"
         shutil.copytree(PLUGIN, plugin, ignore=IGNORED)
         shutil.copytree(source, plugin / relative, ignore=IGNORED)
-        integrity_module().create(plugin, plugin / "RELEASE-MANIFEST.json")
         yield plugin
 
 

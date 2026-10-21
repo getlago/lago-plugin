@@ -1,7 +1,7 @@
 {
   "name": "lago",
   "displayName": "Lago",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Design, implement, and test usage-based billing with Lago, the open-source billing engine: usage events, plans, credits, wallets, invoices, and migrations, starting with an offline demo that needs no credentials.",
   "author": {
     "name": "Lago",
@@ -23,5 +23,13 @@
   "skills": "./skills/",
   "documentationUrl": "https://getlago.com/docs",
   "privacyPolicyUrl": "https://getlago.com/legal/privacy-policy",
-  "termsOfServiceUrl": "https://getlago.com/legal"
+  "termsOfServiceUrl": "https://getlago.com/legal",
+  "userConfig": {
+    "lago_api_url": {
+      "type": "string",
+      "title": "Lago API URL",
+      "description": "Optional. The Lago API endpoint for live work you start: Lago Cloud US by default, https://api.eu.getlago.com for EU, or your self-hosted URL. Not a secret. The plugin never asks for an API key; your Lago CLI or MCP connection keeps its own.",
+      "default": "https://api.getlago.com"
+    }
+  }
 }

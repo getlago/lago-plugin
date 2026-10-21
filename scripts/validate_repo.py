@@ -80,7 +80,6 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         plugin / "skills/implementation/scripts/extract_actual.py",
         plugin / "skills/implementation/scripts/money_test.py",
         plugin / "skills/implementation/scripts/reconcile.py",
-        plugin / "skills/implementation/scripts/release_integrity.py",
         plugin / "skills/implementation/scripts/run_demo.py",
         plugin / "skills/implementation/scripts/validate_demo_target.py",
         plugin / "skills/implementation/scripts/validate_event.py",
@@ -88,10 +87,15 @@ def validate(root: Path, denylist: Path | None) -> list[str]:
         root / "scripts/check_directory_limits.py",
         root / "scripts/list_external_links.py",
         root / "scripts/validate_repo.py",
+        root / "tools/release/release_integrity.py",
     )
-    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", plugin / "README.md", plugin / "LICENSE", plugin / "RELEASE-MANIFEST.json"):
+    for required in (codex, claude, codex_marketplace, claude_marketplace, skill, primitives, solution_engineering, vendor_positioning, solution_brief, demo, validation, cli, openai_yaml, *required_scripts, root / "README.md", root / "LICENSE", plugin / "README.md", plugin / "LICENSE", root / "tools/release/RELEASE-MANIFEST.json"):
         if not required.is_file():
             failures.append(f"missing required file: {required.relative_to(root)}")
+    # The shipped folder holds only what the skill runs; release tooling stays outside it.
+    for name in ("RELEASE-MANIFEST.json", "release_integrity.py"):
+        for stray in sorted(plugin.rglob(name)) if plugin.is_dir() else []:
+            failures.append(f"release tooling inside the shipped plugin: {stray.relative_to(root)}")
     if (root / "LICENSE").is_file() and (plugin / "LICENSE").is_file() and (root / "LICENSE").read_bytes() != (plugin / "LICENSE").read_bytes():
         failures.append(f"{PLUGIN}/LICENSE must match the root LICENSE")
     codex_data, claude_data = load_json(codex, failures), load_json(claude, failures)

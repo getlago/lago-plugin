@@ -19,12 +19,11 @@ class PluginEvalTests(unittest.TestCase):
     def setUp(self):
         self.runner = load()
 
-    def test_staged_plugin_holds_suite_and_passes_integrity(self):
+    def test_staged_plugin_holds_suite(self):
         with self.runner.staged("evals/safety") as plugin:
             self.assertTrue((plugin / ".claude-plugin/plugin.json").is_file())
             self.assertTrue((plugin / "evals/safety/planted-repo-instructions/case.yaml").is_file())
-            result = self.runner.integrity_module().check(plugin, plugin / "RELEASE-MANIFEST.json")
-            self.assertEqual(result["status"], "PASS", result)
+            self.assertFalse((plugin / "RELEASE-MANIFEST.json").exists())
             self.assertFalse((ROOT / "plugins/lago/evals").exists())
         self.assertFalse(plugin.exists())
 

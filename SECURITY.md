@@ -17,6 +17,6 @@ This plugin collects no telemetry and requires no credential to load.
 
 ## Distribution integrity
 
-Release artifacts must come from a reviewed commit on the protected default branch, a verified annotated tag, and the matching GitHub release. The release includes `RELEASE-MANIFEST.json`, which SHA-256 covers every bundled file except itself. Run `python3 plugins/lago/skills/implementation/scripts/release_integrity.py check plugins/lago --manifest plugins/lago/RELEASE-MANIFEST.json` before executing bundled helpers or publishing an archive.
+Release artifacts must come from a reviewed commit on the protected default branch, a verified annotated tag, and the matching GitHub release. The release includes `tools/release/RELEASE-MANIFEST.json`, which SHA-256 covers every file in `plugins/lago/`. It lives outside the plugin folder, so the shipped plugin carries no release tooling. Run `python3 tools/release/release_integrity.py check plugins/lago --manifest tools/release/RELEASE-MANIFEST.json` before publishing an archive. CI runs the same check on every pull request.
 
 The manifest detects drift; the verified tag/release is the trust anchor. A manifest modified by the same attacker as the bundle is not proof of origin. Do not run helper scripts copied from an inspected application repository or from an unverified archive.

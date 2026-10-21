@@ -26,6 +26,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 PLUGIN = REPO / "plugins/lago"
+RELEASE = REPO / "tools/release"
 SKILL = PLUGIN / "skills/implementation/SKILL.md"
 GEMINI = "@google/gemini-cli@0.64.0"
 COPILOT = "@github/copilot@1.0.100"
@@ -46,11 +47,12 @@ def sanitize(text: str, home: Path) -> str:
 
 def verify_bundle(root: Path) -> dict:
     # Use the reviewed checkout's verifier, not unverified installed code.
-    spec = importlib.util.spec_from_file_location("install_integrity", PLUGIN / "skills/implementation/scripts/release_integrity.py")
+    # The manifest lives with the release tooling, outside the shipped plugin.
+    spec = importlib.util.spec_from_file_location("install_integrity", RELEASE / "release_integrity.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     try:
-        return module.check(root, root / "RELEASE-MANIFEST.json")
+        return module.check(root, RELEASE / "RELEASE-MANIFEST.json")
     except (OSError, ValueError) as error:
         return {"status": "FAIL", "error": type(error).__name__}
 
@@ -92,7 +94,6 @@ def check_gemini(home: Path) -> dict:
     demo = verify_demo(bundle, home, integrity)
     passed = all(s["exit_code"] == 0 for s in steps) and validated and listed and skill["identical"] == 1 and integrity["status"] == "PASS" and demo["passed"]
     return {"agent": "gemini-cli", "cli": GEMINI, "passed": passed, "skill": skill, "steps": steps,
-            "bundle_has_release_manifest": (bundle / "RELEASE-MANIFEST.json").is_file(),
             "integrity": integrity, "offline_demo": demo}
 
 
@@ -133,8 +134,7 @@ def check_skills_sh(home: Path) -> dict:
                   "-a", "codex", "-a", "cursor", "-a", "github-copilot", "-a", "gemini-cli", "--copy", "-y"], home, project)]
     skill = installed_skill(home, project / ".agents/skills")
     passed = steps[0]["exit_code"] == 0 and skill["identical"] == 1
-    return {"agent": "skills.sh", "cli": SKILLS, "passed": passed, "skill": skill, "steps": steps,
-            "bundle_has_release_manifest": (project / ".agents/skills/implementation/RELEASE-MANIFEST.json").is_file()}
+    return {"agent": "skills.sh", "cli": SKILLS, "passed": passed, "skill": skill, "steps": steps}
 
 
 def main() -> int:

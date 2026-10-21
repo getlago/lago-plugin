@@ -76,13 +76,18 @@ class TriggerSuiteTests(unittest.TestCase):
                 "type": "command_execution", "status": "completed", "exit_code": 0,
                 "command": f"cat {path}", "aggregated_output": path.read_text()}}
             self.assertTrue(runner.observed_read(event, path))
+            # Shell startup diagnostics share aggregated_output with a successful cat.
+            noisy = {**event, "item": {**event["item"], "aggregated_output":
+                "shell startup: process listing denied\n" + path.read_text() + "shell warning\n"}}
+            self.assertTrue(runner.observed_read(noisy, path))
             for field, value in [("command", "echo implementation/SKILL.md"),
                                  ("command", "cat /unrelated/implementation/SKILL.md"),
                                  ("command", f"echo cat {path}"),
                                  ("command", f"cat {path}; true"),
                                  ("exit_code", 1), ("status", "failed"),
                                  ("aggregated_output", "No such file"),
-                                 ("aggregated_output", "Synthetic")]:
+                                 ("aggregated_output", "Synthetic"),
+                                 ("aggregated_output", "Synthetic skill contents altered")]:
                 with self.subTest(field=field, value=value):
                     changed = {**event, "item": {**event["item"], field: value}}
                     self.assertFalse(runner.observed_read(changed, path))

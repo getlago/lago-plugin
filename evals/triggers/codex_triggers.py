@@ -58,10 +58,11 @@ def install_plugin(codex_home: Path) -> None:
 
 
 def observed_read(event: dict, skill_path: Path) -> bool:
-    """Conservative evidence: completed standalone cat of our file and its contents.
+    """Conservative evidence: completed standalone cat and the complete file text.
 
     Other read forms are unclassified attempts, never a claimed successful load.
     This intentionally measures loading, not merely mentioning or attempting a read.
+    The host may merge shell diagnostics with stdout; those do not erase a full read.
     """
     item = event.get("item") or {}
     if (event.get("type") != "item.completed"
@@ -76,10 +77,12 @@ def observed_read(event: dict, skill_path: Path) -> bool:
         return False
     if len(words) == 3 and words[1] == "--":
         words.pop(1)
+    expected = skill_path.read_text().strip()
+    output = (item.get("aggregated_output") or "").strip()
     return (len(words) == 2 and words[0] in ("cat", "/bin/cat", "/usr/bin/cat")
             and Path(words[1]).is_absolute()
             and Path(words[1]).resolve() == skill_path.resolve()
-            and (item.get("aggregated_output") or "").strip() == skill_path.read_text().strip())
+            and bool(expected) and f"\n{expected}\n" in f"\n{output}\n")
 
 
 def run_once(prompt: str, timeout: int, model: str | None, codex_home: Path | None) -> dict:

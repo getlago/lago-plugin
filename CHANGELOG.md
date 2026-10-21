@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.
 
 ## [Unreleased]
 
+- Recognize complete Codex skill reads when shell startup diagnostics share the tool output; continue rejecting partial, failed or unrelated reads.
+
 - Add explicit-status subscription lookup helpers and stop blind creation retries; explain activation recovery across all statuses and correct termination reconciliation.
 
 - Test demo-helper substitution as untrusted repository instructions, rather than a direct user request to run an inspected application script.
